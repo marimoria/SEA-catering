@@ -7,12 +7,18 @@
 }
 
 .main_grid {
+    $self: &;
+
     display: flex;
     width: 100%;
-    height: 100%;
     flex-direction: column;
     padding: 0 1em 0 1em;
     margin-top: 2vh;
+
+    &--hero_area {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .greeting_area {
@@ -32,11 +38,22 @@
 
     &--slogan {
         font-size: clamp(1rem, 2.5vw, 1.5rem);
-        font-weight: 500;
+        font-weight: 600;
         font-family: "Inter", sans-serif;
         margin-top: 0.5rem;
         text-align: center;
         color: var(--color-deep-red);
+    }
+
+    &--intro {
+        margin-top: 10px;
+        text-align: center;
+        font-weight: 500;
+        font-family: "Inter", sans-serif;
+        font-size: clamp(0.9rem, 1.1vw, 1.5rem);
+        max-width: 35ch;
+        color: var(--color-deep-red);
+        margin-inline: auto;
     }
 }
 
@@ -62,18 +79,160 @@
     }
 }
 
+.features_area {
+    $self: &;
+
+    &--menu_grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.2rem;
+        padding: 2rem;
+    }
+}
+
+.menu_card {
+    $self: &;
+
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background-color: #fff;
+    border: 1.5px solid var(--color-paprika-red);
+    border-radius: 2rem;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+
+    &--img {
+        font-family: "Inter";
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: 2px solid var(--color-paprika-red);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: #d45a36;
+        background-color: #fae1d8;
+        flex-shrink: 0;
+    }
+
+    &--info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        max-width: 27ch;
+
+        font-family: "Inter";
+    }
+}
+
+#menu_card_2 {
+    border: 1.5px solid var(--color-sunset-orange);
+
+    .menu_card--img {
+        border: 2px solid var(--color-sunset-orange);
+        background-color: #fef0d5;
+        color: var(--color-sunset-orange);
+    }
+
+    .info--desc {
+        color: var(--color-sunset-orange);
+    }
+}
+
+#menu_card_3 {
+    border: 1.5px solid var(--color-lime-leaf);
+
+    .menu_card--img {
+        border: 2px solid var(--color-lime-leaf);
+        color: var(--color-fresh-basil);
+        background-color: #f6fed5;
+    }
+
+    .info--desc {
+        color: var(--color-fresh-basil);
+    }
+}
+
+#menu_card_4 {
+    border: 1.5px solid var(--color-pink);
+
+    .menu_card--img {
+        border: 2px solid var(--color-pink);
+        color: #5953ad;
+        background-color: #d5dffe;
+    }
+
+    .info--desc {
+        color: var(--color-pink);
+    }
+}
+
+.info {
+    $self: &;
+
+    &--name {
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    &--desc {
+        font-weight: 700;
+        color: #d45a36;
+        font-size: 0.9rem;
+    }
+}
+
+.menu_card:hover {
+    transform: translateY(-3px);
+}
+
 @media (min-width: 769px) {
     .main_grid {
-        padding: 0 2em 0 2em;
+        padding: 0 4em 0 4em;
         margin-top: 5vh;
+
+        &--hero_area {
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100vw;
+        }
+    }
+
+    .features_area {
+        &--menu_grid {
+            grid-template-columns: repeat(2, 1fr); // force 2x2 layout
+            grid-template-rows: repeat(2, auto);
+            margin-right: 6rem;
+        }
     }
 
     .greeting_area {
         $self: &;
 
         &--greet_text,
-        &--slogan {
+        &--slogan,
+        &--intro {
             text-align: start;
+        }
+
+        &--intro {
+            font-size: 1.3rem;
+            max-width: 50ch;
+        }
+    }
+
+    .info {
+        &--name {
+            font-size: 1.2rem;
+        }
+
+        &--desc {
+            font-size: 1rem;
         }
     }
 }
