@@ -9,10 +9,13 @@
 <script setup>
     import "./assets/styles/app.scss"; // global app styling
 
-    import { onMounted, Transition } from "vue";
+    import { onMounted, Transition, ref } from "vue";
     import { useViewport } from "./components/composables/useViewport";
+    import { getData, insertData } from "./components/composables/useSupabase";
 
     const { viewport, device } = useViewport();
+
+    const instruments = ref([]);
 
     onMounted(() => {
         document.addEventListener("contextmenu", (e) => {
