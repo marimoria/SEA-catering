@@ -15,7 +15,7 @@
     flex-direction: column;
     padding: 0 1em 0 1em;
     margin-top: 2vh;
-    z-index: 1;
+    z-index: 2;
 
     &--hero_area {
         display: flex;
@@ -220,11 +220,17 @@
     position: absolute;
     bottom: -20%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) rotate(0deg);
     width: clamp(25em, 50vw, 47em);
-    z-index: 0;
-    pointer-events: none;
     object-fit: contain;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+}
+
+.hero_image.active {
+    opacity: 1;
+    z-index: 1;
 }
 
 @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
@@ -259,6 +265,7 @@
         &--slogan,
         &--intro {
             text-align: start;
+            margin-inline: 0;
         }
 
         &--intro {

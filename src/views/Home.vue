@@ -59,10 +59,27 @@
         </div>
 
         <img
+            id="hero_image_1"
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax hero_image"
             src="../assets/images/protein_hero.svg"
+            alt=""
+        />
+        <img
+            id="hero_image_2"
+            data-speedx="0.03"
+            data-speedy="0.03"
+            class="parallax hero_image"
+            src="../assets/images/veggies_hero.svg"
+            alt=""
+        />
+        <img
+            id="hero_image_3"
+            data-speedx="0.03"
+            data-speedy="0.03"
+            class="parallax hero_image"
+            src="../assets/images/fruits_hero.svg"
             alt=""
         />
     </section>
@@ -79,20 +96,61 @@
     import { useParallax } from "../components/composables/useParallax";
 
     onMounted(() => {
-        const textRef = "#animatedText";
+        const parallaxEls = document.querySelectorAll(".parallax");
+        parallaxEls.forEach((el) => useParallax(el, ".home"));
 
         const wordsObject = [
-            { word: "protein", color: "--color-sunset-orange" },
-            { word: "veggies", color: "--color-fresh-basil" },
-            { word: "fruits", color: "--color-pink" }
+            {
+                word: "protein",
+                color: "--color-sunset-orange"
+            },
+            {
+                word: "veggies",
+                color: "--color-fresh-basil"
+            },
+            {
+                word: "fruits",
+                color: "--color-pink"
+            }
         ];
 
+        const heroImages = Array.from(document.querySelectorAll(".hero_image"));
+        let currentIndex = 0;
+
+        function switchImage(nextIndex) {
+            const current = heroImages[currentIndex];
+            const next = heroImages[nextIndex];
+
+            gsap.to(current, {
+                rotation: 360,
+                opacity: 0,
+                duration: 1.5,
+                ease: "power1.in",
+                onComplete: () => {
+                    current.classList.remove("active");
+                    gsap.set(current, { rotation: 0 });
+                }
+            });
+
+            gsap.to(next, {
+                rotation: 360,
+                opacity: 1,
+                duration: 1.5,
+                ease: "power1.out",
+                onStart: () => next.classList.add("active")
+            });
+
+            currentIndex = nextIndex;
+        }
+
+        const textRef = "#animatedText";
         const typewriterTl = gsap.timeline({ repeat: -1 });
 
         for (let i = 0; i < wordsObject.length; i++) {
             const { word, color } = wordsObject[i];
 
             typewriterTl
+                .call(() => switchImage(i))
                 .set(textRef, {
                     color: "var(" + color + ")"
                 })
@@ -108,8 +166,5 @@
                     ease: "steps(" + word.length + ")"
                 });
         }
-
-        const parallaxEl = document.querySelector(".parallax");
-        useParallax(parallaxEl, ".home");
     });
 </script>
