@@ -1,6 +1,7 @@
 <template>
     <div class="meal_type_nav">
         <div class="tab_buttons">
+            <!-- Checks if current active tab is equal to index -->
             <button
                 v-for="(tab, index) in tabs"
                 :key="index"
@@ -26,11 +27,17 @@
 
     const props = defineProps({
         tabs: {
-            type: Array
+            type: Array,
             required: true
         },
-        buttonColor: String,
-        activeColor: String
+        buttonColor: {
+            type: String,
+            default: "#ffffff"
+        },
+        activeColor: {
+            type: String,
+            default: "#d54f22"
+        }
     });
 
     const activeTab = ref(0);
