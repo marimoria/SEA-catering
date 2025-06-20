@@ -17,37 +17,37 @@
                     </p>
                 </div>
                 <div class="hero_area--features_area">
-                    <div class="features_area--menu_grid">
-                        <div id="menu_card_1" class="menu_card">
-                            <div class="menu_card--img">1</div>
-                            <div class="menu_card--info">
+                    <div class="features_area--feature_grid">
+                        <div id="feature_card_1" class="feature_card">
+                            <div class="feature_card--img">1</div>
+                            <div class="feature_card--info">
                                 <p class="info--name">Meal Customization</p>
                                 <p class="info--desc">
                                     We allow users to pick their own meal plan.
                                 </p>
                             </div>
                         </div>
-                        <div id="menu_card_2" class="menu_card">
-                            <div class="menu_card--img">2</div>
-                            <div class="menu_card--info">
+                        <div id="feature_card_2" class="feature_card">
+                            <div class="feature_card--img">2</div>
+                            <div class="feature_card--info">
                                 <p class="info--name">Speedy Deliveries</p>
                                 <p class="info--desc">
                                     Reliable delivery everywhere, major to small cities.
                                 </p>
                             </div>
                         </div>
-                        <div id="menu_card_3" class="menu_card">
-                            <div class="menu_card--img">3</div>
-                            <div class="menu_card--info">
+                        <div id="feature_card_3" class="feature_card">
+                            <div class="feature_card--img">3</div>
+                            <div class="feature_card--info">
                                 <p class="info--name">Detailed Nutrition</p>
                                 <p class="info--desc">
                                     We prioritize our user's health, satisfaction, and belly.
                                 </p>
                             </div>
                         </div>
-                        <div id="menu_card_4" class="menu_card">
-                            <div class="menu_card--img">4</div>
-                            <div class="menu_card--info">
+                        <div id="feature_card_4" class="feature_card">
+                            <div class="feature_card--img">4</div>
+                            <div class="feature_card--info">
                                 <p class="info--name">Budget Friendly</p>
                                 <p class="info--desc">Affordable healthy meal for everyone!</p>
                             </div>
