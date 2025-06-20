@@ -43,7 +43,7 @@
 <style scoped>
     .navbar {
         background: rgb(255, 249, 244);
-        padding: 1rem 0;
+        padding: 1rem 1rem;
         position: sticky;
         top: 0;
         z-index: 50;
@@ -52,9 +52,9 @@
     .container {
         display: flex;
         gap: 5vw;
-        max-width: 100%;
+        width: 100%;
         margin: 0 auto;
-        padding: 0 1rem;
+        padding: 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -166,6 +166,9 @@
     }
 
     @media (min-width: 769px) {
+        .navbar {
+            padding: 1rem 2rem 0 2rem;
+        }
         .desktop-nav {
             display: flex;
         }
