@@ -206,7 +206,7 @@
     .features_area {
         &--menu_grid {
             grid-template-columns: repeat(2, 1fr); // force 2x2 layout
-            grid-template-rows: repeat(2, auto);
+            grid-template-rows: repeat(2, 1fr);
             margin-right: 6rem;
         }
     }

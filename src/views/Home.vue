@@ -31,21 +31,25 @@
                             <div class="menu_card--img">2</div>
                             <div class="menu_card--info">
                                 <p class="info--name">Speedy Deliveries</p>
-                                <p class="info--desc">Reliable delivery everywhere.</p>
+                                <p class="info--desc">
+                                    Reliable delivery everywhere, major to small cities.
+                                </p>
                             </div>
                         </div>
                         <div id="menu_card_3" class="menu_card">
                             <div class="menu_card--img">3</div>
                             <div class="menu_card--info">
                                 <p class="info--name">Detailed Nutrition</p>
-                                <p class="info--desc">We prioritize our user's health.</p>
+                                <p class="info--desc">
+                                    We prioritize our user's health, satisfaction, and belly.
+                                </p>
                             </div>
                         </div>
                         <div id="menu_card_4" class="menu_card">
                             <div class="menu_card--img">4</div>
                             <div class="menu_card--info">
                                 <p class="info--name">Budget Friendly</p>
-                                <p class="info--desc">And their wallets!</p>
+                                <p class="info--desc">Affordable healthy meal for everyone!</p>
                             </div>
                         </div>
                     </div>
