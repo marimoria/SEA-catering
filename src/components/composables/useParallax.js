@@ -10,8 +10,7 @@ function transformParallax(parallaxEl) {
     gsap.to(parallaxEl, {
         x: -mouse.x * speedX,
         y: mouse.y * speedY,
-        rotationY: rotateDeg,
-        transition: "0.45s cubic-bezier(0.2, 0.49, 0.32, 0.99)"
+        rotationY: rotateDeg
     });
 }
 
