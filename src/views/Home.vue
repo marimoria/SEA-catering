@@ -124,7 +124,7 @@
             gsap.to(current, {
                 rotation: 360,
                 opacity: 0,
-                duration: 1.5,
+                duration: 2,
                 ease: "power1.in",
                 onComplete: () => {
                     current.classList.remove("active");
@@ -135,7 +135,7 @@
             gsap.to(next, {
                 rotation: 360,
                 opacity: 1,
-                duration: 1.5,
+                duration: 2,
                 ease: "power1.out",
                 onStart: () => next.classList.add("active")
             });
@@ -148,6 +148,7 @@
 
         for (let i = 0; i < wordsObject.length; i++) {
             const { word, color } = wordsObject[i];
+            const nextIndex = (i + i) % wordsObject.length; // Makes it so that when (2 + 1) % 3 = 0
 
             typewriterTl
                 .call(() => switchImage(i))
