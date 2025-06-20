@@ -9,11 +9,13 @@
 .main_grid {
     $self: &;
 
+    position: relative;
     display: flex;
     width: 100%;
     flex-direction: column;
     padding: 0 1em 0 1em;
     margin-top: 2vh;
+    z-index: 1;
 
     &--hero_area {
         display: flex;
@@ -211,6 +213,18 @@
 
 .feature_card:hover {
     transform: translateY(-3px);
+}
+
+.hero_image {
+    position: absolute;
+    bottom: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(25em, 50vw, 47em); // adjusts smoothly between small & large screens
+    height: auto;
+    z-index: 0;
+    pointer-events: none;
+    object-fit: contain;
 }
 
 @media (min-width: 769px) {

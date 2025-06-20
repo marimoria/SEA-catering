@@ -57,6 +57,8 @@
                 </div>
             </div>
         </div>
+
+        <img class="hero_image" src="../assets/images/protein_hero.svg" alt="" />
     </section>
 </template>
 
