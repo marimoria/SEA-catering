@@ -28,19 +28,19 @@ body {
     margin: 0;
 }
 
-.fade-slide-enter-active,
-.fade-slide-leave-active {
+.fade-slide-router-enter-active,
+.fade-slide-router-leave-active {
     transition: all 0.5s ease;
 }
 
-.fade-slide-enter-from,
-.fade-slide-leave-to {
+.fade-slide-router-enter-from,
+.fade-slide-router-leave-to {
     opacity: 0;
-    transform: translateY(20px); // slide upward
+    transform: translateY(20px);
 }
 
-.fade-slide-enter-to,
-.fade-slide-leave-from {
+.fade-slide-router-enter-to,
+.fade-slide-router-leave-from {
     opacity: 1;
     transform: translateY(0);
 }
