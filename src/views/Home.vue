@@ -24,7 +24,7 @@
 
 <script setup>
     import navBar from "../components/Navbar.vue";
-    import { onMounted } from "Vue";
+    import { onMounted } from "vue";
 
     onMounted(() => {});
 </script>
