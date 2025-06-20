@@ -1,0 +1,79 @@
+.home {
+    position: relative;
+    width: 100vw;
+    height: calc(var(--vh, 1vh) * 100);
+    background-color: rgb(255, 249, 244);
+    overflow-x: hidden;
+}
+
+.main_grid {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    padding: 0 1em 0 1em;
+    margin-top: 2vh;
+}
+
+.greeting_area {
+    $self: &;
+
+    &--greet_text {
+        font-size: clamp(2rem, 6vw, 4rem);
+        font-weight: 700;
+        font-family: "Inter", sans-serif;
+        text-align: center;
+        color: var(--color-deep-red);
+
+        &--second {
+            color: var(--color-paprika-red);
+        }
+    }
+
+    &--slogan {
+        font-size: clamp(1rem, 2.5vw, 1.5rem);
+        font-weight: 500;
+        font-family: "Inter", sans-serif;
+        margin-top: 0.5rem;
+        text-align: center;
+        color: var(--color-deep-red);
+    }
+}
+
+.typing_text,
+.cursor {
+    display: inline-block;
+    white-space: nowrap;
+    vertical-align: bottom;
+}
+
+.cursor {
+    font-weight: 350;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    0%,
+    100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@media (min-width: 769px) {
+    .main_grid {
+        padding: 0 2em 0 2em;
+        margin-top: 5vh;
+    }
+
+    .greeting_area {
+        $self: &;
+
+        &--greet_text,
+        &--slogan {
+            text-align: start;
+        }
+    }
+}
