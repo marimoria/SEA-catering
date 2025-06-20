@@ -221,8 +221,7 @@
     bottom: -20%;
     left: 50%;
     transform: translateX(-50%);
-    width: clamp(25em, 50vw, 47em); // adjusts smoothly between small & large screens
-    height: auto;
+    width: clamp(25em, 50vw, 47em);
     z-index: 0;
     pointer-events: none;
     object-fit: contain;
