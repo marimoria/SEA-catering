@@ -46,7 +46,7 @@
     }
 
     &--intro {
-        margin-top: 10px;
+        margin-top: 13px;
         text-align: center;
         font-weight: 500;
         font-family: "Inter", sans-serif;
@@ -54,6 +54,26 @@
         max-width: 35ch;
         color: var(--color-deep-red);
         margin-inline: auto;
+    }
+
+    &--contact {
+        margin-top: 13px;
+        border: 2px solid var(--color-sunset-orange);
+        padding: 1em 1em 1em 1em;
+        max-width: 60%;
+        margin-inline: auto;
+        border-radius: 40px;
+
+        &--text {
+            text-align: center;
+            font-family: "Inter";
+            font-weight: 500;
+            font-size: clamp(0.9rem, 1.1vw, 1.5rem);
+        }
+    }
+
+    &--contact:hover {
+        cursor: pointer;
     }
 }
 
@@ -87,6 +107,8 @@
         grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
         gap: 1.2rem;
         padding: 2rem;
+        padding-top: 0;
+        margin-top: 10px;
     }
 }
 
@@ -223,6 +245,11 @@
         &--intro {
             font-size: 1.3rem;
             max-width: 50ch;
+        }
+
+        &--contact {
+            margin-inline: 0;
+            max-width: 40%;
         }
     }
 

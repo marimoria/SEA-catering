@@ -15,6 +15,9 @@
                         SEA Catering delivers your healthy & customizable meal plans fresh to your
                         doorstep, anywhere in Indonesia.
                     </p>
+                    <div class="greeting_area--contact">
+                        <p class="greeting_area--contact--text">Brian | 123456789</p>
+                    </div>
                 </div>
                 <div class="hero_area--features_area">
                     <div class="features_area--feature_grid">
@@ -31,9 +34,7 @@
                             <div class="feature_card--img">2</div>
                             <div class="feature_card--info">
                                 <p class="info--name">Speedy Deliveries</p>
-                                <p class="info--desc">
-                                    Reliable delivery everywhere, major to small cities.
-                                </p>
+                                <p class="info--desc">Reliable delivery wherever you are.</p>
                             </div>
                         </div>
                         <div id="feature_card_3" class="feature_card">
