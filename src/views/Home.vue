@@ -58,7 +58,13 @@
             </div>
         </div>
 
-        <img class="hero_image" src="../assets/images/protein_hero.svg" alt="" />
+        <img
+            data-speedx="0.03"
+            data-speedy="0.03"
+            class="parallax hero_image"
+            src="../assets/images/protein_hero.svg"
+            alt=""
+        />
     </section>
 </template>
 
@@ -70,6 +76,7 @@
     import navBar from "../components/Navbar.vue";
     import { onMounted } from "vue";
     import { gsap } from "../js/vendor.js";
+    import { useParallax } from "../components/composables/useParallax";
 
     onMounted(() => {
         const textRef = "#animatedText";
@@ -101,5 +108,8 @@
                     ease: "steps(" + word.length + ")"
                 });
         }
+
+        const parallaxEl = document.querySelector(".parallax");
+        useParallax(parallaxEl, ".home");
     });
 </script>
