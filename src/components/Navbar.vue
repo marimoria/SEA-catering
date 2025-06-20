@@ -44,6 +44,7 @@
         color: var(--color-fresh-basil);
         font-weight: 600;
     }
+
     .navbar {
         background: rgb(255, 249, 244);
         padding: 1rem 1rem;
