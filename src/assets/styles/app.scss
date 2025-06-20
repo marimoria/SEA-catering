@@ -18,6 +18,20 @@ body {
 }
 
 .fade-slide-enter-active,
+:root {
+    /* Primary Brand Colors */
+    --color-sunset-orange: #f28c28;
+    --color-paprika-red: #d54f22;
+
+    /* Greens */
+    --color-lime-leaf: #8ebe3f;
+    --color-fresh-basil: #4f9447;
+    --color-deep-olive: #2e5a32;
+
+    /* Neutrals */
+    --color-creamy-beige: #fcecd6; // Backgrounds, contrast
+}
+
 .fade-slide-leave-active {
     transition: all 0.5s ease;
 }
