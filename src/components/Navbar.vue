@@ -44,9 +44,7 @@
     .navbar {
         background: rgb(255, 249, 244);
         padding: 1rem 1rem;
-        position: sticky;
         top: 0;
-        z-index: 50;
     }
 
     .container {
