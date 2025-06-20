@@ -1,5 +1,5 @@
 <template>
-    <section class="home">
+    <section class="background">
         <navBar />
         <div class="main_grid">
             <div class="main_grid--hero_area">
@@ -91,13 +91,14 @@
 
 <script setup>
     import navBar from "../components/Navbar.vue";
+
     import { onMounted } from "vue";
     import { gsap } from "../js/vendor.js";
     import { useParallax } from "../components/composables/useParallax";
 
     onMounted(() => {
         const parallaxEls = document.querySelectorAll(".parallax");
-        parallaxEls.forEach((el) => useParallax(el, ".home"));
+        parallaxEls.forEach((el) => useParallax(el, ".background"));
 
         const wordsObject = [
             {
