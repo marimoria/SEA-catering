@@ -7,15 +7,15 @@
             </div>
 
             <nav class="desktop-nav">
-                <a class="nav_name" href="/">Home</a>
-                <a class="nav_name" href="/menu">Menu</a>
-                <a class="nav_name" href="/locations">Locations</a>
-                <a class="nav_name" href="/about">About</a>
-                <a class="nav_name" href="/contact">Contact</a>
+                <router-link class="nav_name" to="/">Home</router-link>
+                <router-link class="nav_name" to="/meal">Meal Plans</router-link>
+                <router-link class="nav_name" to="/subscription">Subscription</router-link>
+                <router-link class="nav_name" to="/contact">Contact Us</router-link>
             </nav>
 
             <!-- Hamburger -->
             <button class="hamburger" @click="isOpen = !isOpen">
+                <!-- Might need to add @touchend later for mobile -->
                 <span :class="{ open: isOpen }"></span>
                 <span :class="{ open: isOpen }"></span>
                 <span :class="{ open: isOpen }"></span>
@@ -24,11 +24,10 @@
             <!-- Dropdown Menu -->
             <transition name="fade-slide">
                 <nav v-if="isOpen" class="dropdown">
-                    <a class="nav_name" href="/">Home</a>
-                    <a class="nav_name" href="/menu">Menu</a>
-                    <a class="nav_name" href="/locations">Locations</a>
-                    <a class="nav_name" href="/about">About</a>
-                    <a class="nav_name" href="/contact">Contact</a>
+                    <router-link class="nav_name" to="/">Home</router-link>
+                    <router-link class="nav_name" to="/meal">Meal Plans</router-link>
+                    <router-link class="nav_name" to="/subscription">Subscription</router-link>
+                    <router-link class="nav_name" to="/contact">Contact Us</router-link>
                 </nav>
             </transition>
         </div>
@@ -45,6 +44,8 @@
         background: rgb(255, 249, 244);
         padding: 1rem 1rem;
         top: 0;
+        position: sticky;
+        z-index: 100;
     }
 
     .container {
@@ -120,7 +121,7 @@
         width: 100%;
         transform: translateX(-50%);
         background: white;
-        border-radius: 0.5rem;
+        border-radius: 20px;
         box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
         padding: 1rem 2rem;
         display: flex;
@@ -145,12 +146,12 @@
 
     .fade-slide-enter-from {
         opacity: 0;
-        transform: translate(-50%, -10px); /* ⬅️ go upward while staying centered */
+        transform: translate(-50%, -10px);
     }
 
     .fade-slide-leave-to {
         opacity: 0;
-        transform: translate(-50%, -10px); /* ⬅️ same */
+        transform: translate(-50%, -10px);
     }
 
     .desktop-nav {
