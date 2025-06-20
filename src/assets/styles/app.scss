@@ -33,3 +33,10 @@ body {
     opacity: 1;
     transform: translateY(0);
 }
+
+.gradient_1 {
+    background: linear-gradient(135deg, #f28c28, #d54f22, #8ebe3f, #4f9447);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
