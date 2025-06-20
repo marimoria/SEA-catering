@@ -40,6 +40,10 @@
 </script>
 
 <style scoped>
+    .router-link-active {
+        color: var(--color-fresh-basil);
+        font-weight: 600;
+    }
     .navbar {
         background: rgb(255, 249, 244);
         padding: 1rem 1rem;
@@ -161,7 +165,7 @@
 
     .desktop-nav a {
         text-decoration: none;
-        font-weight: 500;
+        font-weight: 600;
     }
 
     @media (min-width: 769px) {
