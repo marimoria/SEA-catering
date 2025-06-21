@@ -65,6 +65,7 @@
         border-radius: 20px;
         cursor: pointer;
         transition: background 0.2s;
+        font-size: clamp(1rem, 2.3vw, 2rem);
     }
 
     .tab_buttons button.active {
