@@ -98,7 +98,7 @@
 
     onMounted(() => {
         const parallaxEls = document.querySelectorAll(".parallax");
-        parallaxEls.forEach((el) => useParallax(el, ".background"));
+        parallaxEls.forEach((el) => useParallax(el));
 
         const wordsObject = [
             {
