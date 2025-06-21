@@ -1,7 +1,9 @@
 <template>
     <main class="meal_plan">
+        <div class="background"></div>
         <navBar />
         <div class="meal_plan_panel">
+            <img v-if="viewport.w >= 1024" src="../assets/images/fork.svg" alt="" class="fork" />
             <div class="meal_plan_panel--meal_plan_hero">
                 <div id="banner_diet" class="meal_plan_hero--banner"></div>
                 <img
@@ -16,7 +18,7 @@
                 <p class="meal_plan_info--title">
                     <span class="highlight_basil">Diet</span> Meal Plan
                 </p>
-                <p class="meal_plan_info--desc">
+                <p id="desc_olive" class="meal_plan_info--desc">
                     Nourish your body with low-calorie, high-nutrient meals to support weight
                     management. Each dish is balanced for portion control without sacrificing
                     flavor.
@@ -127,6 +129,7 @@
         </div>
 
         <div class="meal_plan_panel">
+            <img v-if="viewport.w >= 1024" src="../assets/images/spoon.svg" alt="" class="spoon" />
             <div class="meal_plan_panel--meal_plan_hero">
                 <div class="meal_plan_hero--banner"></div>
                 <img
@@ -141,7 +144,7 @@
                 <p class="meal_plan_info--title">
                     <span class="highlight_paprika">Protein</span> Meal Plan
                 </p>
-                <p class="meal_plan_info--desc">
+                <p id="desc_red" class="meal_plan_info--desc">
                     Power up with protein-packed meals made for strength, recovery, and fullness.
                     Perfect for active lifestyles to keep you energized all day.
                 </p>
@@ -250,6 +253,7 @@
         </div>
 
         <div class="meal_plan_panel">
+            <img v-if="viewport.w >= 1024" src="../assets/images/knife.svg" alt="" class="knife" />
             <div class="meal_plan_panel--meal_plan_hero">
                 <div id="banner_royal" class="meal_plan_hero--banner"></div>
                 <img
@@ -264,7 +268,7 @@
                 <p class="meal_plan_info--title">
                     <span class="highlight_purple">Royal</span> Meal Plan
                 </p>
-                <p class="meal_plan_info--desc">
+                <p id="desc_purple" class="meal_plan_info--desc">
                     An elite culinary experience crafted with the world’s most exquisite
                     ingredients. From black truffle to A5 Wagyu, each meal is designed for
                     indulgence, balance, and unforgettable taste
