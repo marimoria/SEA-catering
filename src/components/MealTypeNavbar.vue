@@ -8,7 +8,7 @@
                 :class="{ active: activeTab === index }"
                 @click="activeTab = index"
                 :style="{
-                    backgroundColor: activeTab === index ? props.activeColor : 'transparent',
+                    backgroundColor: activeTab === index ? props.activeColor : '#fff9f4',
                     color: activeTab === index ? 'white' : props.buttonColor,
                     borderColor: props.buttonColor
                 }"
