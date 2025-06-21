@@ -54,6 +54,7 @@
         display: flex;
         justify-content: center;
         gap: 1rem;
+        margin-bottom: clamp(0.2rem, 0.5vh, 0.5rem);
     }
 
     .tab_buttons button {
