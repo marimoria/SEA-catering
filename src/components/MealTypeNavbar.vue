@@ -47,7 +47,7 @@
     .meal_type_nav {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.5rem;
     }
 
     .tab_buttons {
@@ -74,5 +74,11 @@
 
     .tab_content {
         text-align: center;
+    }
+
+    @media (min-width: 1024px) {
+        .tab_buttons button {
+            font-size: clamp(1rem, 1.2rem, 1.5rem);
+        }
     }
 </style>

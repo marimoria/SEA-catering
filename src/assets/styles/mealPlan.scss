@@ -1,9 +1,10 @@
 .meal_plan {
     position: relative;
     width: 100vw;
-    height: calc(var(--vh, 1vh) * 100);
     background-color: rgb(255, 249, 244);
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .meal_plan_panel {
@@ -13,9 +14,7 @@
     display: flex;
     width: 100%;
     flex-direction: column;
-    margin-top: 2vh;
-
-    height: calc(var(--vh, 1vh) * 100);
+    margin-bottom: clamp(5vh, 2vh, 8vh);
 
     &--meal_plan_hero {
         position: relative;
@@ -47,7 +46,7 @@
 
     &--image {
         position: relative;
-        width: 13em; // clamp
+        width: clamp(13em, 50vw, 18em);
         z-index: 1;
     }
 }
@@ -83,7 +82,7 @@
         border-radius: 20px;
         padding: 0.3em;
         width: 20ch;
-        margin-top: 10px;
+        margin-top: 20px;
         margin-bottom: 13px;
     }
 
@@ -99,16 +98,22 @@
     flex-direction: row;
     text-align: center;
     justify-content: center;
-    gap: clamp(0.5rem, 2vw, 1.25rem);
-    padding-top: clamp(2.5em, 6vh, 5em);
+    gap: clamp(0.7rem, 2vw, 1.25rem);
+    padding-top: clamp(2em, 2vh, 5em);
+    margin-top: clamp(0rem, 1em, 1.1rem);
 
     &--recipe {
         position: relative;
+
         width: clamp(8rem, 40vw, 13rem);
-        height: clamp(10rem, 23vh, 14rem);
-        padding-top: clamp(2.5em, 3vh, 4em);
+        height: auto;
+        min-height: clamp(12rem, 23vh, 14rem);
+
+        padding-bottom: clamp(1rem, 2vh, 2rem);
+        padding-top: clamp(2.7em, 8vh, 4em);
         padding-right: 0.5em;
         padding-inline: clamp(0.5rem, 1.5vw, 1rem);
+
         margin-bottom: 5px;
         background: linear-gradient(
             180deg,
@@ -127,17 +132,17 @@
 
     &--image {
         position: absolute;
-        top: -50%;
+        top: 0;
         left: 50%;
-        transform: translate(-50%, 50%);
-        width: clamp(4rem, 50%, 6rem);
+        transform: translate(-50%, -50%);
+        width: clamp(4rem, 60%, 6rem);
         height: auto;
     }
 
     &--name {
         font-family: "Inter";
         font-weight: 600;
-        font-size: clamp(0.95rem, 1.4vw, 1.2rem);
+        font-size: clamp(1rem, 2.5vw, 1.5rem);
         color: #c93808;
         margin-bottom: 5px;
     }
@@ -145,15 +150,135 @@
     &--desc {
         font-family: "Inter";
         font-weight: 500;
-        font-size: clamp(0.8rem, 1.2vw, 1rem);
+        font-size: clamp(0.85rem, 2vw, 1.1rem);
         color: black;
     }
+}
+
+.bigger_size {
+    font-size: 1.2rem;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    .meals_recipe_wrap {
+        &--recipe {
+            margin-top: 10px;
+        }
+    }
+}
+
+#banner_diet {
+    background: linear-gradient(135deg, #234c27, #4f9447, #b1e361);
+}
+
+#banner_royal {
+    background: linear-gradient(135deg, #2c0b47, #5e3a87, #a678e2);
 }
 
 .highlight_paprika {
     color: var(--color-paprika-red);
 }
 
-.bigger_size {
-    font-size: 1.2rem;
+.highlight_basil {
+    color: var(--color-fresh-basil);
+}
+
+.highlight_purple {
+    color: #7935c7;
+}
+
+#price_diet {
+    border: 2px solid var(--color-lime-leaf);
+}
+
+#price_royal {
+    border: 2px solid var(--color-pink);
+}
+
+#recipe_diet {
+    border: 2px solid var(--color-deep-olive);
+
+    background: linear-gradient(
+        180deg,
+        rgb(255, 249, 244) 0%,
+        rgb(255, 249, 244) 45%,
+        rgba(140, 219, 44, 0.5) 99%,
+        var(--color-lime-leaf) 100%
+    );
+
+    p.recipe--name {
+        color: var(--color-deep-olive);
+    }
+}
+
+#recipe_royal {
+    border: 2px solid #490a7d;
+
+    background: linear-gradient(
+        180deg,
+        rgb(255, 249, 244) 0%,
+        rgb(255, 249, 244) 45%,
+        rgba(163, 113, 237, 0.5) 99%,
+        var(--color-pink) 100%
+    );
+
+    p.recipe--name {
+        color: #7935c7;
+    }
+}
+
+#details_diet {
+    border: 2px solid var(--color-lime-leaf);
+}
+
+#details_royal {
+    border: 2px solid var(--color-pink);
+}
+
+@media (min-width: 1024px) {
+    .meal_plan_panel {
+        width: 100%;
+        padding-right: 4em;
+        min-height: calc(var(--vh, 1vh) * 100);
+        margin-bottom: 0px;
+
+        display: grid;
+        grid-template-columns: 50% 50%;
+        gap: 0px;
+
+        &--meal_plan_info {
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    .meal_plan_info {
+        &--title {
+            font-size: 4rem;
+        }
+
+        &--desc {
+            font-size: 1.1rem;
+        }
+
+        &--details {
+            font-size: clamp(1rem, 1.2rem, 1.5rem);
+        }
+    }
+
+    .meal_plan_hero {
+        &--banner {
+            width: 30%;
+            height: 100vh;
+            inset: 0;
+            left: 50%;
+            transform: translatex(-50%);
+        }
+
+        &--image {
+            position: relative;
+            width: clamp(27em, 67%, 40em);
+            z-index: 1;
+        }
+    }
 }
