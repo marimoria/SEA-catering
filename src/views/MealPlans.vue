@@ -381,6 +381,11 @@
     import { useParallax } from "../components/composables/useParallax";
     import { onMounted } from "vue";
 
+    const props = defineProps({
+        viewport: Object,
+        device: Object
+    });
+
     onMounted(() => {
         const parallaxEls = document.querySelectorAll(".parallax");
         parallaxEls.forEach((el) => useParallax(el));

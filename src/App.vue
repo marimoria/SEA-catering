@@ -11,7 +11,6 @@
 
     import { onMounted, Transition } from "vue";
     import { useViewport } from "./components/composables/useViewport";
-    import { getData, insertData } from "./components/composables/useSupabase";
 
     const { viewport, device } = useViewport();
 

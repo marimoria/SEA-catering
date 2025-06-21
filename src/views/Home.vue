@@ -96,6 +96,11 @@
     import { gsap } from "../js/vendor.js";
     import { useParallax } from "../components/composables/useParallax";
 
+    const props = defineProps({
+        viewport: Object,
+        device: Object
+    });
+
     onMounted(() => {
         const parallaxEls = document.querySelectorAll(".parallax");
         parallaxEls.forEach((el) => useParallax(el));
