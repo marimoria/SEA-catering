@@ -4,7 +4,13 @@
         <div class="meal_plan_panel">
             <div class="meal_plan_panel--meal_plan_hero">
                 <div id="banner_diet" class="meal_plan_hero--banner"></div>
-                <img src="../assets/images/veggies_hero.svg" alt="" class="meal_plan_hero--image" />
+                <img
+                    data-speedx="0.03"
+                    data-speedy="0.03"
+                    src="../assets/images/veggies_hero.svg"
+                    alt=""
+                    class="parallax meal_plan_hero--image"
+                />
             </div>
             <div class="meal_plan_panel--meal_plan_info">
                 <p class="meal_plan_info--title">
@@ -123,7 +129,13 @@
         <div class="meal_plan_panel">
             <div class="meal_plan_panel--meal_plan_hero">
                 <div class="meal_plan_hero--banner"></div>
-                <img src="../assets/images/protein_hero.svg" alt="" class="meal_plan_hero--image" />
+                <img
+                    data-speedx="0.03"
+                    data-speedy="0.03"
+                    src="../assets/images/protein_hero.svg"
+                    alt=""
+                    class="parallax meal_plan_hero--image"
+                />
             </div>
             <div class="meal_plan_panel--meal_plan_info">
                 <p class="meal_plan_info--title">
@@ -240,7 +252,13 @@
         <div class="meal_plan_panel">
             <div class="meal_plan_panel--meal_plan_hero">
                 <div id="banner_royal" class="meal_plan_hero--banner"></div>
-                <img src="../assets/images/fancy_food.svg" alt="" class="meal_plan_hero--image" />
+                <img
+                    data-speedx="0.03"
+                    data-speedy="0.03"
+                    src="../assets/images/fancy_food.svg"
+                    alt=""
+                    class="parallax meal_plan_hero--image"
+                />
             </div>
             <div class="meal_plan_panel--meal_plan_info">
                 <p class="meal_plan_info--title">
@@ -360,4 +378,11 @@
 <script setup>
     import navBar from "../components/Navbar.vue";
     import mealTypeNav from "../components/MealTypeNavbar.vue";
+    import { useParallax } from "../components/composables/useParallax";
+    import { onMounted } from "vue";
+
+    onMounted(() => {
+        const parallaxEls = document.querySelectorAll(".parallax");
+        parallaxEls.forEach((el) => useParallax(el));
+    });
 </script>
