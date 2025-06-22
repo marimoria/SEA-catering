@@ -56,3 +56,17 @@ body {
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #fff9f4;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #f28c28, #d54f22, #4f9447, #8ebe3f);
+    border-radius: 10px;
+    border: 2px solid #fff9f4;
+}
