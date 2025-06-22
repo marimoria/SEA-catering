@@ -1,6 +1,4 @@
 .testimonials {
-    $self: &;
-
     position: relative;
     width: 100vw;
     min-height: calc(var(--vh, 1vh) * 100);
@@ -45,8 +43,6 @@
 }
 
 .cards_grid {
-    $self: &;
-
     display: flex;
     flex-direction: column;
     margin-top: clamp(5vh, 2vh, 8vh);
@@ -100,8 +96,6 @@
 }
 
 .cards_carousel {
-    $self: &;
-
     &--cards {
         flex: 0 0 clamp(15em, 25vw, 20em);
         height: auto;
