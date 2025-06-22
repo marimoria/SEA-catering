@@ -9,6 +9,7 @@
             <nav class="desktop-nav">
                 <router-link class="nav_name" to="/">Home</router-link>
                 <router-link class="nav_name" to="/meal">Meal Plans</router-link>
+                <router-link class="nav_name" to="/testimony">Testimonies</router-link>
                 <router-link class="nav_name" to="/subscription">Subscription</router-link>
                 <router-link class="nav_name" to="/contact">Contact Us</router-link>
             </nav>
@@ -26,6 +27,7 @@
                 <nav v-if="isOpen" class="dropdown">
                     <router-link class="nav_name" to="/">Home</router-link>
                     <router-link class="nav_name" to="/meal">Meal Plans</router-link>
+                    <router-link class="nav_name" to="/testimony">Testimonies</router-link>
                     <router-link class="nav_name" to="/subscription">Subscription</router-link>
                     <router-link class="nav_name" to="/contact">Contact Us</router-link>
                 </nav>
