@@ -88,7 +88,7 @@
 
     &--cards {
         flex: 0 0 clamp(15em, 25vw, 20em);
-        height: clamp(24em, 40vh, 30em);
+        height: auto;
 
         border: 2px solid transparent;
         border-radius: 1em;
@@ -102,13 +102,10 @@
         flex-direction: column;
         text-align: center;
         align-items: center;
-
-        overflow-y: auto;
     }
 }
 
 .card_content {
-    flex: 1;
     &--quotes {
         width: 2.3em;
         margin-bottom: 0.5em;

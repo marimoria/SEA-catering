@@ -23,11 +23,13 @@
                                 <p :style="{ color: getRandomColor() }" class="card_content--title">
                                     Good App!
                                 </p>
+                                <rating :max-rating="5" :rating="3" />
                                 <p class="card_content--desc">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                                    enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                                    nisi ut aliquip ex ea commodo consequat.
+                                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
+                                    commodo ligula eget dolor. Aenean massa. Cum sociis natoque
+                                    penatibus et magnis dis parturient montes, nascetur ridiculus
+                                    mus. Donec quam felis, ultricies nec, pellentesque eu, pretium
+                                    quis, sem. Nulla consequat massa quis enim. Donec.
                                 </p>
                                 <p :style="{ color: getRandomColor() }" class="card_content--user">
                                     - Marimoria
@@ -57,6 +59,8 @@
 
 <script setup>
     import navBar from "../components/Navbar.vue";
+    import rating from "../components/Rating.vue";
+
     import { gsap } from "../js/vendor";
 
     const props = defineProps({
