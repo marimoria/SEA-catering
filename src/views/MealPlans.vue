@@ -24,7 +24,7 @@
                     flavor.
                 </p>
                 <router-link to="/subscription">
-                    <p id="price_diet" class="meal_plan_info--price">
+                    <p id="price_diet" class="button meal_plan_info--price">
                         <span class="bigger_size highlight_basil">Rp30.000,00</span> /meal
                     </p>
                 </router-link>
@@ -122,7 +122,7 @@
                         </div>
                     </template>
                 </mealTypeNav>
-                <p id="details_diet" class="meal_plan_info--details">
+                <p id="details_diet" class="button meal_plan_info--details">
                     See more <span class="highlight_basil">details</span>
                 </p>
             </div>
@@ -149,7 +149,7 @@
                     Perfect for active lifestyles to keep you energized all day.
                 </p>
                 <router-link to="/subscription">
-                    <p class="meal_plan_info--price">
+                    <p class="button meal_plan_info--price">
                         <span class="bigger_size highlight_paprika">Rp40.000,00</span> /meal
                     </p>
                 </router-link>
@@ -246,7 +246,7 @@
                         </div>
                     </template>
                 </mealTypeNav>
-                <p class="meal_plan_info--details">
+                <p class="button meal_plan_info--details">
                     See more <span class="highlight_paprika">details</span>
                 </p>
             </div>
@@ -274,7 +274,7 @@
                     indulgence, balance, and unforgettable taste
                 </p>
                 <router-link to="/subscription">
-                    <p id="price_royal" class="meal_plan_info--price">
+                    <p id="price_royal" class="button meal_plan_info--price">
                         <span class="bigger_size highlight_purple">Rp60.000,00</span> /meal
                     </p>
                 </router-link>
@@ -367,7 +367,7 @@
                         </div>
                     </template>
                 </mealTypeNav>
-                <p id="details_royal" class="meal_plan_info--details">
+                <p id="details_royal" class="button meal_plan_info--details">
                     See more <span class="highlight_purple">details</span>
                 </p>
             </div>
@@ -389,6 +389,27 @@
         viewport: Object,
         device: Object
     });
+
+    // diet plan popup props
+    const nameDiet = "Diet Meal Plan";
+    const descDiet =
+        "Our Diet Meal Plan is crafted to help you achieve your health goals without compromising on taste. Packed with essential nutrients and rich in fiber, these meals are designed to support weight management, boost metabolism, and keep you full longer. Ideal for those looking to stay light, energized, and nourished throughout the day.";
+    const benefitsDiet = [
+        "Supports healthy weight loss and maintenance",
+        "Keeps you full longer with fiber-rich ingredients",
+        "Helps regulate digestion and metabolism",
+        "Low in calories, high in essential nutrients",
+        "Balanced macronutrient portions for optimal energy"
+    ];
+    const nutritionDiet = {
+        Calories: "300 kcal",
+        Protein: "18 g",
+        Carbohydrates: "32 g",
+        Fats: "9 g",
+        Fiber: "7 g",
+        Sugars: "5 g",
+        Sodium: "320 mg"
+    };
 
     onMounted(() => {
         const parallaxEls = document.querySelectorAll(".parallax");
