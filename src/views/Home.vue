@@ -154,7 +154,6 @@
 
         for (let i = 0; i < wordsObject.length; i++) {
             const { word, color } = wordsObject[i];
-            const nextIndex = (i + i) % wordsObject.length; // Makes it so that when (2 + 1) % 3 = 0
 
             typewriterTl
                 .call(() => switchImage(i))
