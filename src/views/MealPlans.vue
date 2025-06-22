@@ -122,9 +122,26 @@
                         </div>
                     </template>
                 </mealTypeNav>
-                <p id="details_diet" class="button meal_plan_info--details">
+
+                <p
+                    @click="visibleDiet = true"
+                    id="details_diet"
+                    class="button meal_plan_info--details"
+                >
                     See more <span class="highlight_basil">details</span>
                 </p>
+
+                <mealPlanPopup
+                    :visible="visibleDiet"
+                    @close="visibleDiet = false"
+                    :name="nameDiet"
+                    :desc="descDiet"
+                    :benefits="benefitsDiet"
+                    :nutrition="nutritionDiet"
+                    :darkColor="'#2e5a32'"
+                    :medColor="'#4f9447'"
+                    :lightColor="'#8ebe3f'"
+                />
             </div>
         </div>
 
@@ -246,9 +263,21 @@
                         </div>
                     </template>
                 </mealTypeNav>
-                <p class="button meal_plan_info--details">
+                <p @click="visibleProtein = true" class="button meal_plan_info--details">
                     See more <span class="highlight_paprika">details</span>
                 </p>
+
+                <mealPlanPopup
+                    :visible="visibleProtein"
+                    @close="visibleProtein = false"
+                    :name="nameProtein"
+                    :desc="descProtein"
+                    :benefits="benefitsProtein"
+                    :nutrition="nutritionProtein"
+                    :darkColor="'#680a0a'"
+                    :medColor="'#d54f22'"
+                    :lightColor="'#f28c28'"
+                />
             </div>
         </div>
 
@@ -367,9 +396,24 @@
                         </div>
                     </template>
                 </mealTypeNav>
-                <p id="details_royal" class="button meal_plan_info--details">
+                <p
+                    @click="visibleRoyal = true"
+                    id="details_royal"
+                    class="button meal_plan_info--details"
+                >
                     See more <span class="highlight_purple">details</span>
                 </p>
+                <mealPlanPopup
+                    :visible="visibleRoyal"
+                    @close="visibleRoyal = false"
+                    :name="nameRoyal"
+                    :desc="descRoyal"
+                    :benefits="benefitsRoyal"
+                    :nutrition="nutritionRoyal"
+                    :darkColor="'#490a7d'"
+                    :medColor="'#7935c7'"
+                    :lightColor="'#ae73f1'"
+                />
             </div>
         </div>
     </main>
@@ -382,8 +426,10 @@
 <script setup>
     import navBar from "../components/Navbar.vue";
     import mealTypeNav from "../components/MealTypeNavbar.vue";
+    import mealPlanPopup from "../components/MealPlanPopup.vue";
+
     import { useParallax } from "../components/composables/useParallax";
-    import { onMounted } from "vue";
+    import { onMounted, ref } from "vue";
 
     const props = defineProps({
         viewport: Object,
@@ -391,24 +437,63 @@
     });
 
     // diet plan popup props
+    const visibleDiet = ref(false);
     const nameDiet = "Diet Meal Plan";
     const descDiet =
         "Our Diet Meal Plan is crafted to help you achieve your health goals without compromising on taste. Packed with essential nutrients and rich in fiber, these meals are designed to support weight management, boost metabolism, and keep you full longer. Ideal for those looking to stay light, energized, and nourished throughout the day.";
     const benefitsDiet = [
-        "Supports healthy weight loss and maintenance",
         "Keeps you full longer with fiber-rich ingredients",
         "Helps regulate digestion and metabolism",
-        "Low in calories, high in essential nutrients",
-        "Balanced macronutrient portions for optimal energy"
+        "Low in calories, high in essential nutrients"
     ];
     const nutritionDiet = {
         Calories: "300 kcal",
         Protein: "18 g",
-        Carbohydrates: "32 g",
+        Carbs: "32 g",
         Fats: "9 g",
         Fiber: "7 g",
         Sugars: "5 g",
         Sodium: "320 mg"
+    };
+
+    // protein plan popup props
+    const visibleProtein = ref(false);
+    const nameProtein = "Protein Meal Plan";
+    const descProtein =
+        "Our Protein Meal Plan is tailored for muscle maintenance, post-workout recovery, and sustained energy levels. Each meal is high in quality protein sources like lean meats, legumes, and eggs, balanced with smart carbs and healthy fats to support an active lifestyle.";
+    const benefitsProtein = [
+        "Supports muscle growth and recovery",
+        "Keeps you full and energized throughout the day",
+        "Ideal for fitness and active routines"
+    ];
+    const nutritionProtein = {
+        Calories: "450 kcal",
+        Protein: "35 g",
+        Carbs: "25 g",
+        Fats: "15 g",
+        Fiber: "6 g",
+        Sugars: "4 g",
+        Sodium: "400 mg"
+    };
+
+    // royal plan popup props
+    const visibleRoyal = ref(false);
+    const nameRoyal = "Royal Meal Plan";
+    const descRoyal =
+        "Our Royal Meal Plan offers a luxurious culinary experience crafted with premium ingredients. These gourmet meals are rich in taste and nutrition, perfect for those who seek indulgence while maintaining a balanced diet. A blend of health and elegance in every bite.";
+    const benefitsRoyal = [
+        "Premium ingredients for superior taste and nutrition",
+        "Balanced macros for sustained well-being",
+        "Elevated dining experience at every meal"
+    ];
+    const nutritionRoyal = {
+        Calories: "520 kcal",
+        Protein: "28 g",
+        Carbs: "40 g",
+        Fats: "22 g",
+        Fiber: "5 g",
+        Sugars: "6 g",
+        Sodium: "380 mg"
     };
 
     onMounted(() => {
