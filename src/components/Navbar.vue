@@ -14,6 +14,10 @@
                 <router-link class="nav_name" to="/contact">Contact Us</router-link>
             </nav>
 
+            <nav v-if="!userLogged" class="desktop-nav">
+                <router-link class="sign_up" to="/">Sign Up</router-link>
+            </nav>
+
             <!-- Hamburger -->
             <button class="hamburger" @click="isOpen = !isOpen">
                 <!-- Might need to add @touchend later for mobile -->
@@ -38,7 +42,9 @@
 
 <script setup>
     import { ref } from "vue";
+
     const isOpen = ref(false);
+    const userLogged = ref(false);
 </script>
 
 <style scoped>
@@ -48,7 +54,6 @@
     }
 
     .navbar {
-        background: rgb(255, 249, 244);
         padding: 1rem 1rem;
         top: 0;
         position: sticky;
@@ -186,5 +191,18 @@
         .logo_name {
             font-size: 1.5rem;
         }
+    }
+
+    .sign_up {
+        background-color: #fff9f4;
+        font-family: "Inter";
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 0.8em;
+
+        border: 2px solid transparent;
+        border-radius: 1em;
+        background-image: linear-gradient(white, white), var(--second-gradient);
+        background-clip: padding-box, border-box;
     }
 </style>
