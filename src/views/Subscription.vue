@@ -1,9 +1,130 @@
 <template>
-    <h1>Hi! This is Subscription</h1>
+    <div class="subscription">
+        <div class="background"></div>
+        <Navbar />
+        <form class="subscription_form">
+            <div class="subscription_form--plan">
+                <p class="plan--title">Meal Plan</p>
+                <p class="plan--desc">Please choose at least one of these meal plan.</p>
+                <div class="plan_wrap">
+                    <div class="choice_wrap">
+                        <div @click="choosePlan($event)" id="recipe_diet" class="plan_wrap--recipe">
+                            <img
+                                src="../assets/images/veggies_hero.svg"
+                                alt=""
+                                class="recipe--image"
+                            />
+                            <p class="recipe--name">Diet Plan</p>
+                            <p id="price_diet" class="recipe--price">
+                                <span class="bigger_size highlight_basil">Rp30.000,00</span> /meal
+                            </p>
+                            <p class="recipe--desc">
+                                Nourish your body with low-calorie, high-nutrient meals to support
+                                weight management. Each dish is balanced for portion control without
+                                sacrificing flavor.
+                            </p>
+                        </div>
+                        <p
+                            :class="{ hidden_opacity: !chosenPlans.includes('recipe_diet') }"
+                            class="selected_message"
+                        >
+                            ✅ Plan selected
+                        </p>
+                    </div>
+
+                    <div class="choice_wrap">
+                        <div
+                            @click="choosePlan($event)"
+                            id="recipe_protein"
+                            class="plan_wrap--recipe"
+                        >
+                            <img
+                                src="../assets/images/protein_hero.svg"
+                                alt=""
+                                class="recipe--image"
+                            />
+                            <p class="recipe--name">Protein Plan</p>
+                            <p id="price_protein" class="recipe--price">
+                                <span class="bigger_size highlight_paprika">Rp40.000,00</span> /meal
+                            </p>
+                            <p class="recipe--desc">
+                                Power up with protein-packed meals made for strength, recovery, and
+                                fullness. Perfect for active lifestyles to keep you energized all
+                                day.
+                            </p>
+                        </div>
+                        <p
+                            :class="{ hidden_opacity: !chosenPlans.includes('recipe_protein') }"
+                            class="selected_message"
+                        >
+                            ✅ Plan selected
+                        </p>
+                    </div>
+
+                    <div class="choice_wrap">
+                        <div
+                            @click="choosePlan($event)"
+                            id="recipe_royal"
+                            class="plan_wrap--recipe"
+                        >
+                            <img
+                                src="../assets/images/fancy_food.svg"
+                                alt=""
+                                class="recipe--image"
+                            />
+                            <p class="recipe--name">Royal Plan</p>
+                            <p id="price_royal" class="recipe--price">
+                                <span class="bigger_size highlight_purple">Rp60.000,00</span> /meal
+                            </p>
+                            <p class="recipe--desc">
+                                An elite culinary experience crafted with the world's most exquisite
+                                ingredients. Each meal is designed for indulgence, balance, and
+                                unforgettable taste
+                            </p>
+                        </div>
+                        <p
+                            :class="{ hidden_opacity: !chosenPlans.includes('recipe_royal') }"
+                            class="selected_message"
+                        >
+                            ✅ Plan selected
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="subscription_form--meal_type"></div>
+            <div class="subscription_form--delivery_days"></div>
+            <div class="subscription_form--user_data"></div>
+        </form>
+    </div>
 </template>
 
 <style scoped lang="scss">
     @use "../assets/styles/subscription.scss";
 </style>
 
-<script setup></script>
+<script setup>
+    import { ref } from "vue";
+    import Navbar from "../components/Navbar.vue";
+
+    const props = defineProps({
+        viewport: Object,
+        device: Object
+    });
+
+    const chosenPlans = ref([]);
+
+    function choosePlan(event) {
+        const recipeCard = event.target.closest(".plan_wrap--recipe");
+
+        if (!recipeCard) {
+            return;
+        }
+
+        if (chosenPlans.value.includes(recipeCard.id)) {
+            const index = chosenPlans.value.indexOf(recipeCard.id);
+            chosenPlans.value.splice(index, 1);
+        } else {
+            chosenPlans.value.push(recipeCard.id);
+        }
+    }
+</script>
