@@ -3,6 +3,7 @@
         <div class="tab_buttons">
             <!-- Checks if current active tab is equal to index -->
             <button
+                type="button"
                 v-for="(tab, index) in tabs"
                 :key="index"
                 :class="{ active: activeTab === index }"
