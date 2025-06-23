@@ -34,6 +34,7 @@
                     <router-link class="nav_name" to="/testimony">Testimonies</router-link>
                     <router-link class="nav_name" to="/subscription">Subscription</router-link>
                     <router-link class="nav_name" to="/contact">Contact Us</router-link>
+                    <router-link class="sign_up" to="/">Sign Up</router-link>
                 </nav>
             </transition>
         </div>
