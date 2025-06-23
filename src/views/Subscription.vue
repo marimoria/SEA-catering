@@ -2,7 +2,7 @@
     <div class="subscription">
         <div class="background"></div>
         <Navbar />
-        <form class="subscription_form">
+        <div class="subscription_form">
             <div class="subscription_form--plan">
                 <p class="plan--title">Meal Plan</p>
                 <p class="plan--desc">Please choose at least one of these meal plan.</p>
@@ -148,7 +148,7 @@
 
             <div class="subscription_form--delivery_days"></div>
             <div class="subscription_form--user_data"></div>
-        </form>
+        </div>
     </div>
 </template>
 
