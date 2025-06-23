@@ -91,7 +91,61 @@
                     </div>
                 </div>
             </div>
-            <div class="subscription_form--meal_type"></div>
+
+            <div class="subscription_form--meal_type">
+                <p class="type--title">Meal Type</p>
+                <p class="type--desc">
+                    Please choose at least one of these meal types for each of your chosen plan.
+                </p>
+
+                <div class="type_options">
+                    <div v-if="chosenPlans.includes('recipe_diet')" class="diet_type">
+                        <p class="diet_type--title">
+                            <span class="highlight_basil">Diet</span> Plan
+                        </p>
+                        <MealSelector
+                            class="meal_nav"
+                            v-model:selected="chosenTypes"
+                            :types="['Breakfast', 'Lunch', 'Dinner']"
+                            :mealPlan="'dietTypes'"
+                            :buttonColor="'#4f9447'"
+                            :activeColor="'#8ebe3f'"
+                        >
+                        </MealSelector>
+                    </div>
+
+                    <div v-if="chosenPlans.includes('recipe_protein')" class="protein_type">
+                        <p class="protein_type--title">
+                            <span class="highlight_paprika">Protein</span> Plan
+                        </p>
+                        <MealSelector
+                            class="meal_nav"
+                            v-model:selected="chosenTypes"
+                            :types="['Breakfast', 'Lunch', 'Dinner']"
+                            :mealPlan="'proteinTypes'"
+                            :button-color="'#d54f22'"
+                            :active-color="'#ec7b55'"
+                        >
+                        </MealSelector>
+                    </div>
+
+                    <div v-if="chosenPlans.includes('recipe_royal')" class="royal_type">
+                        <p class="royal_type--title">
+                            <span class="highlight_purple">Royal</span> Plan
+                        </p>
+                        <MealSelector
+                            class="meal_nav"
+                            v-model:selected="chosenTypes"
+                            :types="['Breakfast', 'Lunch', 'Dinner']"
+                            :mealPlan="'royalTypes'"
+                            :button-color="'#847ddd'"
+                            :active-color="'#a5a0e8'"
+                        >
+                        </MealSelector>
+                    </div>
+                </div>
+            </div>
+
             <div class="subscription_form--delivery_days"></div>
             <div class="subscription_form--user_data"></div>
         </form>
@@ -105,6 +159,7 @@
 <script setup>
     import { ref } from "vue";
     import Navbar from "../components/Navbar.vue";
+    import MealSelector from "../components/MealSelector.vue";
 
     const props = defineProps({
         viewport: Object,
@@ -112,6 +167,11 @@
     });
 
     const chosenPlans = ref([]);
+    const chosenTypes = ref({
+        dietTypes: [],
+        proteinTypes: [],
+        royalTypes: []
+    });
 
     function choosePlan(event) {
         const recipeCard = event.target.closest(".plan_wrap--recipe");

@@ -16,6 +16,7 @@
     z-index: -2;
 }
 
+// plan forms
 .plan {
     &--title {
         font-family: "Inter";
@@ -38,11 +39,6 @@
         width: clamp(37ch, 50%, 40ch);
         color: #444;
         margin-inline: auto;
-    }
-
-    &--group {
-        display: flex;
-        flex-direction: row;
     }
 }
 
@@ -127,24 +123,6 @@
     }
 }
 
-.selected_message {
-    text-align: center;
-    font-weight: 500;
-    font-family: "Inter", sans-serif;
-    font-size: clamp(1.1rem, 1.1vw, 1.5rem);
-    width: clamp(37ch, 50%, 50ch);
-    color: #444;
-    margin-top: 10px;
-
-    opacity: 1;
-    transition: opacity 0.2s ease;
-}
-
-.hidden_opacity {
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
 #recipe_diet {
     border: 2px solid var(--color-deep-olive);
 
@@ -205,16 +183,96 @@
     }
 }
 
-@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
-    .plan_wrap {
-        &--recipe {
-            margin-top: 10px;
-        }
+.selected_message {
+    text-align: center;
+    font-weight: 500;
+    font-family: "Inter", sans-serif;
+    font-size: clamp(1.1rem, 1.1vw, 1.5rem);
+    width: clamp(37ch, 50%, 50ch);
+    color: #444;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+.hidden_opacity {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+// Type forms
+.meal_type_nav {
+    gap: 1em;
+}
+
+.type {
+    &--title {
+        font-family: "Inter";
+        font-size: clamp(2rem, 6vw, 4rem);
+        font-weight: 700;
+        font-family: "Inter", sans-serif;
+        text-align: center;
+        color: black;
+        margin-top: clamp(5vh, 2vh, 8vh);
+    }
+
+    &--desc {
+        margin-top: 10px;
+        margin-bottom: clamp(4vh, 3vh, 8vh);
+
+        text-align: center;
+        font-weight: 500;
+        font-family: "Inter", sans-serif;
+        font-size: clamp(0.9rem, 1.1vw, 1.5rem);
+        width: clamp(37ch, 50%, 40ch);
+        color: #444;
+        margin-inline: auto;
+    }
+}
+
+.type_options {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1em, 5vw, 2rem);
+    align-items: center;
+    justify-content: center;
+}
+
+.diet_type {
+    &--title {
+        font-size: clamp(1.3rem, 3.5vw, 2rem);
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 1rem;
+        font-family: "Inter";
+    }
+}
+
+.protein_type {
+    &--title {
+        font-size: clamp(1.3rem, 3.5vw, 2rem);
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 1rem;
+        font-family: "Inter";
+    }
+}
+
+.royal_type {
+    &--title {
+        font-size: clamp(1.3rem, 3.5vw, 2rem);
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 1rem;
+        font-family: "Inter";
     }
 }
 
 @media (min-width: 1024px) {
-    .plan_wrap {
+    .plan_wrap,
+    .type_options {
         flex-direction: row;
     }
 }
