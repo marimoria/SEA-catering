@@ -180,6 +180,12 @@
 }
 
 // testimony forms
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: transparent !important;
+    box-shadow: none;
+}
 
 .testi_forms {
     margin-top: clamp(5vh, 2vh, 8vh);
