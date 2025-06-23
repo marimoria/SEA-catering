@@ -30,13 +30,30 @@
                     </div>
                 </div>
 
-                <div class="contact_info--form">
+                <div class="contact_info--form" @submit.prevent="sendContactData">
                     <form>
-                        <input type="text" placeholder="Your Name" />
-                        <input type="email" placeholder="Your Email" />
-                        <input type="text" placeholder="Subject" />
-                        <textarea placeholder="Your Message"></textarea>
+                        <input v-model="contactName" type="text" placeholder="Your Name" required />
+                        <input
+                            v-model="contactEmail"
+                            type="email"
+                            placeholder="Your Email"
+                            required
+                        />
+                        <input
+                            v-model="contactSubject"
+                            type="text"
+                            placeholder="Subject"
+                            required
+                        />
+                        <textarea
+                            v-model="contactMessage"
+                            placeholder="Your Message"
+                            required
+                        ></textarea>
                         <button type="submit">Send Message</button>
+                        <p v-if="isSubmitted" class="success_message">
+                            ✅ Thank you! Your review has been submitted.
+                        </p>
                     </form>
                 </div>
             </div>
@@ -83,9 +100,36 @@
 
 <script setup>
     import Navbar from "../components/Navbar.vue";
+    import { ref } from "vue";
 
     const props = defineProps({
         viewport: Object,
         device: Object
     });
+
+    const contactName = ref("");
+    const contactEmail = ref("");
+    const contactSubject = ref("");
+    const contactMessage = ref("");
+    const isSubmitted = ref(false);
+
+    function sendContactData() {
+        console.log(
+            contactName.value,
+            contactEmail.value,
+            contactSubject.value,
+            contactMessage.value
+        );
+
+        isSubmitted.value = true;
+
+        contactName.value = "";
+        contactEmail.value = "";
+        contactSubject.value = "";
+        contactMessage.value = "";
+
+        setTimeout(() => {
+            isSubmitted.value = false;
+        }, 3000);
+    }
 </script>
