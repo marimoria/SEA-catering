@@ -69,7 +69,7 @@
                     Help us create a more satisfying meal and experience here at SEA Catering!
                 </p>
 
-                <div class="testi_forms--forms_area">
+                <form class="testi_forms--forms_area" @submit.prevent="sendReviewData">
                     <div class="input_area">
                         <p class="forms_area--name_title">Your name</p>
                         <input
@@ -79,6 +79,7 @@
                             v-model="reviewName"
                             placeholder="Username"
                             maxlength="17"
+                            required
                         />
                     </div>
 
@@ -101,6 +102,7 @@
                             v-model="reviewSummary"
                             placeholder="Summary"
                             maxlength="20"
+                            required
                         />
                     </div>
 
@@ -112,12 +114,17 @@
                             v-model="reviewMessage"
                             placeholder="Message"
                             maxlength="200"
+                            required
                         ></textarea>
                     </div>
-                </div>
-            </div>
 
-            <button class="submit_button" @click="sendReviewData">Submit Review</button>
+                    <button class="submit_button" type="submit">Submit Review</button>
+
+                    <p v-if="isSubmitted" class="success_message">
+                        ✅ Thank you! Your review has been submitted.
+                    </p>
+                </form>
+            </div>
         </div>
     </div>
 </template>
@@ -177,12 +184,23 @@
     }
 
     const reviewName = ref("");
-    const reviewStars = ref(0);
+    const reviewStars = ref(1);
     const reviewSummary = ref("");
     const reviewMessage = ref("");
+    const isSubmitted = ref(false);
 
     function sendReviewData() {
-        // connect with supabase & do checks
         console.log(reviewName.value, reviewStars.value, reviewSummary.value, reviewMessage.value);
+
+        isSubmitted.value = true;
+
+        reviewName.value = "";
+        reviewStars.value = 1;
+        reviewSummary.value = "";
+        reviewMessage.value = "";
+
+        setTimeout(() => {
+            isSubmitted.value = false;
+        }, 3000);
     }
 </script>
