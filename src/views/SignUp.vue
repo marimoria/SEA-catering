@@ -43,7 +43,7 @@
                         <input v-model="email" type="email" placeholder="Email Address" required />
                         <input v-model="password" type="password" placeholder="Password" required />
                         <input v-model="fullName" type="text" placeholder="Full Name" required />
-                        <input v-model="phone" type="tel" placeholder="Phone Number" required />
+                        <input v-model="phone" type="number" placeholder="Phone Number" required />
                         <input v-model="allergies" type="text" placeholder="Allergies (optional)" />
 
                         <button type="submit">Sign Up</button>
