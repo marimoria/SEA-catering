@@ -30,10 +30,18 @@
                 </div>
 
                 <div class="signup_info--form">
+                    <p class="details--title">Sign Up</p>
                     <form @submit.prevent="handleSignup">
+                        <input
+                            v-model="username"
+                            type="text"
+                            placeholder="Username"
+                            maxlength="20"
+                            @input="sanitizeUsername"
+                            required
+                        />
                         <input v-model="email" type="email" placeholder="Email Address" required />
                         <input v-model="password" type="password" placeholder="Password" required />
-                        <input v-model="username" type="text" placeholder="Username" required />
                         <input v-model="fullName" type="text" placeholder="Full Name" required />
                         <input v-model="phone" type="tel" placeholder="Phone Number" required />
                         <input v-model="allergies" type="text" placeholder="Allergies (optional)" />
@@ -43,6 +51,10 @@
                         <p v-if="errorMessage" class="error_message">❌ {{ errorMessage }}</p>
                         <p v-if="successMessage" class="success_message">✅ {{ successMessage }}</p>
                     </form>
+                    <p class="nav_message">
+                        Already have an account?
+                        <router-link to="/login">Login Here</router-link>
+                    </p>
                 </div>
             </div>
         </div>
@@ -101,6 +113,11 @@
 
     const successMessage = ref("");
     const errorMessage = ref("");
+
+    function sanitizeUsername(e) {
+        // Replace anything that's NOT a-z, A-Z, 0-9, _ or .
+        username.value = e.target.value.replace(/[^a-zA-Z0-9_.]/g, "");
+    }
 
     async function handleSignup() {
         errorMessage.value = "";

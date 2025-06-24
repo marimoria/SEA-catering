@@ -176,6 +176,19 @@
     margin-inline: auto;
 }
 
+.nav_message {
+    text-align: center;
+    font-size: 1rem;
+    font-family: "Inter", sans-serif;
+    margin-top: 1rem;
+
+    a {
+        font-weight: bold;
+        color: var(--color-paprika-red);
+        text-decoration: underline;
+    }
+}
+
 @media (min-width: 1024px) and (max-height: 1000px) {
     .signup_grid {
         justify-content: space-between;
