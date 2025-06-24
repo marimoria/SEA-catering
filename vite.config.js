@@ -1,18 +1,26 @@
-import { fileURLToPath, URL } from 'node:url'
+import { fileURLToPath, URL } from "node:url";
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
 
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueDevTools from 'vite-plugin-vue-devtools'
+const isProd = process.env.NODE_ENV === "production";
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    vueDevTools(),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+    base: "/SEA-catering",
+    resolve: {
+        alias: {
+            "@": fileURLToPath(new URL("./src", import.meta.url)),
+        },
     },
-  },
-})
+    build: {
+        outDir: "dist",
+        assetsDir: "assets",
+        emptyOutDir: true,
+        minify: isProd ? "esbuild" : false,
+        target: "esnext",
+    },
+    server: {
+        open: true,
+        port: 3000,
+    },
+    plugins: [vue()],
+});
