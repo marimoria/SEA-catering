@@ -4,7 +4,8 @@ import Home from "../views/Home.vue";
 import Meal from "../views/MealPlans.vue";
 import Subscription from "../views/Subscription.vue";
 import ContactUs from "../views/ContactUs.vue";
-import Testimony from "@/views/Testimony.vue";
+import Testimony from "../views/Testimony.vue";
+import SignUp from "../views/SignUp.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +34,11 @@ const router = createRouter({
             path: "/contact",
             name: "contact",
             component: ContactUs
+        },
+        {
+            path: "/signup",
+            name: "sign up",
+            component: SignUp
         },
         {
             path: "/:pathMatch(.*)*",
