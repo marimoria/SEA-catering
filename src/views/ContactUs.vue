@@ -67,7 +67,7 @@
             alt=""
         />
         <img
-            data-speedx="0.03"
+            data-speedx="0.02"
             data-speedy="0.03"
             class="parallax bg_image--bottom_left"
             src="../assets/images/pad_thai.svg"
@@ -77,7 +77,7 @@
         <!-- large screen only -->
         <img
             v-if="viewport.w >= 1024"
-            data-speedx="0.03"
+            data-speedx="0.01"
             data-speedy="0.03"
             class="parallax bg_image--sec_right"
             src="../assets/images/protein_hero.svg"
@@ -85,7 +85,7 @@
         />
         <img
             v-if="viewport.w >= 1024"
-            data-speedx="0.03"
+            data-speedx="0.04"
             data-speedy="0.03"
             class="parallax bg_image--sec_left"
             src="../assets/images/veggies_hero.svg"
@@ -99,8 +99,9 @@
 </style>
 
 <script setup>
+    import { useParallax } from "../components/composables/useParallax";
     import Navbar from "../components/Navbar.vue";
-    import { ref } from "vue";
+    import { onMounted, ref } from "vue";
 
     const props = defineProps({
         viewport: Object,
@@ -132,4 +133,9 @@
             isSubmitted.value = false;
         }, 3000);
     }
+
+    onMounted(() => {
+        const parallaxElements = document.querySelectorAll(".parallax");
+        parallaxElements.forEach((el) => useParallax(el));
+    });
 </script>

@@ -61,25 +61,25 @@
 
         <!-- background assets -->
         <img
-            data-speedx="0.03"
+            data-speedx="0.02"
             data-speedy="0.03"
             class="parallax bg_image--top_right"
-            src="../assets/images/chicken_platter.svg"
+            src="../assets/images/grill_steak.svg"
             alt=""
         />
         <img
-            data-speedx="0.03"
+            data-speedx="0.01"
             data-speedy="0.03"
             class="parallax bg_image--bottom_left"
-            src="../assets/images/pad_thai.svg"
+            src="../assets/images/grilled_salmon.svg"
             alt=""
         />
         <img
             v-if="viewport.w >= 1024"
-            data-speedx="0.03"
+            data-speedx="0.04"
             data-speedy="0.03"
             class="parallax bg_image--sec_right"
-            src="../assets/images/protein_hero.svg"
+            src="../assets/images/duck.svg"
             alt=""
         />
         <img
@@ -87,7 +87,7 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax bg_image--sec_left"
-            src="../assets/images/veggies_hero.svg"
+            src="../assets/images/quinoa_salad.svg"
             alt=""
         />
     </div>
@@ -95,8 +95,9 @@
 
 <script setup>
     import Navbar from "../components/Navbar.vue";
-    import { ref } from "vue";
+    import { onMounted, ref } from "vue";
     import { supabase, getData, insertData } from "../components/composables/useSupabase";
+    import { useParallax } from "../components/composables/useParallax";
 
     const props = defineProps({
         viewport: Object,
@@ -167,6 +168,11 @@
         phone.value = "";
         allergies.value = "";
     }
+
+    onMounted(() => {
+        const parallaxElements = document.querySelectorAll(".parallax");
+        parallaxElements.forEach((el) => useParallax(el));
+    });
 </script>
 
 <style scoped lang="scss">
