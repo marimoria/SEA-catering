@@ -1,14 +1,15 @@
 <template>
     <div class="meal_type_selector">
+        <!--Breakfast, Lunch-->
         <button
             v-for="type in types"
-            :key="type"
+            :key="type.toLowerCase()"
             type="button"
-            @click="toggleType(type)"
-            :class="{ active: isSelected(type) }"
+            @click="toggleType(type.toLowerCase())"
+            :class="{ active: isSelected(type.toLowerCase()) }"
             :style="{
-                backgroundColor: isSelected(type) ? props.activeColor : '#fff9f4',
-                color: isSelected(type) ? 'white' : props.buttonColor,
+                backgroundColor: isSelected(type.toLowerCase()) ? props.activeColor : '#fff9f4',
+                color: isSelected(type.toLowerCase()) ? 'white' : props.buttonColor,
                 borderColor: props.buttonColor
             }"
         >
@@ -32,24 +33,18 @@
     const selected = defineModel("selected");
 
     function isSelected(type) {
-        if (selected.value[props.mealPlan].includes(type.toLowerCase())) {
-            return true;
-        }
-        return false;
+        return selected.value[props.mealPlan].includes(type);
     }
 
     function toggleType(type) {
-        const typeLower = type.toLowerCase();
         const planArray = selected.value[props.mealPlan];
 
         if (isSelected(type)) {
-            const index = planArray.indexOf(typeLower);
+            const index = planArray.indexOf(type);
             planArray?.splice(index, 1);
         } else {
-            planArray?.push(typeLower);
+            planArray?.push(type);
         }
-
-        console.log(selected.value);
     }
 </script>
 
