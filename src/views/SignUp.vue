@@ -37,7 +37,7 @@
                             type="text"
                             placeholder="Username"
                             maxlength="20"
-                            @input="sanitizeUsername"
+                            @input="sanitizeUsername($event)"
                             required
                         />
                         <input v-model="email" type="email" placeholder="Email Address" required />
@@ -111,13 +111,14 @@
     const fullName = ref("");
     const phone = ref("");
     const allergies = ref("");
+    const isAdmin = ref(false);
 
     const successMessage = ref("");
     const errorMessage = ref("");
 
     function sanitizeUsername(e) {
-        // Replace anything that's NOT a-z, A-Z, 0-9, _ or .
-        username.value = e.target.value.replace(/[^a-zA-Z0-9_.]/g, "");
+        // Replace anything that's NOT a-z, 0-9, _ or .
+        username.value = e.target.value.replace(/[^a-zA-Z0-9_.]/g, "").toLowerCase();
     }
 
     async function handleSignup() {
@@ -129,6 +130,12 @@
         if (usernameExists.length > 0) {
             errorMessage.value = "Username already exists.";
             return;
+        }
+
+        const adminUsername = import.meta.env.ADMIN_USER;
+
+        if (username.value == adminUsername) {
+            isAdmin.value = true;
         }
 
         // duplicate phone
@@ -152,7 +159,7 @@
         await insertData("profiles", {
             username: username.value,
             full_name: fullName.value,
-            is_admin: false,
+            is_admin: isAdmin.value,
             phone: phone.value,
             allergies: allergies.value,
             created_at: new Date().toISOString()
