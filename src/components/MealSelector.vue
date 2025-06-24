@@ -41,9 +41,9 @@
 
         if (isSelected(type)) {
             const index = planArray.indexOf(type);
-            planArray?.splice(index, 1);
+            planArray.splice(index, 1);
         } else {
-            planArray?.push(type);
+            planArray.push(type);
         }
     }
 </script>
