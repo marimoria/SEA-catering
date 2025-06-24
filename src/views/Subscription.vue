@@ -246,7 +246,7 @@
                         type="text"
                         v-model="userName"
                         placeholder="Username"
-                        maxlength="17"
+                        maxlength="20"
                         required
                     />
                 </div>
