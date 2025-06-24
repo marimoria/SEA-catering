@@ -25,7 +25,7 @@
                             </p>
                         </div>
                         <p
-                            :class="{ hidden_opacity: !chosenPlans.includes('recipe_diet') }"
+                            :class="{ hidden_opacity: !chosenPlans.includes('diet') }"
                             class="selected_message"
                         >
                             ✅ Plan selected
@@ -54,7 +54,7 @@
                             </p>
                         </div>
                         <p
-                            :class="{ hidden_opacity: !chosenPlans.includes('recipe_protein') }"
+                            :class="{ hidden_opacity: !chosenPlans.includes('protein') }"
                             class="selected_message"
                         >
                             ✅ Plan selected
@@ -83,7 +83,7 @@
                             </p>
                         </div>
                         <p
-                            :class="{ hidden_opacity: !chosenPlans.includes('recipe_royal') }"
+                            :class="{ hidden_opacity: !chosenPlans.includes('royal') }"
                             class="selected_message"
                         >
                             ✅ Plan selected
@@ -99,7 +99,7 @@
                 </p>
 
                 <div class="type_options">
-                    <div v-if="chosenPlans.includes('recipe_diet')" class="diet_type">
+                    <div v-if="chosenPlans.includes('diet')" class="diet_type">
                         <p class="diet_type--title">
                             <span class="highlight_basil">Diet</span> Plan
                         </p>
@@ -113,7 +113,7 @@
                         ></MealSelector>
                     </div>
 
-                    <div v-if="chosenPlans.includes('recipe_protein')" class="protein_type">
+                    <div v-if="chosenPlans.includes('protein')" class="protein_type">
                         <p class="protein_type--title">
                             <span class="highlight_paprika">Protein</span> Plan
                         </p>
@@ -127,7 +127,7 @@
                         ></MealSelector>
                     </div>
 
-                    <div v-if="chosenPlans.includes('recipe_royal')" class="royal_type">
+                    <div v-if="chosenPlans.includes('royal')" class="royal_type">
                         <p class="royal_type--title">
                             <span class="highlight_purple">Royal</span> Plan
                         </p>
@@ -152,10 +152,7 @@
 
                 <div class="day_options">
                     <div
-                        v-if="
-                            chosenPlans.includes('recipe_diet') &&
-                            chosenTypes.dietTypes.length !== 0
-                        "
+                        v-if="chosenPlans.includes('diet') && chosenTypes.dietTypes.length !== 0"
                         class="diet_day"
                     >
                         <p class="diet_day--title">
@@ -181,8 +178,7 @@
 
                     <div
                         v-if="
-                            chosenPlans.includes('recipe_protein') &&
-                            chosenTypes.proteinTypes.length !== 0
+                            chosenPlans.includes('protein') && chosenTypes.proteinTypes.length !== 0
                         "
                     >
                         <p class="protein_day--title">
@@ -207,10 +203,7 @@
                     </div>
 
                     <div
-                        v-if="
-                            chosenPlans.includes('recipe_royal') &&
-                            chosenTypes.royalTypes.length !== 0
-                        "
+                        v-if="chosenPlans.includes('royal') && chosenTypes.royalTypes.length !== 0"
                     >
                         <p class="royal_day--title">
                             <span class="highlight_purple">Royal</span> Plan
@@ -235,7 +228,78 @@
                 </div>
             </div>
 
-            <div class="subscription_form--user_data"></div>
+            <form
+                @submit.prevent="sendSubsData"
+                v-if="chosenPlans.length !== 0 && typesLength() !== 0 && !isDayEmpty()"
+                class="subscription_form--user_data"
+            >
+                <p class="forms--title">User Data<span class="highlight_paprika">*</span></p>
+                <p class="forms--desc">Please enter your information before subscribing.</p>
+
+                <div class="input_area">
+                    <p class="forms_area--user_form_title">
+                        Your username<span class="highlight_paprika">*</span>
+                    </p>
+                    <input
+                        id="input_name"
+                        class="input--name"
+                        type="text"
+                        v-model="userName"
+                        placeholder="Username"
+                        maxlength="17"
+                        required
+                    />
+                </div>
+
+                <div class="input_area">
+                    <p class="forms_area--user_form_title">
+                        Your Full Name<span class="highlight_paprika">*</span>
+                    </p>
+                    <input
+                        id="input_name"
+                        class="input--name"
+                        type="text"
+                        v-model="userFullName"
+                        placeholder="Full Name"
+                        maxlength="60"
+                        required
+                    />
+                </div>
+
+                <div class="input_area">
+                    <p class="forms_area--user_form_title">
+                        Your Number<span class="highlight_paprika">*</span>
+                    </p>
+                    <input
+                        id="input_number"
+                        class="input--number"
+                        type="number"
+                        v-model="userNum"
+                        placeholder="Your Number"
+                        maxlength="20"
+                        required
+                    />
+                </div>
+
+                <div class="input_area">
+                    <p class="forms_area--user_form_title">Your Allergies</p>
+                    <textarea
+                        id="input_allergy"
+                        class="input--allergy"
+                        v-model="userAllergy"
+                        placeholder="Allergies (Separate with commas)"
+                        maxlength="200"
+                    ></textarea>
+                </div>
+
+                <p class="total_price">Total: Rp{{ totalPrice.toLocaleString("id-ID") }}</p>
+
+                <button class="submit_button" type="submit">Order Subscription</button>
+
+                <p v-if="isSubmitted" class="success_message">
+                    ✅ Thank you! Your subscription is now active.
+                </p>
+            </form>
         </div>
     </div>
 </template>
@@ -245,7 +309,7 @@
 </style>
 
 <script setup>
-    import { ref } from "vue";
+    import { ref, computed } from "vue";
     import Navbar from "../components/Navbar.vue";
     import MealSelector from "../components/MealSelector.vue";
     import DaySelector from "../components/DaySelector.vue";
@@ -275,18 +339,118 @@
         );
     }
 
+    function isDayEmpty() {
+        if (chosenPlans.value.includes("diet")) {
+            return chosenDays.value.dietDays.length == 0;
+        }
+
+        if (chosenPlans.value.includes("protein")) {
+            return chosenDays.value.proteinDays.length == 0;
+        }
+
+        if (chosenPlans.value.includes("royal")) {
+            return chosenDays.value.royalDays.length == 0;
+        }
+    }
+
     function choosePlan(event) {
         const recipeCard = event.target.closest(".plan_wrap--recipe");
+        let planName;
 
-        if (!recipeCard) {
-            return;
+        switch (recipeCard.id) {
+            case "recipe_diet":
+                planName = "diet";
+                break;
+
+            case "recipe_protein":
+                planName = "protein";
+                break;
+
+            case "recipe_royal":
+                planName = "royal";
+                break;
         }
 
-        if (chosenPlans.value.includes(recipeCard.id)) {
-            const index = chosenPlans.value.indexOf(recipeCard.id);
+        if (chosenPlans.value.includes(planName)) {
+            const index = chosenPlans.value.indexOf(planName);
             chosenPlans.value.splice(index, 1);
         } else {
-            chosenPlans.value.push(recipeCard.id);
+            chosenPlans.value.push(planName);
         }
+    }
+
+    const userName = ref("");
+    const userFullName = ref("");
+    const userNum = ref("");
+    const userAllergy = ref("");
+    const isSubmitted = ref(false);
+
+    const allergyList = computed(() => {
+        if (!userAllergy.value) return [];
+
+        return userAllergy.value
+            .split(/\s*,\s*/) // split on commas with optional spaces around
+            .map((a) => a.trim()) // trim extra spaces
+            .filter((a) => a.length > 0); // remove empty entries
+    });
+
+    // to be get by db
+    const planPrices = {
+        diet: 30000,
+        protein: 40000,
+        royal: 60000
+    };
+
+    const totalPrice = computed(() => {
+        let total = 0;
+
+        for (let i = 0; i < chosenPlans.value.length; i++) {
+            const plan = chosenPlans.value[i];
+            const planPrice = planPrices[plan];
+            const numTypes = chosenTypes.value[`${plan}Types`].length;
+            const numDays = chosenDays.value[`${plan}Days`].length;
+
+            total += planPrice * numTypes * numDays * 4.3;
+        }
+
+        return total;
+    });
+
+    function isDataValid() {
+        if (
+            !userName.value ||
+            !userFullName.value ||
+            !userNum.value ||
+            chosenPlans.value.length === 0
+        ) {
+            return false;
+        }
+
+        for (const plan in chosenPlans.value) {
+            if (
+                chosenTypes.value[`${plan}Types`].length === 0 ||
+                chosenDays.value[`${plan}Days`].length === 0
+            ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // have to modify based on db
+    function sendSubsData() {
+        console.log(userName.value, userFullName.value, userNum.value, allergyList.value);
+
+        isSubmitted.value = true;
+
+        userName.value = "";
+        userFullName.value = "";
+        userNum.value = "";
+        userAllergy.value = "";
+
+        setTimeout(() => {
+            isSubmitted.value = false;
+        }, 3000);
     }
 </script>
