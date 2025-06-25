@@ -235,7 +235,8 @@
         }
     }
 
-    .sign_up {
+    .sign_up,
+    .log_out {
         background-color: #fff9f4;
         font-family: "Inter";
         font-weight: 600;
