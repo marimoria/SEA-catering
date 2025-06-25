@@ -135,13 +135,24 @@
         errorMessage.value = "";
         successMessage.value = "";
 
+        const allergyList = computed(() => {
+            if (!allergies.value) return [];
+
+            return userAllergy.value
+                .split(/\s*,\s*/) // split on commas with optional spaces around
+                .map((a) => a.trim()) // trim extra spaces
+                .filter((a) => a.length > 0); // remove empty entries
+        });
+
+        const allergiesString = allergyList.value.join(", ");
+
         const result = await handleSignUp({
             email: email.value,
             password: password.value,
             username: username.value,
             fullName: fullName.value,
             phone: phone.value,
-            allergies: allergies.value
+            allergies: allergiesString
         });
 
         if (result.success) {
