@@ -8,6 +8,7 @@ export async function fetchProfile() {
     const {
         data: { user: authUser }
     } = await supabase.auth.getUser();
+
     user.value = authUser;
 
     if (authUser) {
@@ -46,7 +47,7 @@ export async function handleSignUp({ email, password, username, fullName, phone,
     }
 
     const { error: profileError } = await insertData("profiles", {
-        id: user.id,
+        id: userId,
         username,
         full_name: fullName,
         phone,
@@ -56,12 +57,14 @@ export async function handleSignUp({ email, password, username, fullName, phone,
 
     if (profileError) {
         return { success: false, error: profileError.message };
-    }
+    } else {
+        await fetchProfile();
 
-    return {
-        success: true,
-        message: "Success! Please check your email to confirm your account."
-    };
+        return {
+            success: true,
+            message: "Success! Please check your email to confirm your account."
+        };
+    }
 }
 
 export async function handleLogin({ email, password }) {
@@ -73,6 +76,9 @@ export async function handleLogin({ email, password }) {
     if (error) {
         return { success: false, error: error.message };
     } else {
+        await fetchProfile();
         return { success: true, message: "Successfully logged in!" };
     }
 }
+
+export { user, isAdmin };

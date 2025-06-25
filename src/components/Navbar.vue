@@ -14,6 +14,13 @@
                 <router-link class="nav_name" to="/contact">Contact Us</router-link>
             </nav>
 
+            <router-link v-if="userLogged && isAdmin" class="nav_name" to="/admin">
+                Admin Dashboard
+            </router-link>
+            <router-link v-else-if="userLogged" class="nav_name" to="/dashboard">
+                Dashboard
+            </router-link>
+
             <nav v-if="!userLogged" class="desktop-nav">
                 <router-link class="sign_up" to="/signup">Sign Up</router-link>
             </nav>
@@ -34,7 +41,16 @@
                     <router-link class="nav_name" to="/testimony">Testimonies</router-link>
                     <router-link class="nav_name" to="/subscription">Subscription</router-link>
                     <router-link class="nav_name" to="/contact">Contact Us</router-link>
-                    <router-link class="sign_up" to="/signup">Sign Up</router-link>
+
+                    <router-link v-if="!userLogged" class="sign_up" to="/signup"
+                        >Sign Up</router-link
+                    >
+                    <router-link v-if="userLogged && isAdmin" class="nav_name" to="/admin">
+                        Admin Dashboard
+                    </router-link>
+                    <router-link v-else-if="userLogged" class="nav_name" to="/dashboard">
+                        Dashboard
+                    </router-link>
                 </nav>
             </transition>
         </div>
@@ -42,10 +58,17 @@
 </template>
 
 <script setup>
-    import { ref } from "vue";
+    import { computed, onMounted, ref } from "vue";
+    import { user, isAdmin, fetchProfile } from "../components/composables/useAuth";
 
     const isOpen = ref(false);
-    const userLogged = ref(false);
+
+    // if user.value is false -> !! -> false
+    const userLogged = computed(() => !!user.value);
+
+    onMounted(() => {
+        fetchProfile();
+    });
 </script>
 
 <style scoped>
