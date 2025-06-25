@@ -77,8 +77,8 @@ export async function handleSignUp({ email, password, username, fullName, phone,
 
 export async function handleLogin({ email, password }) {
     const { error } = await supabase.auth.signInWithPassword({
-        email: email.value,
-        password: password.value
+        email,
+        password
     });
 
     if (error) {
