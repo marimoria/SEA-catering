@@ -52,7 +52,11 @@
                         />
                         <input v-model="allergies" type="text" placeholder="Allergies (optional)" />
 
-                        <button type="submit">Sign Up</button>
+                        <button :disabled="isLoading" type="submit">
+                            {{ isLoading ? "Signing Up..." : "Sign Up" }}
+                        </button>
+
+                        <LoadingSpinner v-if="isLoading" />
 
                         <p v-if="errorMessage" class="error_message">❌ {{ errorMessage }}</p>
                         <p v-if="successMessage" class="success_message">✅ {{ successMessage }}</p>
@@ -104,11 +108,14 @@
     import { onMounted, ref } from "vue";
     import { useParallax } from "../components/composables/useParallax";
     import { handleSignUp } from "../components/composables/useAuth";
+    import LoadingSpinner from "../components/LoadingSpinner.vue";
 
     const props = defineProps({
         viewport: Object,
         device: Object
     });
+
+    const isLoading = ref(false);
 
     // form state
     const email = ref("");
@@ -134,6 +141,7 @@
     async function submitSignUp() {
         errorMessage.value = "";
         successMessage.value = "";
+        isLoading.value = true;
 
         const allergyList = computed(() => {
             if (!allergies.value) return [];
@@ -156,6 +164,7 @@
         });
 
         if (result.success) {
+            isLoading.value = false;
             successMessage.value = result.message;
 
             email.value = "";
@@ -165,6 +174,7 @@
             phone.value = "";
             allergies.value = "";
         } else {
+            isLoading.value = false;
             errorMessage.value = result.error;
         }
     }

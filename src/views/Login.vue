@@ -35,7 +35,11 @@
                         <input v-model="email" type="email" placeholder="Email Address" required />
                         <input v-model="password" type="password" placeholder="Password" required />
 
-                        <button type="submit">Login</button>
+                        <button :disabled="isLoading" type="submit">
+                            {{ isLoading ? "Logging..." : "Login" }}
+                        </button>
+
+                        <LoadingSpinner v-if="isLoading" />
 
                         <p v-if="errorMessage" class="error_message">❌ {{ errorMessage }}</p>
                         <p v-if="successMessage" class="success_message">✅ {{ successMessage }}</p>
@@ -92,11 +96,14 @@
     import { ref, onMounted } from "vue";
     import { handleLogin } from "../components/composables/useAuth";
     import { useParallax } from "../components/composables/useParallax";
+    import LoadingSpinner from "../components/LoadingSpinner.vue";
 
     const props = defineProps({
         viewport: Object,
         device: Object
     });
+
+    const isLoading = ref(false);
 
     const router = useRouter();
 
@@ -108,6 +115,7 @@
     async function submitLogin() {
         errorMessage.value = "";
         successMessage.value = "";
+        isLoading.value = true;
 
         const result = await handleLogin({
             email: email.value,
@@ -115,6 +123,7 @@
         });
 
         if (result.success) {
+            isLoading.value = false;
             successMessage.value = result.message;
 
             email.value = "";
@@ -122,6 +131,7 @@
 
             router.push("/");
         } else {
+            isLoading.value = false;
             errorMessage.value = result.error;
         }
     }
