@@ -1,16 +1,19 @@
 {
     "name": "sea-catering",
-    "version": "0.0.0",
-    "private": true,
-    "type": "module",
     "homepage": "https://marimoria.github.io/SEA-catering/",
+    "version": "0.0.0",
+    "private": false,
+    "type": "module",
     "scripts": {
         "dev": "vite --host",
         "build": "vite build",
         "preview": "vite preview",
-        "test:unit": "vitest",
         "predeploy": "npm run build",
-        "deploy": "gh-pages -d dist -f"
+        "deploy": "gh-pages -d dist"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/marimoria/SEA-catering.git"
     },
     "dependencies": {
         "@supabase/supabase-js": "^2.50.0",
