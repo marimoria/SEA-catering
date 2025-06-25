@@ -3,6 +3,7 @@
     "version": "0.0.0",
     "private": true,
     "type": "module",
+    "homepage": "https://mariaamanda.github.io/SEA-catering",
     "scripts": {
         "dev": "vite --host",
         "build": "vite build",
