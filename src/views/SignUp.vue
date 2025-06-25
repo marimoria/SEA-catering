@@ -31,7 +31,7 @@
 
                 <div class="signup_info--form">
                     <p class="details--title">Sign Up</p>
-                    <form @submit.prevent="handleSignup">
+                    <form @submit.prevent="submitSignUp">
                         <input
                             v-model="username"
                             type="text"
@@ -120,62 +120,31 @@
         username.value = e.target.value.replace(/[^a-zA-Z0-9_.]/g, "").toLowerCase();
     }
 
-    async function handleSignup() {
+    async function submitSignUp() {
         errorMessage.value = "";
         successMessage.value = "";
 
-        // Duplicate checks
-        const usernameExists = await getData("profiles", { username: username.value });
-        if (usernameExists.length > 0) {
-            errorMessage.value = "Username already exists.";
-            return;
-        }
-
-        const phoneExists = await getData("profiles", { phone: phone.value });
-        if (phoneExists.length > 0) {
-            errorMessage.value = "Phone number already registered.";
-            return;
-        }
-
-        // Register user with Supabase Auth
-        const { data, error } = await supabase.auth.signUp({
+        const result = await handleSignUp({
             email: email.value,
-            password: password.value
-        });
-
-        if (error) {
-            errorMessage.value = error.message;
-            return;
-        }
-
-        // Get user ID
-        const { data: userData } = await supabase.auth.getUser();
-        const userId = userData?.user?.id;
-
-        if (!userId) {
-            errorMessage.value = "Could not retrieve user ID after sign-up.";
-            return;
-        }
-
-        // Insert full profile
-        await insertData("profiles", {
-            id: userId,
+            password: password.value,
             username: username.value,
-            full_name: fullName.value,
+            fullName: fullName.value,
             phone: phone.value,
-            allergies: allergies.value,
-            created_at: new Date().toISOString()
+            allergies: allergies.value
         });
 
-        successMessage.value = "Success! Please check your email to confirm your account.";
+        if (result.success) {
+            successMessage.value = result.message;
 
-        // Reset
-        email.value = "";
-        password.value = "";
-        username.value = "";
-        fullName.value = "";
-        phone.value = "";
-        allergies.value = "";
+            email.value = "";
+            password.value = "";
+            username.value = "";
+            fullName.value = "";
+            phone.value = "";
+            allergies.value = "";
+        } else {
+            errorMessage.value = result.error;
+        }
     }
 
     onMounted(() => {
