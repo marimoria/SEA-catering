@@ -63,3 +63,16 @@ export async function handleSignUp({ email, password, username, fullName, phone,
         message: "Success! Please check your email to confirm your account."
     };
 }
+
+export async function handleLogin({ email, password }) {
+    const { error } = await supabase.auth.signInWithPassword({
+        email: email.value,
+        password: password.value
+    });
+
+    if (error) {
+        return { success: false, error: error.message };
+    } else {
+        return { success: true, message: "Successfully logged in!" };
+    }
+}

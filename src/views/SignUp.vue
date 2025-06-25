@@ -96,8 +96,8 @@
 <script setup>
     import Navbar from "../components/Navbar.vue";
     import { onMounted, ref } from "vue";
-    import { supabase, getData, insertData } from "../components/composables/useSupabase";
     import { useParallax } from "../components/composables/useParallax";
+    import { handleSignUp } from "../components/composables/useAuth";
 
     const props = defineProps({
         viewport: Object,

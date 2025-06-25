@@ -31,7 +31,7 @@
 
                 <div class="login_info--form">
                     <p class="details--title">Login</p>
-                    <form @submit.prevent="handleLogin">
+                    <form @submit.prevent="submitLogin">
                         <input v-model="email" type="email" placeholder="Email Address" required />
                         <input v-model="password" type="password" placeholder="Password" required />
 
@@ -90,7 +90,7 @@
     import Navbar from "../components/Navbar.vue";
     import { useRouter } from "vue-router";
     import { ref, onMounted } from "vue";
-    import { supabase } from "../components/composables/useSupabase";
+    import { handleLogin } from "../components/composables/useAuth";
     import { useParallax } from "../components/composables/useParallax";
 
     const props = defineProps({
@@ -105,20 +105,24 @@
     const successMessage = ref("");
     const errorMessage = ref("");
 
-    async function handleLogin() {
+    async function submitLogin() {
         errorMessage.value = "";
         successMessage.value = "";
 
-        const { error } = await supabase.auth.signInWithPassword({
+        const result = await handleLogin({
             email: email.value,
             password: password.value
         });
 
-        if (error) {
-            errorMessage.value = error.message;
-        } else {
-            successMessage.value = "Successfully logged in!";
+        if (result.success) {
+            successMessage.value = result.message;
+
+            email.value = "";
+            password.value = "";
+
             router.push("/");
+        } else {
+            errorMessage.value = result.error;
         }
     }
 
