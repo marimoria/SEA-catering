@@ -12,13 +12,35 @@ export async function fetchProfile() {
     user.value = authUser;
 
     if (authUser) {
-        const { data: profile } = await supabase
+        const { data: profile, error } = await supabase
             .from("profiles")
-            .select("is_admin")
+            .select("*")
             .eq("id", authUser.id)
             .single();
 
-        isAdmin.value = profile?.is_admin === true;
+        if (error && error.code === "PGRST116") {
+            // User authenticated but row not created yet
+            const { error: insertError } = await insertData("profiles", {
+                id: authUser.id,
+                username: authUser.user_metadata?.username ?? "unknown",
+                full_name: authUser.user_metadata?.full_name ?? "",
+                phone: authUser.user_metadata?.phone ?? "",
+                allergies: authUser.user_metadata?.allergies ?? "",
+                created_at: new Date().toISOString()
+            });
+
+            if (insertError) {
+                console.error("Insert profile failed:", insertError);
+            }
+        }
+
+        const { data: check } = await supabase
+            .from("admin_roles")
+            .select("*")
+            .eq("id", authUser.id)
+            .single();
+
+        isAdmin.value = !!check;
     }
 }
 
@@ -41,30 +63,10 @@ export async function handleSignUp({ email, password, username, fullName, phone,
         return { success: false, error: error.message };
     }
 
-    const userId = data?.user?.id;
-    if (!userId) {
-        return { success: false, error: "Could not retrieve user ID after sign-up." };
-    }
-
-    const { error: profileError } = await insertData("profiles", {
-        id: userId,
-        username,
-        full_name: fullName,
-        phone,
-        allergies,
-        created_at: new Date().toISOString()
-    });
-
-    if (profileError) {
-        return { success: false, error: profileError.message };
-    } else {
-        await fetchProfile();
-
-        return {
-            success: true,
-            message: "Success! Please check your email to confirm your account."
-        };
-    }
+    return {
+        success: true,
+        message: "Success! Please check your email to confirm your account."
+    };
 }
 
 export async function handleLogin({ email, password }) {
