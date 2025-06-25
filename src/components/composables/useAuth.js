@@ -61,7 +61,14 @@ export async function handleSignUp({ email, password, username, fullName, phone,
         email,
         password,
         options: {
-            emailRedirectTo: "https://marimoria.github.io/SEA-catering/#/login"
+            emailRedirectTo: "https://marimoria.github.io/SEA-catering/#/login",
+            // save to meta data
+            data: {
+                username,
+                full_name: fullName,
+                phone,
+                allergies
+            }
         }
     });
 

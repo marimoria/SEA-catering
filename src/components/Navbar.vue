@@ -14,15 +14,14 @@
                 <router-link class="nav_name" to="/contact">Contact Us</router-link>
             </nav>
 
-            <router-link v-if="userLogged && isAdmin" class="nav_name" to="/admin">
-                Admin Dashboard
-            </router-link>
-            <router-link v-else-if="userLogged" class="nav_name" to="/dashboard">
-                Dashboard
-            </router-link>
-
             <nav v-if="!userLogged" class="desktop-nav">
                 <router-link class="sign_up" to="/signup">Sign Up</router-link>
+                <router-link v-if="userLogged && isAdmin" class="nav_name" to="/admin">
+                    Admin Dashboard
+                </router-link>
+                <router-link v-else-if="userLogged" class="nav_name" to="/dashboard">
+                    Dashboard
+                </router-link>
             </nav>
 
             <!-- Hamburger -->
