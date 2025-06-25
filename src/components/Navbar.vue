@@ -24,7 +24,7 @@
                     Dashboard
                 </router-link>
 
-                <router-link v-if="userLogged" class="log_out" @click="logout">Log Out</router-link>
+                <p v-if="userLogged" class="log_out" @click="logout">Log Out</p>
             </nav>
 
             <!-- Hamburger -->
@@ -55,9 +55,7 @@
                         Dashboard
                     </router-link>
 
-                    <router-link v-if="userLogged" class="log_out" @click="logout"
-                        >Log Out</router-link
-                    >
+                    <p v-if="userLogged" class="log_out" @click="logout">Log Out</p>
                 </nav>
             </transition>
         </div>
