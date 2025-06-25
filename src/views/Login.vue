@@ -98,6 +98,8 @@
         device: Object
     });
 
+    const router = useRouter();
+
     const email = ref("");
     const password = ref("");
     const successMessage = ref("");
