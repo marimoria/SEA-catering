@@ -158,18 +158,11 @@
             return;
         }
 
-        // Check admin
-        const adminUsername = import.meta.env.ADMIN_USER;
-        if (username.value === adminUsername) {
-            isAdmin.value = true;
-        }
-
         // Insert full profile
         await insertData("profiles", {
             id: userId,
             username: username.value,
             full_name: fullName.value,
-            is_admin: isAdmin.value,
             phone: phone.value,
             allergies: allergies.value,
             created_at: new Date().toISOString()
