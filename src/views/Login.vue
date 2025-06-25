@@ -88,6 +88,7 @@
 
 <script setup>
     import Navbar from "../components/Navbar.vue";
+    import { useRouter } from "vue-router";
     import { ref, onMounted } from "vue";
     import { supabase } from "../components/composables/useSupabase";
     import { useParallax } from "../components/composables/useParallax";
@@ -115,6 +116,7 @@
             errorMessage.value = error.message;
         } else {
             successMessage.value = "Successfully logged in!";
+            router.push("/");
         }
     }
 
