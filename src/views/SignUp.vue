@@ -43,7 +43,13 @@
                         <input v-model="email" type="email" placeholder="Email Address" required />
                         <input v-model="password" type="password" placeholder="Password" required />
                         <input v-model="fullName" type="text" placeholder="Full Name" required />
-                        <input v-model="phone" type="number" placeholder="Phone Number" required />
+                        <input
+                            v-model="phone"
+                            type="text"
+                            placeholder="+6281234567"
+                            @input="sanitizePhone($event)"
+                            required
+                        />
                         <input v-model="allergies" type="text" placeholder="Allergies (optional)" />
 
                         <button type="submit">Sign Up</button>
@@ -118,6 +124,11 @@
     function sanitizeUsername(e) {
         // Replace anything that's NOT a-z, 0-9, _ or .
         username.value = e.target.value.replace(/[^a-zA-Z0-9_.]/g, "").toLowerCase();
+    }
+
+    function sanitizePhone(e) {
+        // Only allow numbers and +
+        phone.value = e.target.value.replace(/[^\d+]/g, "");
     }
 
     async function submitSignUp() {
