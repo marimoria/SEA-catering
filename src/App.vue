@@ -11,6 +11,7 @@
 
     import { onMounted, Transition } from "vue";
     import { useViewport } from "./components/composables/useViewport";
+    import { fetchProfile } from "./components/composables/useAuth";
 
     const { viewport, device } = useViewport();
 
@@ -18,5 +19,7 @@
         document.addEventListener("contextmenu", (e) => {
             e.preventDefault();
         });
+
+        fetchProfile();
     });
 </script>

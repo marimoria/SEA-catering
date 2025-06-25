@@ -14,14 +14,17 @@
                 <router-link class="nav_name" to="/contact">Contact Us</router-link>
             </nav>
 
-            <nav v-if="!userLogged" class="desktop-nav">
-                <router-link class="sign_up" to="/signup">Sign Up</router-link>
+            <nav class="desktop-nav">
+                <router-link v-if="!userLogged" class="sign_up" to="/signup">Sign Up</router-link>
+
                 <router-link v-if="userLogged && isAdmin" class="nav_name" to="/admin">
                     Admin Dashboard
                 </router-link>
                 <router-link v-else-if="userLogged" class="nav_name" to="/dashboard">
                     Dashboard
                 </router-link>
+
+                <router-link v-if="userLogged" class="log_out" @click="logout">Log Out</router-link>
             </nav>
 
             <!-- Hamburger -->
@@ -44,12 +47,17 @@
                     <router-link v-if="!userLogged" class="sign_up" to="/signup"
                         >Sign Up</router-link
                     >
+
                     <router-link v-if="userLogged && isAdmin" class="nav_name" to="/admin">
                         Admin Dashboard
                     </router-link>
                     <router-link v-else-if="userLogged" class="nav_name" to="/dashboard">
                         Dashboard
                     </router-link>
+
+                    <router-link v-if="userLogged" class="log_out" @click="logout"
+                        >Log Out</router-link
+                    >
                 </nav>
             </transition>
         </div>
@@ -58,12 +66,22 @@
 
 <script setup>
     import { computed, onMounted, ref } from "vue";
-    import { user, isAdmin, fetchProfile } from "../components/composables/useAuth";
+    import { user, isAdmin, fetchProfile, handleLogout } from "../components/composables/useAuth";
+    import { useRouter } from "vue-router";
 
     const isOpen = ref(false);
+    const router = useRouter();
 
-    // if user.value is false -> !! -> false
+    // if user.value is null -> !! -> false
     const userLogged = computed(() => !!user.value);
+
+    async function logout() {
+        const { success } = await handleLogout();
+
+        if (success) {
+            router.push("/");
+        }
+    }
 
     onMounted(() => {
         fetchProfile();

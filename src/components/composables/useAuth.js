@@ -9,9 +9,9 @@ export async function fetchProfile() {
         data: { user: authUser }
     } = await supabase.auth.getUser();
 
-    user.value = authUser;
-
     if (authUser) {
+        user.value = authUser;
+
         const { data: profile, error } = await supabase
             .from("profiles")
             .select("*")
@@ -34,13 +34,13 @@ export async function fetchProfile() {
             }
         }
 
-        const { data: check } = await supabase
+        const { data: checkAdmin } = await supabase
             .from("admin_roles")
             .select("*")
             .eq("id", authUser.id)
             .single();
 
-        isAdmin.value = !!check;
+        isAdmin.value = !!checkAdmin;
     }
 }
 
@@ -94,6 +94,19 @@ export async function handleLogin({ email, password }) {
         await fetchProfile();
         return { success: true, message: "Successfully logged in!" };
     }
+}
+
+export async function handleLogout() {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+        console.error("Logout error:", error.message);
+        return { success: false, error: error.message };
+    }
+
+    user.value = null;
+    isAdmin.value = false;
+
+    return { success: true };
 }
 
 export { user, isAdmin };
