@@ -78,7 +78,7 @@
                             type="text"
                             v-model="reviewName"
                             placeholder="Username"
-                            maxlength="17"
+                            maxlength="20"
                             required
                         />
                     </div>

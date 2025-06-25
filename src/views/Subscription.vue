@@ -246,7 +246,7 @@
                         type="text"
                         v-model="userName"
                         placeholder="Username"
-                        maxlength="17"
+                        maxlength="20"
                         required
                     />
                 </div>
@@ -275,8 +275,9 @@
                         class="input--number"
                         type="number"
                         v-model="userNum"
-                        placeholder="Your Number"
+                        placeholder="+6281234567"
                         maxlength="20"
+                        @input="sanitizePhone($event)"
                         required
                     />
                 </div>
@@ -318,6 +319,11 @@
         viewport: Object,
         device: Object
     });
+
+    function sanitizePhone(e) {
+        // Only allow numbers and +
+        phone.value = e.target.value.replace(/[^\d+]/g, "");
+    }
 
     const chosenPlans = ref([]);
     const chosenTypes = ref({

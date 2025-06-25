@@ -1,13 +1,15 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 
 import Home from "../views/Home.vue";
 import Meal from "../views/MealPlans.vue";
 import Subscription from "../views/Subscription.vue";
 import ContactUs from "../views/ContactUs.vue";
-import Testimony from "@/views/Testimony.vue";
+import Testimony from "../views/Testimony.vue";
+import SignUp from "../views/SignUp.vue";
+import Login from "../views/Login.vue";
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHashHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: "/",
@@ -33,6 +35,16 @@ const router = createRouter({
             path: "/contact",
             name: "contact",
             component: ContactUs
+        },
+        {
+            path: "/signup",
+            name: "sign up",
+            component: SignUp
+        },
+        {
+            path: "/login",
+            name: "login",
+            component: Login
         },
         {
             path: "/:pathMatch(.*)*",
