@@ -111,7 +111,6 @@
     const fullName = ref("");
     const phone = ref("");
     const allergies = ref("");
-    const isAdmin = ref(false);
 
     const successMessage = ref("");
     const errorMessage = ref("");
