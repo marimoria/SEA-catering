@@ -125,26 +125,20 @@
         errorMessage.value = "";
         successMessage.value = "";
 
-        // duplicate username
+        // Duplicate checks
         const usernameExists = await getData("profiles", { username: username.value });
         if (usernameExists.length > 0) {
             errorMessage.value = "Username already exists.";
             return;
         }
 
-        const adminUsername = import.meta.env.ADMIN_USER;
-
-        if (username.value == adminUsername) {
-            isAdmin.value = true;
-        }
-
-        // duplicate phone
         const phoneExists = await getData("profiles", { phone: phone.value });
         if (phoneExists.length > 0) {
             errorMessage.value = "Phone number already registered.";
             return;
         }
 
+        // Register user with Supabase Auth
         const { data, error } = await supabase.auth.signUp({
             email: email.value,
             password: password.value
@@ -155,8 +149,24 @@
             return;
         }
 
-        // insert additional profile data
+        // Get user ID
+        const { data: userData } = await supabase.auth.getUser();
+        const userId = userData?.user?.id;
+
+        if (!userId) {
+            errorMessage.value = "Could not retrieve user ID after sign-up.";
+            return;
+        }
+
+        // Check admin
+        const adminUsername = import.meta.env.ADMIN_USER;
+        if (username.value === adminUsername) {
+            isAdmin.value = true;
+        }
+
+        // Insert full profile
         await insertData("profiles", {
+            id: userId,
             username: username.value,
             full_name: fullName.value,
             is_admin: isAdmin.value,
@@ -167,7 +177,7 @@
 
         successMessage.value = "Success! Please check your email to confirm your account.";
 
-        // reset form
+        // Reset
         email.value = "";
         password.value = "";
         username.value = "";
