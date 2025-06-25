@@ -57,7 +57,13 @@ export async function handleSignUp({ email, password, username, fullName, phone,
         return { success: false, error: "Phone number already registered." };
     }
 
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+            emailRedirectTo: "https://marimoria.github.io/SEA-catering/#/login"
+        }
+    });
 
     if (error) {
         return { success: false, error: error.message };
