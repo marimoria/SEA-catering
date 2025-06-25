@@ -19,8 +19,6 @@
 </template>
 
 <script setup>
-    import { defineModel } from "vue";
-
     const props = defineProps({
         types: Array,
         mealPlan: String,
