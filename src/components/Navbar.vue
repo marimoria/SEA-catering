@@ -222,6 +222,7 @@
         }
         .desktop-nav {
             display: flex;
+            align-items: center;
         }
 
         .hamburger {
