@@ -1,7 +1,8 @@
 import { ref } from "vue";
 import { supabase, getData, insertData } from "../composables/useSupabase";
 
-const user = ref(null);
+const user = ref(null); // only contains email + metadata
+const profile = ref(null);
 const isAdmin = ref(false);
 
 export async function fetchProfile() {
@@ -12,7 +13,7 @@ export async function fetchProfile() {
     if (authUser) {
         user.value = authUser;
 
-        const { data: profile, error } = await supabase
+        const { data: profileData, error } = await supabase
             .from("profiles")
             .select("*")
             .eq("id", authUser.id)
@@ -41,6 +42,7 @@ export async function fetchProfile() {
             .single();
 
         isAdmin.value = !!checkAdmin;
+        profile.value = profileData;
     }
 }
 
@@ -109,4 +111,4 @@ export async function handleLogout() {
     return { success: true };
 }
 
-export { user, isAdmin };
+export { user, isAdmin, profile };
