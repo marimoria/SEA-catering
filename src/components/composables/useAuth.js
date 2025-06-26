@@ -106,6 +106,7 @@ export async function handleLogout() {
     }
 
     user.value = null;
+    profile.value = null;
     isAdmin.value = false;
 
     return { success: true };
