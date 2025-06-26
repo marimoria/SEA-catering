@@ -4,18 +4,19 @@
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
+
+    .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #fff9f4;
+        z-index: -2;
+    }
 }
 
-.background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #fff9f4;
-    z-index: -2;
-}
-
+// Utensil icons
 .fork,
 .spoon,
 .knife {
@@ -28,107 +29,95 @@
     opacity: 0.7;
 }
 
+// Dynamic plan section
 .meal_plan_panel {
     position: relative;
     display: flex;
-    width: 100%;
     flex-direction: column;
     margin-bottom: clamp(5vh, 2vh, 8vh);
+    width: 100%;
 
     &--meal_plan_hero {
-        position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
+        position: relative;
+
+        .meal_plan_hero--banner {
+            position: absolute;
+            width: 100vw;
+            height: 6em;
+            background: linear-gradient(135deg, #680a0a, #d54f22, #f28c28); // fallback
+            z-index: 0;
+        }
+
+        .meal_plan_hero--image {
+            position: relative;
+            width: clamp(13em, 50vw, 18em);
+            z-index: 1;
+        }
     }
 
     &--meal_plan_info {
         display: flex;
         flex-direction: column;
+        align-items: center;
         text-align: center;
         margin-top: 10px;
-        text-align: center;
-        align-items: center;
+
+        .meal_plan_info--title {
+            font-family: "Inter", sans-serif;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 700;
+            color: black;
+        }
+
+        .meal_plan_info--desc {
+            margin-top: 6px;
+            max-width: 35ch;
+            font-weight: 500;
+            font-family: "Inter", sans-serif;
+            font-size: clamp(0.9rem, 1.1vw, 1.5rem);
+        }
+
+        .meal_plan_info--price,
+        .meal_plan_info--details {
+            font-family: "Inter", sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 2px solid var(--color-sunset-orange);
+            border-radius: 20px;
+            background-color: #fff9f4;
+            padding: 0.3em;
+            width: 20ch;
+            margin-top: 20px;
+            margin-bottom: 13px;
+        }
+
+        .meal_plan_info--details:hover {
+            cursor: pointer;
+        }
     }
 }
 
-.meal_plan_hero {
-    &--banner {
-        position: absolute;
-        width: 100vw;
-        height: 6em;
-        background: linear-gradient(135deg, #680a0a, #d54f22, #f28c28);
-        z-index: 0;
-    }
-
-    &--image {
-        position: relative;
-        width: clamp(13em, 50vw, 18em);
-        z-index: 1;
-    }
-}
-
-.meal_plan_info {
-    &--title {
-        font-family: "Inter";
-        font-size: clamp(2rem, 6vw, 4rem);
-        font-weight: 700;
-        font-family: "Inter", sans-serif;
-        text-align: center;
-        color: black;
-    }
-
-    &--desc {
-        margin-top: 6px;
-        text-align: center;
-        font-weight: 500;
-        font-family: "Inter", sans-serif;
-        font-size: clamp(0.9rem, 1.1vw, 1.5rem);
-        max-width: 35ch;
-        color: var(--color-deep-red);
-    }
-
-    &--price,
-    &--details {
-        background-color: #fff9f4;
-        font-family: "Inter";
-        font-weight: 600;
-        font-size: 1rem;
-        border: 2px solid var(--color-sunset-orange);
-        border-radius: 20px;
-        padding: 0.3em;
-        width: 20ch;
-        margin-top: 20px;
-        margin-bottom: 13px;
-    }
-
-    &--details:hover {
-        cursor: pointer;
-    }
-}
-
+// Recipe cards
 .meals_recipe_wrap {
     display: flex;
     flex-direction: row;
-    text-align: center;
     justify-content: center;
+    text-align: center;
     gap: clamp(0.7rem, 2vw, 1.25rem);
     padding-top: clamp(2em, 2vh, 5em);
     margin-top: clamp(0rem, 1em, 1.1rem);
 
     &--recipe {
         position: relative;
-
         width: clamp(8rem, 40vw, 13rem);
-        height: auto;
         min-height: clamp(12rem, 23vh, 14rem);
-
-        padding-bottom: clamp(1rem, 2vh, 2rem);
-        padding-top: clamp(2.7em, 8vh, 4em);
-        padding-right: 0.5em;
-        padding-inline: clamp(0.5rem, 1.5vw, 1rem);
-
+        padding: clamp(2.7em, 8vh, 4em) 0.5em clamp(1rem, 2vh, 2rem);
         margin-bottom: 5px;
+        border: 2px solid var(--color-sunset-orange);
+        border-radius: 10px;
         background: linear-gradient(
             180deg,
             rgb(255, 249, 244) 0%,
@@ -136,169 +125,96 @@
             rgba(242, 140, 40, 0.5) 99%,
             var(--color-sunset-orange) 100%
         );
-        border: 2px solid var(--color-sunset-orange);
-        border-radius: 10px;
+
+        .recipe--image {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: clamp(4rem, 60%, 6rem);
+            height: auto;
+        }
+
+        .recipe--name {
+            font-family: "Inter", sans-serif;
+            font-weight: 600;
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            color: #c93808;
+            margin-bottom: 5px;
+        }
+
+        .recipe--desc {
+            font-family: "Inter", sans-serif;
+            font-weight: 500;
+            font-size: clamp(0.85rem, 2vw, 1.1rem);
+            color: black;
+        }
     }
 }
 
-.recipe {
-    &--image {
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: clamp(4rem, 60%, 6rem);
-        height: auto;
-    }
-
-    &--name {
-        font-family: "Inter";
-        font-weight: 600;
-        font-size: clamp(1rem, 2.5vw, 1.5rem);
-        color: #c93808;
-        margin-bottom: 5px;
-    }
-
-    &--desc {
-        font-family: "Inter";
-        font-weight: 500;
-        font-size: clamp(0.85rem, 2vw, 1.1rem);
-        color: black;
-    }
+// Highlight color utility classes (used in span and button text)
+.highlight_diet {
+    color: var(--color-fresh-basil);
+}
+.highlight_protein {
+    color: var(--color-paprika-red);
+}
+.highlight_royal {
+    color: #7935c7;
 }
 
 .bigger_size {
     font-size: 1.2rem;
 }
 
-@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
-    .meals_recipe_wrap {
-        &--recipe {
-            margin-top: 10px;
-        }
-    }
-}
-
-#banner_diet {
-    background: linear-gradient(135deg, #234c27, #4f9447, #b1e361);
-}
-
-#banner_royal {
-    background: linear-gradient(135deg, #2c0b47, #5e3a87, #a678e2);
-}
-
-#price_diet {
-    border: 2px solid var(--color-lime-leaf);
-}
-
-#price_royal {
-    border: 2px solid var(--color-pink);
-}
-
-#recipe_diet {
-    border: 2px solid var(--color-deep-olive);
-
-    background: linear-gradient(
-        180deg,
-        rgb(255, 249, 244) 0%,
-        rgb(255, 249, 244) 45%,
-        rgba(140, 219, 44, 0.5) 99%,
-        var(--color-lime-leaf) 100%
-    );
-
-    p.recipe--name {
-        color: var(--color-deep-olive);
-    }
-}
-
-#recipe_royal {
-    border: 2px solid #490a7d;
-
-    background: linear-gradient(
-        180deg,
-        rgb(255, 249, 244) 0%,
-        rgb(255, 249, 244) 45%,
-        rgba(163, 113, 237, 0.5) 99%,
-        var(--color-pink) 100%
-    );
-
-    p.recipe--name {
-        color: #7935c7;
-    }
-}
-
-#details_diet {
-    border: 2px solid var(--color-lime-leaf);
-}
-
-#details_royal {
-    border: 2px solid var(--color-pink);
-}
-
-#desc_olive {
-    color: var(--color-deep-olive);
-}
-
-#desc_red {
-    color: var(--color-deep-red);
-}
-
-#desc_purple {
-    color: #2c0b47;
-}
-
-@media (min-width: 1024px) {
+// Responsive overrides
+@media screen and (min-width: 1024px) {
     .meal_plan_panel {
-        width: 100%;
-        padding-right: 4em;
-        min-height: calc(var(--vh, 1vh) * 100);
-        margin-bottom: 0px;
-
         display: grid;
         grid-template-columns: 50% 50%;
-        gap: 0px;
+        padding-right: 4em;
+        min-height: calc(var(--vh, 1vh) * 100);
+        margin-bottom: 0;
 
         &--meal_plan_info {
             justify-content: center;
             align-items: center;
         }
-    }
 
-    .meal_plan_info {
-        &--title {
+        .meal_plan_info--title {
             font-size: 4rem;
         }
 
-        &--desc {
+        .meal_plan_info--desc {
             font-size: 1.1rem;
         }
 
-        &--details {
+        .meal_plan_info--details {
             font-size: clamp(1rem, 1.2rem, 1.5rem);
         }
-    }
 
-    .meal_plan_hero {
-        &--banner {
+        .meal_plan_hero--banner {
             width: 30%;
             height: 100%;
             inset: 0;
             left: 50%;
-            transform: translatex(-50%);
+            transform: translateX(-50%);
         }
 
-        &--image {
-            position: relative;
+        .meal_plan_hero--image {
             width: clamp(27em, 67%, 40em);
-            z-index: 1;
         }
     }
 }
 
 @media (min-width: 1300px) {
-    .meal_plan_hero {
-        &--image {
-            width: 80%;
-        }
+    .meal_plan_hero--image {
+        width: 80%;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    .meals_recipe_wrap--recipe {
+        margin-top: 10px;
     }
 }
