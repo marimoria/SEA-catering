@@ -32,7 +32,7 @@
 
                 <div class="contact_info--form" @submit.prevent="sendContactData">
                     <form>
-                        <input v-model="contactName" type="text" placeholder="Your Name" required />
+                        <input v-model="contactName" type="text" placeholder="Username" required />
                         <input
                             v-model="contactEmail"
                             type="email"
@@ -50,10 +50,13 @@
                             placeholder="Your Message"
                             required
                         ></textarea>
+
                         <button type="submit">Send Message</button>
-                        <p v-if="isSubmitted" class="success_message">
-                            ✅ Thank you! Your review has been submitted.
-                        </p>
+
+                        <LoadingSpinner v-if="isLoading" />
+
+                        <p v-if="errorMessage" class="error_message">❌ {{ errorMessage }}</p>
+                        <p v-if="successMessage" class="success_message">✅ {{ successMessage }}</p>
                     </form>
                 </div>
             </div>
@@ -101,7 +104,10 @@
 <script setup>
     import { useParallax } from "../components/composables/useParallax";
     import Navbar from "../components/Navbar.vue";
-    import { onMounted, ref } from "vue";
+    import LoadingSpinner from "../components/LoadingSpinner.vue";
+    import { computed, onMounted, ref } from "vue";
+    import { user, profile } from "../components/composables/useAuth";
+    import emailjs from "emailjs-com";
 
     const props = defineProps({
         viewport: Object,
@@ -112,30 +118,72 @@
     const contactEmail = ref("");
     const contactSubject = ref("");
     const contactMessage = ref("");
-    const isSubmitted = ref(false);
+
+    const isLoading = ref(false);
+    const errorMessage = ref("");
+    const successMessage = ref("");
+
+    const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
     function sendContactData() {
-        console.log(
-            contactName.value,
-            contactEmail.value,
-            contactSubject.value,
-            contactMessage.value
-        );
+        isLoading.value = true;
 
-        isSubmitted.value = true;
+        const userLogged = computed(() => !!user.value);
 
-        contactName.value = "";
-        contactEmail.value = "";
-        contactSubject.value = "";
-        contactMessage.value = "";
+        if (!userLogged.value) {
+            isLoading.value = false;
+            errorMessage.value = "You must sign up or login!";
+            return;
+        }
 
-        setTimeout(() => {
-            isSubmitted.value = false;
-        }, 3000);
+        if (contactName.value !== profile.value.username) {
+            isLoading.value = false;
+            errorMessage.value = "That's not your username!";
+            return;
+        }
+
+        if (contactEmail.value !== user.value.email) {
+            isLoading.value = false;
+            errorMessage.value = "That's not your email!";
+            return;
+        }
+
+        const templateParams = {
+            contact_name: contactName.value,
+            contact_email: contactEmail.value,
+            contact_subject: contactSubject.value,
+            contact_message: contactMessage.value
+        };
+
+        emailjs
+            .send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY)
+            .then(() => {
+                isLoading.value = false;
+
+                contactName.value = "";
+                contactEmail.value = "";
+                contactSubject.value = "";
+                contactMessage.value = "";
+
+                successMessage.value = "Successfully sent! Please wait within 24 hours.";
+            })
+            .catch((error) => {
+                errorMessage.value = error;
+            });
     }
 
     onMounted(() => {
         const parallaxElements = document.querySelectorAll(".parallax");
         parallaxElements.forEach((el) => useParallax(el));
+
+        if (profile.value && profile.value.username) {
+            contactName.value = profile.value.username;
+        }
+
+        if (user.value && user.value.email) {
+            contactEmail.value = user.value.email;
+        }
     });
 </script>
