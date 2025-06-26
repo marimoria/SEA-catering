@@ -105,7 +105,7 @@
 
 <script setup>
     import Navbar from "../components/Navbar.vue";
-    import { onMounted, ref } from "vue";
+    import { onMounted, ref, computed } from "vue";
     import { useParallax } from "../components/composables/useParallax";
     import { handleSignUp } from "../components/composables/useAuth";
     import LoadingSpinner from "../components/LoadingSpinner.vue";
