@@ -74,14 +74,14 @@
             data-speedx="0.02"
             data-speedy="0.03"
             class="parallax bg_image--top_right"
-            src="/images/grill_steak.svg"
+            src="/images/grill_steak.webp"
             alt=""
         />
         <img
             data-speedx="0.01"
             data-speedy="0.03"
             class="parallax bg_image--bottom_left"
-            src="/images/grilled_salmon.svg"
+            src="/images/grilled_salmon.webp"
             alt=""
         />
         <img
@@ -89,7 +89,7 @@
             data-speedx="0.04"
             data-speedy="0.03"
             class="parallax bg_image--sec_right"
-            src="/images/duck.svg"
+            src="/images/duck.webp"
             alt=""
         />
         <img
@@ -97,7 +97,7 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax bg_image--sec_left"
-            src="/images/quinoa_salad.svg"
+            src="/images/quinoa_salad.webp"
             alt=""
         />
     </div>

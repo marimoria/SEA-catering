@@ -63,14 +63,14 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax bg_image--top_right"
-            src="/images/chicken_platter.svg"
+            src="/images/chicken_platter.webp"
             alt=""
         />
         <img
             data-speedx="0.02"
             data-speedy="0.03"
             class="parallax bg_image--bottom_left"
-            src="/images/pad_thai.svg"
+            src="/images/pad_thai.webp"
             alt=""
         />
 
@@ -80,7 +80,7 @@
             data-speedx="0.01"
             data-speedy="0.03"
             class="parallax bg_image--sec_right"
-            src="/images/protein_hero.svg"
+            src="/images/protein_hero.webp"
             alt=""
         />
         <img
@@ -88,7 +88,7 @@
             data-speedx="0.04"
             data-speedy="0.03"
             class="parallax bg_image--sec_left"
-            src="/images/veggies_hero.svg"
+            src="/images/veggies_hero.webp"
             alt=""
         />
     </div>

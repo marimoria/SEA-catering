@@ -9,7 +9,7 @@
                 <img
                     data-speedx="0.03"
                     data-speedy="0.03"
-                    src="/images/veggies_hero.svg"
+                    src="/images/veggies_hero.webp"
                     alt=""
                     class="parallax meal_plan_hero--image"
                 />
@@ -37,7 +37,7 @@
                     <template #Breakfast>
                         <div class="meals_recipe_wrap">
                             <div id="recipe_diet" class="meals_recipe_wrap--recipe">
-                                <img src="/images/fruits_hero.svg" alt="" class="recipe--image" />
+                                <img src="/images/fruits_hero.webp" alt="" class="recipe--image" />
                                 <p class="recipe--name">Oat Berry Bowl</p>
                                 <p class="recipe--desc">
                                     Rolled oats soaked in almond milk, topped with mixed berries and
@@ -45,7 +45,7 @@
                                 </p>
                             </div>
                             <div id="recipe_diet" class="meals_recipe_wrap--recipe">
-                                <img src="/images/egg_wrap.svg" alt="" class="recipe--image" />
+                                <img src="/images/egg_wrap.webp" alt="" class="recipe--image" />
                                 <p class="recipe--name">Egg White Wrap</p>
                                 <p class="recipe--desc">
                                     Fluffy egg whites wrapped with sautéed spinach, tomato, and a
@@ -58,7 +58,7 @@
                     <template #Lunch>
                         <div class="meals_recipe_wrap">
                             <div id="recipe_diet" class="meals_recipe_wrap--recipe">
-                                <img src="/images/pad_thai.svg" alt="" class="recipe--image" />
+                                <img src="/images/pad_thai.webp" alt="" class="recipe--image" />
                                 <p class="recipe--name">Pad Thai</p>
                                 <p class="recipe--desc">
                                     Stir-fried rice noodles with juicy shrimp, bean sprouts,
@@ -67,7 +67,7 @@
                                 </p>
                             </div>
                             <div id="recipe_diet" class="meals_recipe_wrap--recipe">
-                                <img src="/images/quinoa_salad.svg" alt="" class="recipe--image" />
+                                <img src="/images/quinoa_salad.webp" alt="" class="recipe--image" />
                                 <p class="recipe--name">Quinoa Salad</p>
                                 <p class="recipe--desc">
                                     Lean grilled chicken tossed with quinoa, cucumber, mint, and
@@ -81,7 +81,7 @@
                         <div class="meals_recipe_wrap">
                             <div id="recipe_diet" class="meals_recipe_wrap--recipe">
                                 <img
-                                    src="/images/grilled_salmon.svg"
+                                    src="/images/grilled_salmon.webp"
                                     alt=""
                                     class="recipe--image"
                                 />
@@ -93,7 +93,7 @@
                             </div>
                             <div id="recipe_diet" class="meals_recipe_wrap--recipe">
                                 <img
-                                    src="/images/stuffed_peppers.svg"
+                                    src="/images/stuffed_peppers.webp"
                                     alt=""
                                     class="recipe--image"
                                 />
@@ -136,7 +136,7 @@
                 <img
                     data-speedx="0.03"
                     data-speedy="0.03"
-                    src="/images/protein_hero.svg"
+                    src="/images/protein_hero.webp"
                     alt=""
                     class="parallax meal_plan_hero--image"
                 />
@@ -163,7 +163,7 @@
                     <template #Breakfast>
                         <div class="meals_recipe_wrap">
                             <div class="meals_recipe_wrap--recipe">
-                                <img src="/images/toast_egg.svg" alt="" class="recipe--image" />
+                                <img src="/images/toast_egg.webp" alt="" class="recipe--image" />
                                 <p class="recipe--name">Avo & Egg</p>
                                 <p class="recipe--desc">
                                     Whole-grain toast topped with creamy avocado and soft-poached
@@ -171,7 +171,7 @@
                                 </p>
                             </div>
                             <div class="meals_recipe_wrap--recipe">
-                                <img src="/images/kebab.svg" alt="" class="recipe--image" />
+                                <img src="/images/kebab.webp" alt="" class="recipe--image" />
                                 <p class="recipe--name">Kebab</p>
                                 <p class="recipe--desc">
                                     Succulent lamb skewers paired with crisp greens and a dollop of
@@ -184,7 +184,7 @@
                     <template #Lunch>
                         <div class="meals_recipe_wrap">
                             <div class="meals_recipe_wrap--recipe">
-                                <img src="/images/burger.svg" alt="" class="recipe--image" />
+                                <img src="/images/burger.webp" alt="" class="recipe--image" />
                                 <p class="recipe--name">Cheese Burger</p>
                                 <p class="recipe--desc">
                                     Grilled beef patty layered with cheese, tomato, lettuce, and
@@ -193,7 +193,7 @@
                             </div>
                             <div class="meals_recipe_wrap--recipe">
                                 <img
-                                    src="/images/chicken_platter.svg"
+                                    src="/images/chicken_platter.webp"
                                     alt=""
                                     class="recipe--image"
                                 />
@@ -210,7 +210,7 @@
                         <div class="meals_recipe_wrap">
                             <div class="meals_recipe_wrap--recipe">
                                 <img
-                                    src="/images/roasted_chicken.svg"
+                                    src="/images/roasted_chicken.webp"
                                     alt=""
                                     class="recipe--image"
                                 />
@@ -221,7 +221,7 @@
                                 </p>
                             </div>
                             <div class="meals_recipe_wrap--recipe">
-                                <img src="/images/grill_steak.svg" alt="" class="recipe--image" />
+                                <img src="/images/grill_steak.webp" alt="" class="recipe--image" />
                                 <p class="recipe--name">Grilled Steak</p>
                                 <p class="recipe--desc">
                                     Butter-basted steak with arugula, cherry tomatoes, and grilled
@@ -256,7 +256,7 @@
                 <img
                     data-speedx="0.03"
                     data-speedy="0.03"
-                    src="/images/fancy_food.svg"
+                    src="/images/fancy_food.webp"
                     alt=""
                     class="parallax meal_plan_hero--image"
                 />
@@ -285,7 +285,7 @@
                         <div class="meals_recipe_wrap">
                             <div id="recipe_royal" class="meals_recipe_wrap--recipe">
                                 <img
-                                    src="/images/caviar_tartine.svg"
+                                    src="/images/caviar_tartine.webp"
                                     alt=""
                                     class="recipe--image"
                                 />
@@ -297,7 +297,7 @@
                             </div>
                             <div id="recipe_royal" class="meals_recipe_wrap--recipe">
                                 <img
-                                    src="/images/truffle_omelette.svg"
+                                    src="/images/truffle_omelette.webp"
                                     alt=""
                                     class="recipe--image"
                                 />
@@ -313,7 +313,7 @@
                     <template #Lunch>
                         <div class="meals_recipe_wrap">
                             <div id="recipe_royal" class="meals_recipe_wrap--recipe">
-                                <img src="/images/wagyu.svg" alt="" class="recipe--image" />
+                                <img src="/images/wagyu.webp" alt="" class="recipe--image" />
                                 <p class="recipe--name">A5 Wagyu</p>
                                 <p class="recipe--desc">
                                     Seared Japanese A5 Wagyu over gold-flaked rice, served with
@@ -321,7 +321,7 @@
                                 </p>
                             </div>
                             <div id="recipe_royal" class="meals_recipe_wrap--recipe">
-                                <img src="/images/foie_gras.svg" alt="" class="recipe--image" />
+                                <img src="/images/foie_gras.webp" alt="" class="recipe--image" />
                                 <p class="recipe--name">Foie Gras Salad</p>
                                 <p class="recipe--desc">
                                     Pan-seared foie gras on a bed of arugula, figs, candied pecans,
@@ -335,7 +335,7 @@
                         <div class="meals_recipe_wrap">
                             <div id="recipe_royal" class="meals_recipe_wrap--recipe">
                                 <img
-                                    src="/images/shrimp_sphagetti.svg"
+                                    src="/images/shrimp_sphagetti.webp"
                                     alt=""
                                     class="recipe--image"
                                 />
@@ -346,7 +346,7 @@
                                 </p>
                             </div>
                             <div id="recipe_royal" class="meals_recipe_wrap--recipe">
-                                <img src="/images/duck.svg" alt="" class="recipe--image" />
+                                <img src="/images/duck.webp" alt="" class="recipe--image" />
                                 <p class="recipe--name">Duck à l’Orange</p>
                                 <p class="recipe--desc">
                                     Crispy-skinned duck breast glazed in orange liqueur reduction,

@@ -9,7 +9,7 @@
                 <div class="plan_wrap">
                     <div class="choice_wrap">
                         <div @click="choosePlan($event)" id="recipe_diet" class="plan_wrap--recipe">
-                            <img src="/images/veggies_hero.svg" alt="" class="recipe--image" />
+                            <img src="/images/veggies_hero.webp" alt="" class="recipe--image" />
                             <p class="recipe--name">Diet Plan</p>
                             <p id="price_diet" class="recipe--price">
                                 <span class="bigger_size highlight_basil">Rp30.000,00</span> /meal
@@ -34,7 +34,7 @@
                             id="recipe_protein"
                             class="plan_wrap--recipe"
                         >
-                            <img src="/images/protein_hero.svg" alt="" class="recipe--image" />
+                            <img src="/images/protein_hero.webp" alt="" class="recipe--image" />
                             <p class="recipe--name">Protein Plan</p>
                             <p id="price_protein" class="recipe--price">
                                 <span class="bigger_size highlight_paprika">Rp40.000,00</span> /meal
@@ -59,7 +59,7 @@
                             id="recipe_royal"
                             class="plan_wrap--recipe"
                         >
-                            <img src="/images/fancy_food.svg" alt="" class="recipe--image" />
+                            <img src="/images/fancy_food.webp" alt="" class="recipe--image" />
                             <p class="recipe--name">Royal Plan</p>
                             <p id="price_royal" class="recipe--price">
                                 <span class="bigger_size highlight_purple">Rp60.000,00</span> /meal
