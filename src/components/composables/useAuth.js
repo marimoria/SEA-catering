@@ -80,7 +80,8 @@ export async function handleSignUp({ email, password, username, fullName, phone,
 
     return {
         success: true,
-        message: "Success! Please check your email to confirm your account."
+        message:
+            "A confirmation link should be sent to your email within a few minutes if the email hasn't been used."
     };
 }
 
