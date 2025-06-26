@@ -15,15 +15,15 @@
                     </p>
                     <div class="details--grid">
                         <div class="group">
-                            <img src="../assets/images/phone.svg" alt="" class="group--icon" />
+                            <img src="/images/phone.svg" alt="" class="group--icon" />
                             <p class="group--info">(+62) 123-456-789</p>
                         </div>
                         <div class="group">
-                            <img src="../assets/images/gmail.svg" alt="" class="group--icon" />
+                            <img src="/images/gmail.svg" alt="" class="group--icon" />
                             <p class="group--info">SEACatering@support.com</p>
                         </div>
                         <div class="group">
-                            <img src="../assets/images/location.svg" alt="" class="group--icon" />
+                            <img src="/images/location.svg" alt="" class="group--icon" />
                             <p class="group--info">Jakarta, Indonesia</p>
                         </div>
                     </div>
@@ -74,14 +74,14 @@
             data-speedx="0.02"
             data-speedy="0.03"
             class="parallax bg_image--top_right"
-            src="../assets/images/grill_steak.svg"
+            src="/images/grill_steak.svg"
             alt=""
         />
         <img
             data-speedx="0.01"
             data-speedy="0.03"
             class="parallax bg_image--bottom_left"
-            src="../assets/images/grilled_salmon.svg"
+            src="/images/grilled_salmon.svg"
             alt=""
         />
         <img
@@ -89,7 +89,7 @@
             data-speedx="0.04"
             data-speedy="0.03"
             class="parallax bg_image--sec_right"
-            src="../assets/images/duck.svg"
+            src="/images/duck.svg"
             alt=""
         />
         <img
@@ -97,7 +97,7 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax bg_image--sec_left"
-            src="../assets/images/quinoa_salad.svg"
+            src="/images/quinoa_salad.svg"
             alt=""
         />
     </div>

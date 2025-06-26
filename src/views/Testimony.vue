@@ -1,8 +1,8 @@
 <template>
     <div class="testimonials">
         <div class="background"></div>
-        <img v-if="viewport.w >= 1024" src="../assets/images/fork.svg" alt="" class="fork" />
-        <img v-if="viewport.w >= 1024" src="../assets/images/spoon.svg" alt="" class="spoon" />
+        <img v-if="viewport.w >= 1024" src="/images/fork.svg" alt="" class="fork" />
+        <img v-if="viewport.w >= 1024" src="/images/spoon.svg" alt="" class="spoon" />
 
         <navBar />
         <div class="testimonials--view_grid">
@@ -21,11 +21,7 @@
 
                     <div class="cards_grid--cards_carousel">
                         <div class="cards_carousel--cards">
-                            <img
-                                src="../assets/images/quotes.svg"
-                                alt=""
-                                class="card_content--quotes"
-                            />
+                            <img src="/images/quotes.svg" alt="" class="card_content--quotes" />
                             <div class="card_content">
                                 <p :style="{ color: getRandomColor() }" class="card_content--title">
                                     Good App!
@@ -46,11 +42,7 @@
                                     - Marimoria
                                 </p>
                             </div>
-                            <img
-                                src="../assets/images/quotes.svg"
-                                alt=""
-                                class="card_content--quotes"
-                            />
+                            <img src="/images/quotes.svg" alt="" class="card_content--quotes" />
                         </div>
                         <div class="cards_carousel--cards"></div>
                         <div class="cards_carousel--cards"></div>

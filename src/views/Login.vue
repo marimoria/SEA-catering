@@ -15,15 +15,15 @@
                     </p>
                     <div class="details--grid">
                         <div class="group">
-                            <img src="../assets/images/phone.svg" alt="" class="group--icon" />
+                            <img src="/images/phone.svg" alt="" class="group--icon" />
                             <p class="group--info">(+62) 123-456-789</p>
                         </div>
                         <div class="group">
-                            <img src="../assets/images/gmail.svg" alt="" class="group--icon" />
+                            <img src="/images/gmail.svg" alt="" class="group--icon" />
                             <p class="group--info">SEACatering@support.com</p>
                         </div>
                         <div class="group">
-                            <img src="../assets/images/location.svg" alt="" class="group--icon" />
+                            <img src="/images/location.svg" alt="" class="group--icon" />
                             <p class="group--info">Jakarta, Indonesia</p>
                         </div>
                     </div>
@@ -57,14 +57,14 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax bg_image--top_right"
-            src="../assets/images/chicken_platter.svg"
+            src="/images/chicken_platter.svg"
             alt=""
         />
         <img
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax bg_image--bottom_left"
-            src="../assets/images/pad_thai.svg"
+            src="/images/pad_thai.svg"
             alt=""
         />
         <img
@@ -72,7 +72,7 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax bg_image--sec_right"
-            src="../assets/images/protein_hero.svg"
+            src="/images/protein_hero.svg"
             alt=""
         />
         <img
@@ -80,7 +80,7 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax bg_image--sec_left"
-            src="../assets/images/veggies_hero.svg"
+            src="/images/veggies_hero.svg"
             alt=""
         />
     </div>

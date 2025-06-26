@@ -2,7 +2,7 @@
     <header class="navbar">
         <div class="container">
             <div class="logo">
-                <img src="../assets/images/logo.png" alt="" class="logo_image" />
+                <img src="/images/logo.png" alt="" class="logo_image" />
                 <p class="logo_name"><span class="gradient_1">SEA</span> Catering</p>
             </div>
 
