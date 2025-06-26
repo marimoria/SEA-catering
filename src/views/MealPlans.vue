@@ -20,7 +20,7 @@
                     :style="`background: linear-gradient(135deg, ${plan.colors.dark}, ${plan.colors.medium}, ${plan.colors.light})`"
                 ></div>
                 <img
-                    data-speedx="0.03"
+                    data-speedx="0.02"
                     data-speedy="0.03"
                     :src="getImageUrl(plan.hero_image)"
                     :alt="`${plan.title} hero image`"
@@ -140,7 +140,7 @@
 </style>
 
 <script setup>
-    import { ref, onMounted } from "vue";
+    import { ref, onMounted, nextTick } from "vue";
     import navBar from "../components/Navbar.vue";
     import mealTypeNav from "../components/MealTypeNavbar.vue";
     import mealPlanPopup from "../components/MealPlanPopup.vue";
@@ -209,13 +209,16 @@
             for (const plan of plans.value) {
                 popupStates.value[plan.title.toLowerCase()] = false;
             }
+
+            nextTick(() => {
+                parallaxInit();
+            });
         } catch (err) {
             console.error("Failed to load meal plans:", err.message);
         }
     }
 
     onMounted(() => {
-        parallaxInit();
         loadMealPlansAndRecipes();
     });
 </script>
