@@ -63,8 +63,8 @@
 </template>
 
 <script setup>
-    import { computed, onMounted, ref } from "vue";
-    import { user, isAdmin, fetchProfile, handleLogout } from "../components/composables/useAuth";
+    import { computed, ref } from "vue";
+    import { user, isAdmin, handleLogout } from "../components/composables/useAuth";
     import { useRouter } from "vue-router";
 
     const isOpen = ref(false);
@@ -80,10 +80,6 @@
             router.push("/");
         }
     }
-
-    onMounted(() => {
-        fetchProfile();
-    });
 </script>
 
 <style scoped>

@@ -2,14 +2,24 @@ import { createApp } from "vue";
 import App from "./src/App.vue";
 import router from "./src/js/router";
 import "./src/js/vendor";
+import { fetchProfile } from "./src/components/composables/useAuth";
 
-createApp(App).use(router).mount("#app");
+async function initApp() {
+    // Wait until session and profile is fetched
+    await fetchProfile();
 
-function setVH() {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty("--vh", `${vh}px`);
+    const app = createApp(App);
+    app.use(router).mount("#app");
+
+    // Set correct viewport height
+    function setVH() {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty("--vh", `${vh}px`);
+    }
+
+    window.addEventListener("resize", setVH);
+    window.addEventListener("orientationchange", setVH);
+    setVH();
 }
 
-window.addEventListener("resize", setVH());
-window.addEventListener("orientationchange", setVH());
-setVH();
+initApp();
