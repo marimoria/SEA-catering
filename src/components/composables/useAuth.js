@@ -122,6 +122,11 @@ export async function handleLogout() {
     return { success: true };
 }
 
+function isValidIndonesianPhone(phoneNumber) {
+    const regex = /^\+62[0-9]{8,12}$/;
+    return regex.test(phoneNumber);
+}
+
 export async function updateAllergies(newAllergy) {
     try {
         await updateData("profiles", { id: user.value.id }, { allergies: newAllergy });
@@ -137,9 +142,53 @@ export async function updateAllergies(newAllergy) {
     }
 }
 
-export function isValidIndonesianPhone(phoneNumber) {
-    const regex = /^\+62[0-9]{8,12}$/;
-    return regex.test(phoneNumber);
+export async function updateUsername(newUsername) {
+    try {
+        await updateData("profiles", { id: user.value.id }, { username: newUsername });
+
+        profile.value = {
+            ...profile.value,
+            username: newUsername
+        };
+
+        return { success: true };
+    } catch (err) {
+        return { success: false, error: err.message };
+    }
+}
+
+export async function updateFullName(newFullName) {
+    try {
+        await updateData("profiles", { id: user.value.id }, { full_name: newFullName });
+
+        profile.value = {
+            ...profile.value,
+            full_name: newFullName
+        };
+
+        return { success: true };
+    } catch (err) {
+        return { success: false, error: err.message };
+    }
+}
+
+export async function updatePhone(newPhone) {
+    if (!isValidIndonesianPhone(newPhone)) {
+        return { success: false, error: "Phone number is not Indonesian." };
+    }
+
+    try {
+        await updateData("profiles", { id: user.value.id }, { phone: newPhone });
+
+        profile.value = {
+            ...profile.value,
+            phone: newPhone
+        };
+
+        return { success: true };
+    } catch (err) {
+        return { success: false, error: err.message };
+    }
 }
 
 export { user, isAdmin, profile };
