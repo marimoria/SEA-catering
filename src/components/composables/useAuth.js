@@ -47,6 +47,10 @@ export async function fetchProfile() {
 }
 
 export async function handleSignUp({ email, password, username, fullName, phone, allergies }) {
+    if (!isValidIndonesianPhone(phone)) {
+        return { success: false, error: "Phone number is not Indonesian." };
+    }
+
     // check for dupes
     const { data: dupesData, error: dupesError } = await supabase.functions.invoke(
         "checkUniqueSignUp",
@@ -116,6 +120,11 @@ export async function handleLogout() {
     isAdmin.value = false;
 
     return { success: true };
+}
+
+export function isValidIndonesianPhone(phoneNumber) {
+    const regex = /^\+62[0-9]{8,12}$/;
+    return regex.test(phoneNumber);
 }
 
 export { user, isAdmin, profile };
