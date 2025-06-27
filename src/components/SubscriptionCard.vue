@@ -16,6 +16,12 @@
                     </p>
                     <p><strong>Price:</strong> Rp {{ formatPrice(subscription.price) }}</p>
                     <p><strong>Purchased:</strong> {{ formatDate(subscription.created_at) }}</p>
+                    <p v-if="subscription.status == 'paused'">
+                        <strong>Paused at:</strong> {{ formatDate(subscription.pause_start) }}
+                    </p>
+                    <p v-if="subscription.status == 'paused'">
+                        <strong>Paused until:</strong> {{ formatDate(subscription.pause_end) }}
+                    </p>
                 </div>
 
                 <div class="action_buttons">
@@ -58,7 +64,7 @@
 </template>
 
 <script setup>
-    import { ref, computed, onMounted } from "vue";
+    import { ref, computed, onMounted, inject, watch } from "vue";
     import { getData, updateData, deleteData } from "./composables/useSupabase";
 
     const props = defineProps({
@@ -140,6 +146,48 @@
 
         return "#" + mixed.map((x) => x.toString(16).padStart(2, "0")).join("");
     }
+
+    // pause subscription
+    const calendarVisible = inject("calendarVisible");
+    const resumeDate = inject("resumeDate");
+    const pausedSubId = inject("pausedSubId");
+
+    function showCalendar() {
+        resumeDate.value = null;
+        calendarVisible.value = true;
+        pausedSubId.value = subscription.value.id;
+    }
+
+    // Watch resumeDate when modal closes
+    watch([calendarVisible, resumeDate], async ([visible, date]) => {
+        if (!visible && date && pausedSubId.value === subscription.value.id) {
+            const now = new Date().toISOString();
+
+            subscription.value.status = "paused";
+            subscription.value.pause_start = now;
+            subscription.value.pause_end = date;
+
+            console.log("Paused subscription value:", subscription.value);
+            console.log("Paused subscription ID:", subscription.value.id);
+
+            const { error } = await updateData(
+                "subscriptions",
+                { id: subscription.value.id },
+                {
+                    status: "paused",
+                    pause_start: now,
+                    pause_end: date
+                }
+            );
+
+            if (error) {
+                console.error("Failed to pause subscription:", error.message);
+            }
+
+            resumeDate.value = null;
+            pausedSubId.value = null;
+        }
+    });
 
     onMounted(async () => {
         await loadMealPlans();

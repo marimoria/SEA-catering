@@ -39,6 +39,26 @@
     opacity: 0;
 }
 
+.bg_image--top_right,
+.bg_image--bottom_left {
+    position: fixed;
+    height: auto;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.bg_image--top_right {
+    width: clamp(20em, 23vw, 30em);
+    top: 10vh;
+    right: -5%;
+}
+
+.bg_image--bottom_left {
+    width: clamp(13em, 23vw, 22em);
+    bottom: 10vh;
+    left: 0;
+}
+
 .background {
     background-image: url("/bg/wavey-fingerprint.svg");
     position: absolute;

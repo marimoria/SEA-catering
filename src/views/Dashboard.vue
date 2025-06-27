@@ -5,7 +5,9 @@
 
         <div class="dashboard_grid">
             <div class="dashboard_header">
-                <p class="dashboard_header--greet">Hello there, {{ profile.username }}!</p>
+                <p class="dashboard_header--greet">
+                    Hello there, <span class="highlight_basil">{{ profile.username }}</span>
+                </p>
                 <p class="dashboard_header--desc">
                     <span class="typing_text" id="animatedText"></span>
                     <span class="cursor">|</span>
@@ -61,6 +63,26 @@
             data-speedy="0.07"
             alt=""
         />
+
+        <!-- Large screen decors -->
+        <img
+            v-if="viewport.w >= 1024"
+            data-speedx="0.03"
+            data-speedy="0.03"
+            class="parallax bg_image--top_right"
+            src="/images/chicken_platter.webp"
+            alt=""
+        />
+        <img
+            v-if="viewport.w >= 1024"
+            data-speedx="0.02"
+            data-speedy="0.03"
+            class="parallax bg_image--bottom_left"
+            src="/images/pad_thai.webp"
+            alt=""
+        />
+
+        <CalendarModal v-model:visible="calendarVisible" v-model:resumeDate="resumeDate" />
     </div>
 </template>
 
@@ -69,7 +91,7 @@
 </style>
 
 <script setup>
-    import { onMounted, ref } from "vue";
+    import { onMounted, ref, provide } from "vue";
     import { user, profile } from "../components/composables/useAuth";
     import { getData } from "../components/composables/useSupabase";
     import { gsap } from "../js/vendor";
@@ -78,6 +100,7 @@
     import Navbar from "../components/Navbar.vue";
     import SubscriptionCard from "../components/SubscriptionCard.vue";
     import DashboardNav from "../components/DashboardNav.vue";
+    import CalendarModal from "../components/CalendarModal.vue";
 
     const props = defineProps({
         viewport: Object,
@@ -135,6 +158,15 @@
             };
         });
     }
+
+    // pause
+    const calendarVisible = ref(false);
+    const resumeDate = ref(null);
+    const pausedSubId = ref(null); // Track which subscription triggered the modal
+
+    provide("calendarVisible", calendarVisible);
+    provide("resumeDate", resumeDate);
+    provide("pausedSubId", pausedSubId);
 
     onMounted(async () => {
         await loadSubscriptions();
