@@ -197,8 +197,6 @@
         });
     }
 
-    function getTestimonyUser(testimonyData) {}
-
     const reviewName = ref("");
     const reviewStars = ref(1);
     const reviewSummary = ref("");
