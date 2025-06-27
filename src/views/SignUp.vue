@@ -137,24 +137,13 @@
         successMessage.value = "";
         isLoading.value = true;
 
-        const allergyList = computed(() => {
-            if (!allergies.value) return [];
-
-            return allergies.value
-                .split(/\s*,\s*/) // split on commas with optional spaces around
-                .map((a) => a.trim()) // trim extra spaces
-                .filter((a) => a.length > 0); // remove empty entries
-        });
-
-        const allergiesString = allergyList.value.join(", ");
-
         const result = await handleSignUp({
             email: email.value,
             password: password.value,
             username: username.value,
             fullName: fullName.value,
             phone: phone.value,
-            allergies: allergiesString
+            allergies: allergies.value
         });
 
         if (result.success) {
