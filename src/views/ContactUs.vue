@@ -66,14 +66,14 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax bg_image--top_right"
-            src="/images/chicken_platter.webp"
+            :src="getImageUrl('chicken_platter.webp')"
             alt=""
         />
         <img
             data-speedx="0.02"
             data-speedy="0.03"
             class="parallax bg_image--bottom_left"
-            src="/images/pad_thai.webp"
+            :src="getImageUrl('pad_thai.webp')"
             alt=""
         />
 
@@ -83,7 +83,7 @@
             data-speedx="0.01"
             data-speedy="0.03"
             class="parallax bg_image--sec_right"
-            src="/images/protein_hero.webp"
+            :src="getImageUrl('protein_hero.webp')"
             alt=""
         />
         <img
@@ -91,7 +91,7 @@
             data-speedx="0.04"
             data-speedy="0.03"
             class="parallax bg_image--sec_left"
-            src="/images/veggies_hero.webp"
+            :src="getImageUrl('veggies_hero.webp')"
             alt=""
         />
     </div>
@@ -108,6 +108,7 @@
     import { computed, onMounted, ref } from "vue";
     import { user, profile } from "../components/composables/useAuth";
     import emailjs from "emailjs-com";
+    import { getImageUrl } from "../components/composables/useSupabase";
 
     const props = defineProps({
         viewport: Object,

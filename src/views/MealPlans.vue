@@ -144,7 +144,7 @@
     import navBar from "../components/Navbar.vue";
     import mealTypeNav from "../components/MealTypeNavbar.vue";
     import mealPlanPopup from "../components/MealPlanPopup.vue";
-    import { getData } from "../components/composables/useSupabase";
+    import { getData, getImageUrl } from "../components/composables/useSupabase";
     import { useParallax } from "../components/composables/useParallax";
 
     const props = defineProps({
@@ -165,10 +165,6 @@
         const g = parseInt(hex.slice(3, 5), 16);
         const b = parseInt(hex.slice(5, 7), 16);
         return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-    }
-
-    function getImageUrl(filename) {
-        return `${import.meta.env.BASE_URL}/images/${filename}`;
     }
 
     function parallaxInit() {

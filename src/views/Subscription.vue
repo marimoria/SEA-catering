@@ -223,7 +223,7 @@
     import MealSelector from "../components/MealSelector.vue";
     import DaySelector from "../components/DaySelector.vue";
     import LoadingSpinner from "../components/LoadingSpinner.vue";
-    import { getData, insertData } from "../components/composables/useSupabase";
+    import { getData, insertData, getImageUrl } from "../components/composables/useSupabase";
     import { user, profile, updateAllergies } from "../components/composables/useAuth";
 
     const props = defineProps({
@@ -236,10 +236,6 @@
     const chosenPlans = ref([]);
     const chosenTypes = ref({});
     const chosenDays = ref({});
-
-    function getImageUrl(filename) {
-        return `${import.meta.env.BASE_URL}/images/${filename}`;
-    }
 
     function capitalize(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);

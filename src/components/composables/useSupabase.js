@@ -32,4 +32,8 @@ export async function deleteData(table, match) {
     return { data, error };
 }
 
+export function getImageUrl(filename) {
+    return `${import.meta.env.VITE_CDN_URL}/${filename}`;
+}
+
 export { supabase };
