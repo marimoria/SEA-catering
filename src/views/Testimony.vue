@@ -250,7 +250,7 @@
             review_message: reviewMessage.value.trim()
         });
 
-        if (response.error) {
+        if (!!response.error) {
             isLoading.value = false;
             errorMessage.value = "Something went wrong, please contact Administration.";
         } else {

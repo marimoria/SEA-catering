@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { supabase, getData, insertData } from "../composables/useSupabase";
+import { supabase, insertData } from "../composables/useSupabase";
 
 const user = ref(null); // only contains email + metadata
 const profile = ref(null);
@@ -47,16 +47,22 @@ export async function fetchProfile() {
 }
 
 export async function handleSignUp({ email, password, username, fullName, phone, allergies }) {
-    // Check for duplicate username
-    const usernameExists = await getData("profiles", { username });
-    if (usernameExists.length > 0) {
-        return { success: false, error: "Username already exists." };
+    // check for dupes
+    const { data: dupesData, error: dupesError } = await supabase.functions.invoke(
+        "checkUniqueSignUp",
+        {
+            body: { username: username, phone: phone }
+        }
+    );
+
+    if (dupesError) {
+        return { succes: false, error: dupesError.message };
     }
 
-    // Check for duplicate phone
-    const phoneExists = await getData("profiles", { phone });
-    if (phoneExists.length > 0) {
-        return { success: false, error: "Phone number already registered." };
+    if (dupesData.usernameExists) {
+        return { success: false, error: "Username already exists." };
+    } else if (dupesData.phoneExists) {
+        return { success: false, error: "Phone number is invalid." };
     }
 
     const { data, error } = await supabase.auth.signUp({
@@ -80,8 +86,7 @@ export async function handleSignUp({ email, password, username, fullName, phone,
 
     return {
         success: true,
-        message:
-            "A confirmation link should be sent to your email within a few minutes if the email hasn't been used."
+        message: "A confirmation link will be sent to your email in a few minutes."
     };
 }
 
