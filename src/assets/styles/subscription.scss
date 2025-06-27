@@ -406,13 +406,90 @@ textarea:focus {
     }
 }
 
+// Highlight color utility classes (used in span and button text)
+.highlight_diet {
+    color: var(--color-fresh-basil);
+}
+.highlight_protein {
+    color: var(--color-paprika-red);
+}
+.highlight_royal {
+    color: #7935c7;
+}
+
+.allergy_prompt {
+    font-family: "Inter", sans-serif;
+    font-size: clamp(0.9rem, 1vw, 1.2rem);
+    color: #444;
+    background-color: #fff3f3;
+    border: 1px solid #e57373;
+    border-radius: 0.8rem;
+    padding: clamp(1rem, 2vw, 2rem);
+    margin: 1.5rem auto 1rem auto;
+    max-width: clamp(320px, 90%, 600px);
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+
+    &--desc {
+        font-size: clamp(0.9rem, 1.1vw, 1.2rem);
+        line-height: 1.4;
+    }
+
+    .prompt_buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 1rem;
+
+        &.column {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .change_button,
+        .cancel_button {
+            font-family: "Inter", sans-serif;
+            font-size: clamp(0.9rem, 1vw, 1.2rem);
+            font-weight: 600;
+            padding: clamp(0.5rem, 1vw, 0.75rem) clamp(1.2rem, 3vw, 2rem);
+            border: none;
+            border-radius: 0.6rem;
+            transition: transform 0.1s ease;
+            white-space: nowrap;
+
+            &:hover {
+                cursor: pointer;
+                transform: scale(1.05);
+            }
+        }
+
+        .change_button {
+            background-color: var(--color-fresh-basil);
+            color: white;
+        }
+
+        .cancel_button {
+            background-color: #fff9f4;
+            color: #444;
+        }
+    }
+}
+
 .success_message {
     text-align: center;
     font-weight: 500;
     font-family: "Inter", sans-serif;
     font-size: clamp(1.1rem, 1.1vw, 1.5rem);
-    width: clamp(37ch, 50%, 50ch);
     color: #444;
     margin-inline: auto;
-    margin-bottom: clamp(5vh, 4vh, 8vh);
+}
+
+.error_message {
+    text-align: center;
+    font-weight: 500;
+    font-family: "Inter", sans-serif;
+    font-size: clamp(1.1rem, 1.1vw, 1.5rem);
+    color: #b60000;
+    margin-inline: auto;
 }

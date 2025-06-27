@@ -1,6 +1,5 @@
 <template>
     <div class="meal_type_selector">
-        <!--Breakfast, Lunch-->
         <button
             v-for="type in types"
             :key="type.toLowerCase()"
@@ -21,7 +20,7 @@
 <script setup>
     const props = defineProps({
         types: Array,
-        mealPlan: String,
+        mealPlanId: String,
         buttonColor: String,
         activeColor: String
     });
@@ -31,17 +30,18 @@
     const selected = defineModel("selected");
 
     function isSelected(type) {
-        return selected.value[props.mealPlan].includes(type);
+        const planTypes = selected.value[props.mealPlanId];
+        return planTypes.includes(type);
     }
 
     function toggleType(type) {
-        const planArray = selected.value[props.mealPlan];
+        const planTypes = selected.value[props.mealPlanId];
 
         if (isSelected(type)) {
-            const index = planArray.indexOf(type);
-            planArray.splice(index, 1);
+            const index = planTypes.indexOf(type);
+            planTypes.splice(index, 1);
         } else {
-            planArray.push(type);
+            planTypes.push(type);
         }
     }
 </script>

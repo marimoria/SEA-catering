@@ -180,7 +180,7 @@
                 </button>
 
                 <div v-if="showAllergyPrompt" class="allergy_prompt">
-                    <p class="forms--desc">
+                    <p class="allergy_prompt--desc">
                         Your current allergy information doesn't match your profile. Would you like
                         to update it?
                     </p>
@@ -388,6 +388,8 @@
             successMessage.value = "";
             return;
         }
+
+        proceedWithSubmission();
     }
 
     async function updateAllergyAndSubmit() {
@@ -410,40 +412,38 @@
         isLoading.value = true;
 
         // Insert into subscriptions table
-        const subsResponse = await insertData("subscriptions", {
+        const { error: subsError } = await insertData("subscriptions", {
             user_id: user.value.id,
             status: "active",
             total_price: totalPrice.value,
             created_at: new Date().toISOString()
         });
 
-        if (!!subsResponse.error) {
+        if (subsError) {
             isLoading.value = false;
             errorMessage.value = "Something went wrong while inserting to subscriptions.";
             return;
         }
 
-        const { data: subscriptions } = await getData(
+        const { data: latestSub, error: getSubError } = await getData(
             "subscriptions",
-            {
-                user_id: user.value.id
-            },
+            { user_id: user.value.id },
             {
                 orderBy: { column: "created_at", ascending: false }
             }
         );
 
-        const latestSubsId = subscriptions?.[0]?.id;
-
-        if (!latestSubsId) {
+        if (getSubError) {
             isLoading.value = false;
-            errorMessage.value = "Could not retrieve subscription ID.";
+            errorMessage.value = "Failed to fetch latest subscription:" + error.message;
             return;
         }
 
+        const latestSubs = latestSub?.[0];
+
         // Insert each chosen meal plan as a subscription_item
         const itemsPayload = chosenPlans.value.map((planId) => ({
-            subscription_id: latestSubsId,
+            subscription_id: latestSubs.id,
             meal_plan_id: planId,
             meal_types: chosenTypes.value[planId],
             delivery_days: chosenDays.value[planId],
@@ -454,18 +454,14 @@
             (item) => item.meal_types.length && item.delivery_days.length
         );
 
-        const itemsResponse = await insertData("meal_items", cleanItems);
+        const { error: itemsError } = await insertData("subscription_items", cleanItems);
 
-        if (!!itemsResponse.error) {
+        if (!!itemsError) {
             isLoading.value = false;
-            errorMessage.value = "Something went wrong, " + itemsResponse.error;
+            errorMessage.value = "Something went wrong: " + itemsError.message;
         } else {
             isLoading.value = false;
             successMessage.value = "Subscription is now active!";
-
-            chosenPlans.value = [];
-            chosenTypes.value = {};
-            chosenDays.value = {};
         }
     }
 
