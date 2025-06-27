@@ -1,26 +1,26 @@
 <template>
-    <div class="subscription-card" :style="{ borderColor: currentStyle.border }">
-        <div class="subscription-content">
-            <div class="card-header">
+    <div class="subscription_card" :style="{ borderColor: currentStyle.border }">
+        <div class="subscription_content">
+            <div class="card_header">
                 <p class="title" :style="{ color: currentStyle.text }">{{ title }}</p>
-                <button class="toggle-btn" @click="expanded = !expanded">
+                <button class="toggle_btn" @click="expanded = !expanded">
                     {{ expanded ? "Hide Details" : "Show Details" }}
                 </button>
             </div>
 
-            <div class="info-row">
-                <div class="info-block">
+            <div class="info_row">
+                <div class="info_block">
                     <p>
                         <strong>Status: </strong>
-                        <span :class="statusClass">{{ subscription.status }}</span>
+                        {{ subscription.status }}
                     </p>
                     <p><strong>Price:</strong> Rp {{ formatPrice(subscription.price) }}</p>
                     <p><strong>Purchased:</strong> {{ formatDate(subscription.created_at) }}</p>
                 </div>
 
-                <div class="action-buttons">
-                    <button @click="showCalendar" class="action-btn pause-btn">Pause</button>
-                    <button class="action-btn cancel-btn">Cancel</button>
+                <div class="action_buttons">
+                    <button @click="showCalendar()" class="action_btn pause_btn">Pause</button>
+                    <button class="action_btn cancel_btn">Cancel</button>
                 </div>
             </div>
 
@@ -28,7 +28,7 @@
                 <div
                     v-for="(item, i) in subscription.items"
                     :key="i"
-                    class="plan-detail"
+                    class="plan_detail"
                     :style="{
                         backgroundColor: lighten(getPlanById(item.meal_plan_id).colors.light, 0.7)
                     }"
@@ -77,10 +77,6 @@
             month: "long",
             year: "numeric"
         });
-
-    const statusClass = computed(() =>
-        props.subscription.status === "active" ? "text-green" : "text-red"
-    );
 
     const cardColors = [
         {
@@ -151,7 +147,7 @@
 </script>
 
 <style scoped>
-    .subscription-card {
+    .subscription_card {
         border-radius: 1rem;
         border: 2px solid;
         width: 100%;
@@ -161,12 +157,12 @@
         transition: transform 0.2s ease;
     }
 
-    .subscription-content {
+    .subscription_content {
         padding: clamp(0.5rem, 3vw, 1rem);
         background-color: white;
     }
 
-    .card-header {
+    .card_header {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -179,7 +175,7 @@
         margin: 0;
     }
 
-    .info-row {
+    .info_row {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -188,17 +184,17 @@
         margin-bottom: 1rem;
     }
 
-    .info-block {
+    .info_block {
         flex-grow: 1;
     }
 
-    .action-buttons {
+    .action_buttons {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
     }
 
-    .action-btn {
+    .action_btn {
         padding: 0.8rem;
         border: none;
         border-radius: 0.6rem;
@@ -208,23 +204,23 @@
         transition: background-color 0.2s ease;
     }
 
-    .pause-btn {
+    .pause_btn {
         background-color: #fef08a;
         color: #a16207;
     }
 
-    .cancel-btn {
+    .cancel_btn {
         background-color: #fecaca;
         color: #991b1b;
     }
 
-    .info-block {
+    .info_block {
         background-color: #fff;
         border-radius: 1.2rem;
-        font-size: clamp(0.85rem, 1.1vw, 1rem);
+        font-size: clamp(0.95rem, 1.1vw, 1.1rem);
     }
 
-    .toggle-btn {
+    .toggle_btn {
         background: none;
         border: none;
         color: #683213;
@@ -242,10 +238,10 @@
         border-radius: 1rem;
     }
 
-    .plan-detail {
+    .plan_detail {
         padding: clamp(0.6rem, 1.5vw, 0.9rem);
         border-radius: 8px;
-        font-size: clamp(0.85rem, 1.1vw, 1rem);
+        font-size: clamp(0.9rem, 1.1vw, 1.1rem);
     }
 
     @media (min-width: 1024px) {
