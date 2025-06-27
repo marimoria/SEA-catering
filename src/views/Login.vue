@@ -15,15 +15,15 @@
                     </p>
                     <div class="details--grid">
                         <div class="group">
-                            <img src="/images/phone.svg" alt="" class="group--icon" />
+                            <img :src="getImageUrl('phone.svg')" alt="" class="group--icon" />
                             <p class="group--info">(+62) 123-456-789</p>
                         </div>
                         <div class="group">
-                            <img src="/images/gmail.svg" alt="" class="group--icon" />
+                            <img :src="getImageUrl('gmail.svg')" alt="" class="group--icon" />
                             <p class="group--info">SEACatering@support.com</p>
                         </div>
                         <div class="group">
-                            <img src="/images/location.svg" alt="" class="group--icon" />
+                            <img :src="getImageUrl('location.svg')" alt="" class="group--icon" />
                             <p class="group--info">Jakarta, Indonesia</p>
                         </div>
                     </div>
@@ -57,14 +57,14 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax bg_image--top_right"
-            src="/images/chicken_platter.webp"
+            :src="getImageUrl('chicken_platter.webp')"
             alt=""
         />
         <img
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax bg_image--bottom_left"
-            src="/images/pad_thai.webp"
+            :src="getImageUrl('pad_thai.webp')"
             alt=""
         />
         <img
@@ -72,7 +72,7 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax bg_image--sec_right"
-            src="/images/protein_hero.webp"
+            :src="getImageUrl('protein_hero.webp')"
             alt=""
         />
         <img
@@ -80,7 +80,7 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax bg_image--sec_left"
-            src="/images/veggies_hero.webp"
+            :src="getImageUrl('veggies_hero.webp')"
             alt=""
         />
     </div>
@@ -96,6 +96,7 @@
     import { ref, onMounted } from "vue";
     import { handleLogin } from "../components/composables/useAuth";
     import { useParallax } from "../components/composables/useParallax";
+    import { getImageUrl } from "../components/composables/useSupabase";
     import LoadingSpinner from "../components/LoadingSpinner.vue";
 
     const props = defineProps({

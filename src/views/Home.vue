@@ -63,7 +63,7 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax hero_image"
-            src="/images/protein_hero.webp"
+            :src="getImageUrl('protein_hero.webp')"
             alt=""
         />
         <img
@@ -71,7 +71,7 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax hero_image"
-            src="/images/veggies_hero.webp"
+            :src="getImageUrl('veggies_hero.webp')"
             alt=""
         />
         <img
@@ -79,7 +79,7 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax hero_image"
-            src="/images/fruits_hero.webp"
+            :src="getImageUrl('fruits_hero.webp')"
             alt=""
         />
     </section>
@@ -95,6 +95,7 @@
     import { onMounted } from "vue";
     import { gsap } from "../js/vendor.js";
     import { useParallax } from "../components/composables/useParallax";
+    import { getImageUrl } from "../components/composables/useSupabase";
 
     const props = defineProps({
         viewport: Object,

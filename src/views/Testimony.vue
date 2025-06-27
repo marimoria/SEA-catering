@@ -1,8 +1,8 @@
 <template>
     <div class="testimonials">
         <div class="background"></div>
-        <img v-if="viewport.w >= 1024" src="/images/fork.svg" alt="" class="fork" />
-        <img v-if="viewport.w >= 1024" src="/images/spoon.svg" alt="" class="spoon" />
+        <img v-if="viewport.w >= 1024" :src="getImageUrl('fork.svg')" alt="" class="fork" />
+        <img v-if="viewport.w >= 1024" :src="getImageUrl('spoon.svg')" alt="" class="spoon" />
 
         <navBar />
         <div class="testimonials--view_grid">
@@ -45,7 +45,11 @@
                             :key="t.id"
                             class="cards_carousel--cards"
                         >
-                            <img src="/images/quotes.svg" alt="" class="card_content--quotes" />
+                            <img
+                                :src="getImageUrl('quotes.svg')"
+                                alt=""
+                                class="card_content--quotes"
+                            />
                             <div class="card_content">
                                 <p :style="{ color: getRandomColor() }" class="card_content--title">
                                     {{ t.summary }}
@@ -61,7 +65,11 @@
                                     - {{ t.username || "Anonymous" }}
                                 </p>
                             </div>
-                            <img src="/images/quotes.svg" alt="" class="card_content--quotes" />
+                            <img
+                                :src="getImageUrl('quotes.svg')"
+                                alt=""
+                                class="card_content--quotes"
+                            />
                         </div>
                     </div>
 
@@ -150,7 +158,7 @@
     import rating from "../components/Rating.vue";
     import LoadingSpinner from "../components/LoadingSpinner.vue";
     import { user, profile } from "../components/composables/useAuth";
-    import { getData, insertData } from "../components/composables/useSupabase";
+    import { getData, insertData, getImageUrl } from "../components/composables/useSupabase";
 
     import { gsap } from "../js/vendor";
 

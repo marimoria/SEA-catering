@@ -15,15 +15,15 @@
                     </p>
                     <div class="details--grid">
                         <div class="group">
-                            <img src="/images/phone.svg" alt="" class="group--icon" />
+                            <img :src="getImageUrl('phone.svg')" alt="" class="group--icon" />
                             <p class="group--info">(+62) 123-456-789</p>
                         </div>
                         <div class="group">
-                            <img src="/images/gmail.svg" alt="" class="group--icon" />
+                            <img :src="getImageUrl('gmail.svg')" alt="" class="group--icon" />
                             <p class="group--info">SEACatering@support.com</p>
                         </div>
                         <div class="group">
-                            <img src="/images/location.svg" alt="" class="group--icon" />
+                            <img :src="getImageUrl('location.svg')" alt="" class="group--icon" />
                             <p class="group--info">Jakarta, Indonesia</p>
                         </div>
                     </div>
@@ -74,14 +74,14 @@
             data-speedx="0.02"
             data-speedy="0.03"
             class="parallax bg_image--top_right"
-            src="/images/grill_steak.webp"
+            :src="getImageUrl('grill_steak.webp')"
             alt=""
         />
         <img
             data-speedx="0.01"
             data-speedy="0.03"
             class="parallax bg_image--bottom_left"
-            src="/images/grilled_salmon.webp"
+            :src="getImageUrl('grilled_salmon.webp')"
             alt=""
         />
         <img
@@ -89,7 +89,7 @@
             data-speedx="0.04"
             data-speedy="0.03"
             class="parallax bg_image--sec_right"
-            src="/images/duck.webp"
+            :src="getImageUrl('duck.webp')"
             alt=""
         />
         <img
@@ -97,7 +97,7 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax bg_image--sec_left"
-            src="/images/quinoa_salad.webp"
+            :src="getImageUrl('quinoa_salad.webp')"
             alt=""
         />
     </div>
@@ -105,9 +105,10 @@
 
 <script setup>
     import Navbar from "../components/Navbar.vue";
-    import { onMounted, ref, computed } from "vue";
+    import { onMounted, ref } from "vue";
     import { useParallax } from "../components/composables/useParallax";
     import { handleSignUp } from "../components/composables/useAuth";
+    import { getImageUrl } from "../components/composables/useSupabase";
     import LoadingSpinner from "../components/LoadingSpinner.vue";
 
     const props = defineProps({

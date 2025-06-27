@@ -58,6 +58,8 @@ VITE_SUPABASE_ANON_KEY=
 VITE_EMAILJS_SERVICE_ID=
 VITE_EMAILJS_TEMPLATE_ID=
 VITE_EMAILJS_PUBLIC_KEY=
+
+VITE_CDN_URL=
 ```
 
 ### 3. Activate the project
@@ -107,15 +109,25 @@ npm install
 - Copy the public key → `VITE_EMAILJS_PUBLIC_KEY=your_public_key`  
 - Add all three to your `.env` file.
 
+### 2.3. Supabase CDN
+- Go to your project then `storage`
+- Create a new bucket and name it `meal-images`
+- Upload all of the images from this (drive)[https://drive.google.com/drive/folders/1V7EV3Z7y4eD91RUbytGQ8UroXaJhMNFo?usp=sharing]
+- Pick one of the uploaded images and `copy url`
+- Put that as `VITE_CDN_URL` but remove the file name, extension, and the trailing slash
+> eg. https://<project_url>.supabase.co/storage/v1/object/public/meal-images/
+
 ### 3. Create `.env` file
 
 ```env
-VITE_SUPABASE_URL=your-project-url
-VITE_SUPABASE_ANON_KEY=your-anon-key
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
 
-VITE_EMAILJS_SERVICE_ID=your_service_id
-VITE_EMAILJS_TEMPLATE_ID=your_template_id
-VITE_EMAILJS_PUBLIC_KEY=your_public_key
+VITE_EMAILJS_SERVICE_ID=
+VITE_EMAILJS_TEMPLATE_ID=
+VITE_EMAILJS_PUBLIC_KEY=
+
+VITE_CDN_URL=
 ```
 
 ### 4. Database Tables

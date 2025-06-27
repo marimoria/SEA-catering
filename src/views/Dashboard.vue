@@ -113,24 +113,27 @@
 
         <!-- Parallax Images -->
         <img
-            class="parallax hero_image"
-            src="/images/protein_hero.webp"
+            id="hero_image_1"
             data-speedx="0.03"
             data-speedy="0.03"
+            class="parallax hero_image"
+            :src="getImageUrl('protein_hero.webp')"
             alt=""
         />
         <img
+            id="hero_image_2"
+            data-speedx="0.03"
+            data-speedy="0.03"
             class="parallax hero_image"
-            src="/images/veggies_hero.webp"
-            data-speedx="0.05"
-            data-speedy="0.05"
+            :src="getImageUrl('veggies_hero.webp')"
             alt=""
         />
         <img
+            id="hero_image_3"
+            data-speedx="0.03"
+            data-speedy="0.03"
             class="parallax hero_image"
-            src="/images/fruits_hero.webp"
-            data-speedx="0.07"
-            data-speedy="0.07"
+            :src="getImageUrl('fruits_hero.webp')"
             alt=""
         />
 
@@ -140,7 +143,7 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax bg_image--top_right"
-            src="/images/chicken_platter.webp"
+            :src="getImageUrl('foie_gras.webp')"
             alt=""
         />
         <img
@@ -148,7 +151,7 @@
             data-speedx="0.02"
             data-speedy="0.03"
             class="parallax bg_image--bottom_left"
-            src="/images/pad_thai.webp"
+            :src="getImageUrl('grill_steak.webp')"
             alt=""
         />
 
@@ -171,7 +174,7 @@
         updatePhone,
         updateAllergies
     } from "../components/composables/useAuth";
-    import { getData, supabase } from "../components/composables/useSupabase";
+    import { getData, supabase, getImageUrl } from "../components/composables/useSupabase";
     import { gsap } from "../js/vendor";
     import { useParallax } from "../components/composables/useParallax";
 
