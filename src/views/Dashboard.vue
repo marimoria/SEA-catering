@@ -24,10 +24,11 @@
 
                             <SubscriptionCard
                                 v-for="(sub, i) in subscriptions"
-                                :key="i"
+                                :key="sub.id"
                                 v-model:subscription="subscriptions[i]"
                                 :title="'Subscription ' + (i + 1)"
                                 :index="i"
+                                @deleted="handleDelete"
                             />
                         </div>
                     </template>
@@ -83,6 +84,7 @@
         />
 
         <CalendarModal v-model:visible="calendarVisible" v-model:resumeDate="resumeDate" />
+        <DeleteConfirmModal v-model:visible="delVisible" v-model:confirm="delConfirm" />
     </div>
 </template>
 
@@ -101,6 +103,7 @@
     import SubscriptionCard from "../components/SubscriptionCard.vue";
     import DashboardNav from "../components/DashboardNav.vue";
     import CalendarModal from "../components/CalendarModal.vue";
+    import DeleteConfirmModal from "../components/DeleteConfirmModal.vue";
 
     const props = defineProps({
         viewport: Object,
@@ -167,6 +170,19 @@
     provide("calendarVisible", calendarVisible);
     provide("resumeDate", resumeDate);
     provide("pausedSubId", pausedSubId);
+
+    // delete
+    const delVisible = ref(false);
+    const delConfirm = ref(false);
+    const delSubId = ref(null); // Track which subscription triggered the modal
+
+    provide("delVisible", delVisible);
+    provide("delConfirm", delConfirm);
+    provide("delSubId", delSubId);
+
+    function handleDelete(id) {
+        subscriptions.value = subscriptions.value.filter((sub) => sub.id !== id);
+    }
 
     onMounted(async () => {
         await loadSubscriptions();

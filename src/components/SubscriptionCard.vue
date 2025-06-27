@@ -25,8 +25,8 @@
                 </div>
 
                 <div class="action_buttons">
-                    <button @click="showCalendar()" class="action_btn pause_btn">Pause</button>
-                    <button class="action_btn cancel_btn">Cancel</button>
+                    <button @click="showCalendar" class="action_btn pause_btn">Pause</button>
+                    <button @click="showDel" class="action_btn cancel_btn">Cancel</button>
                 </div>
             </div>
 
@@ -186,6 +186,34 @@
 
             resumeDate.value = null;
             pausedSubId.value = null;
+        }
+    });
+
+    // delete subscription
+    const delVisible = inject("delVisible");
+    const delConfirm = inject("delConfirm");
+    const delSubId = inject("delSubId");
+
+    const deletedEvent = defineEmits(["deleted"]);
+
+    function showDel() {
+        delVisible.value = true;
+        delConfirm.value = false;
+        delSubId.value = subscription.value.id;
+    }
+
+    // Watch delConfirm when modal closes
+    watch([delVisible, delConfirm], async ([visible, confirm]) => {
+        if (!visible && confirm && delSubId.value === subscription.value.id) {
+            const { error } = await deleteData("subscriptions", { id: subscription.value.id });
+
+            if (error) {
+                console.error("Failed to delete subscription:", error.message);
+            }
+
+            deletedEvent("deleted", subscription.value.id);
+            delConfirm.value = false;
+            delSubId.value = null;
         }
     });
 
