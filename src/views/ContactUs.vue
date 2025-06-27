@@ -16,15 +16,15 @@
                     </p>
                     <div class="details--grid">
                         <div class="group">
-                            <img src="/images/phone.svg" alt="" class="group--icon" />
+                            <img :src="getImageUrl('phone.svg')" alt="" class="group--icon" />
                             <p class="group--info">(+62) 123-456-789</p>
                         </div>
                         <div class="group">
-                            <img src="/images/gmail.svg" alt="" class="group--icon" />
+                            <img :src="getImageUrl('gmail.svg')" alt="" class="group--icon" />
                             <p class="group--info">SEACatering@support.com</p>
                         </div>
                         <div class="group">
-                            <img src="/images/location.svg" alt="" class="group--icon" />
+                            <img :src="getImageUrl('location.svg')" alt="" class="group--icon" />
                             <p class="group--info">Jakarta, Indonesia</p>
                         </div>
                     </div>

@@ -2,7 +2,7 @@
     <header class="navbar">
         <div class="container">
             <div class="logo">
-                <img src="/images/logo.png" alt="" class="logo_image" />
+                <img :src="getImageUrl('logo.png')" alt="" class="logo_image" />
                 <p class="logo_name"><span class="gradient_1">SEA</span> Catering</p>
             </div>
 
@@ -65,6 +65,7 @@
 <script setup>
     import { computed, ref } from "vue";
     import { user, isAdmin, handleLogout } from "../components/composables/useAuth";
+    import { getImageUrl } from "./composables/useSupabase";
     import { useRouter } from "vue-router";
 
     const isOpen = ref(false);
