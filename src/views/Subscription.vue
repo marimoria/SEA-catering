@@ -302,16 +302,12 @@
     import Navbar from "../components/Navbar.vue";
     import MealSelector from "../components/MealSelector.vue";
     import DaySelector from "../components/DaySelector.vue";
+    import { sanitizePhone } from "../components/composables/useAuth";
 
     const props = defineProps({
         viewport: Object,
         device: Object
     });
-
-    function sanitizePhone(e) {
-        // Only allow numbers and +
-        phone.value = e.target.value.replace(/[^\d+]/g, "");
-    }
 
     const chosenPlans = ref([]);
     const chosenTypes = ref({

@@ -107,7 +107,11 @@
     import Navbar from "../components/Navbar.vue";
     import { onMounted, ref, computed } from "vue";
     import { useParallax } from "../components/composables/useParallax";
-    import { handleSignUp } from "../components/composables/useAuth";
+    import {
+        handleSignUp,
+        sanitizePhone,
+        sanitizeUsername
+    } from "../components/composables/useAuth";
     import LoadingSpinner from "../components/LoadingSpinner.vue";
 
     const props = defineProps({
@@ -127,16 +131,6 @@
 
     const successMessage = ref("");
     const errorMessage = ref("");
-
-    function sanitizeUsername(e) {
-        // Replace anything that's NOT a-z, 0-9, _ or .
-        username.value = e.target.value.replace(/[^a-zA-Z0-9_.]/g, "").toLowerCase();
-    }
-
-    function sanitizePhone(e) {
-        // Only allow numbers and +
-        phone.value = e.target.value.replace(/[^\d+]/g, "");
-    }
 
     async function submitSignUp() {
         errorMessage.value = "";
