@@ -222,7 +222,10 @@
             return;
         }
 
-        const existingTestimonial = await getData("testimonies", { user_id: user.value.id });
+        const { data: existingTestimonial } = await getData("testimonies", {
+            user_id: user.value.id
+        });
+
         if (existingTestimonial.length > 0) {
             isLoading.value = false;
             errorMessage.value = "You've already submitted a review!";
@@ -267,7 +270,7 @@
     const testimonies = ref([]);
 
     async function loadCards() {
-        const testimonyData = await getData(
+        const { data: testimonyData } = await getData(
             "testimonies",
             {},
             {

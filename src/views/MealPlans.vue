@@ -178,10 +178,12 @@
 
     async function loadMealPlansAndRecipes() {
         try {
-            const [mealPlans, recipes] = await Promise.all([
-                getData("meal_plans"),
-                getData("recipes", {}, { orderBy: { column: "order_index", ascending: true } })
-            ]);
+            const { data: mealPlans } = await getData("meal_plans");
+            const { data: recipes } = await getData(
+                "recipes",
+                {},
+                { orderBy: { column: "order_index", ascending: true } }
+            );
 
             const recipeMap = {};
             for (const recipe of recipes) {
