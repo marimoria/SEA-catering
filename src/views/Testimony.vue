@@ -1,8 +1,8 @@
 <template>
     <div class="testimonials">
         <div class="background"></div>
-        <img v-if="viewport.w >= 1024" src="../assets/images/fork.svg" alt="" class="fork" />
-        <img v-if="viewport.w >= 1024" src="../assets/images/spoon.svg" alt="" class="spoon" />
+        <img v-if="viewport.w >= 1024" src="/images/fork.svg" alt="" class="fork" />
+        <img v-if="viewport.w >= 1024" src="/images/spoon.svg" alt="" class="spoon" />
 
         <navBar />
         <div class="testimonials--view_grid">
@@ -19,42 +19,50 @@
                 <div class="cards_grid--testimony_wrapper">
                     <button @click="scrollPrev" class="prev_button"><</button>
 
-                    <div class="cards_grid--cards_carousel">
-                        <div class="cards_carousel--cards">
-                            <img
-                                src="../assets/images/quotes.svg"
-                                alt=""
-                                class="card_content--quotes"
-                            />
+                    <div
+                        class="cards_grid--cards_carousel"
+                        :class="{
+                            center_carousel: testimonies.length === 0 || testimonies.length === 1
+                        }"
+                    >
+                        <div v-if="testimonies.length === 0" class="cards_carousel--cards">
                             <div class="card_content">
                                 <p :style="{ color: getRandomColor() }" class="card_content--title">
-                                    Good App!
+                                    Be the First!
+                                </p>
+                                <p class="card_content--desc">
+                                    Submit your review using the form below. Help us create a better
+                                    service for all.
+                                </p>
+                                <p :style="{ color: getRandomColor() }" class="card_content--user">
+                                    - SEA Catering Team
+                                </p>
+                            </div>
+                        </div>
+
+                        <div
+                            v-for="(t, i) in testimonies"
+                            :key="t.id"
+                            class="cards_carousel--cards"
+                        >
+                            <img src="/images/quotes.svg" alt="" class="card_content--quotes" />
+                            <div class="card_content">
+                                <p :style="{ color: getRandomColor() }" class="card_content--title">
+                                    {{ t.summary }}
                                 </p>
                                 <rating
                                     id="rating_read"
                                     :max-rating="5"
-                                    :rating="3"
+                                    :rating="t.rating"
                                     :canRate="false"
                                 />
-                                <p class="card_content--desc">
-                                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-                                    commodo ligula eget dolor. Aenean massa. Cum sociis natoque
-                                    penatibus et magnis dis parturient montes, nascetur ridiculus
-                                    mus.
-                                </p>
+                                <p class="card_content--desc">{{ t.review_message }}</p>
                                 <p :style="{ color: getRandomColor() }" class="card_content--user">
-                                    - Marimoria
+                                    - {{ t.username || "Anonymous" }}
                                 </p>
                             </div>
-                            <img
-                                src="../assets/images/quotes.svg"
-                                alt=""
-                                class="card_content--quotes"
-                            />
+                            <img src="/images/quotes.svg" alt="" class="card_content--quotes" />
                         </div>
-                        <div class="cards_carousel--cards"></div>
-                        <div class="cards_carousel--cards"></div>
-                        <div class="cards_carousel--cards"></div>
                     </div>
 
                     <button @click="scrollNext" class="next_button">></button>
@@ -118,11 +126,14 @@
                         ></textarea>
                     </div>
 
-                    <button class="submit_button" type="submit">Submit Review</button>
+                    <button :disabled="isLoading" class="submit_button" type="submit">
+                        {{ isLoading ? "Submitting..." : "Submit Review" }}
+                    </button>
 
-                    <p v-if="isSubmitted" class="success_message">
-                        ✅ Thank you! Your review has been submitted.
-                    </p>
+                    <LoadingSpinner v-if="isLoading" />
+
+                    <p v-if="errorMessage" class="error_message">❌ {{ errorMessage }}</p>
+                    <p v-if="successMessage" class="success_message">✅ {{ successMessage }}</p>
                 </form>
             </div>
         </div>
@@ -134,9 +145,12 @@
 </style>
 
 <script setup>
-    import { ref } from "vue";
+    import { computed, onMounted, ref } from "vue";
     import navBar from "../components/Navbar.vue";
     import rating from "../components/Rating.vue";
+    import LoadingSpinner from "../components/LoadingSpinner.vue";
+    import { user, profile } from "../components/composables/useAuth";
+    import { getData, insertData } from "../components/composables/useSupabase";
 
     import { gsap } from "../js/vendor";
 
@@ -187,20 +201,106 @@
     const reviewStars = ref(1);
     const reviewSummary = ref("");
     const reviewMessage = ref("");
-    const isSubmitted = ref(false);
 
-    function sendReviewData() {
-        console.log(reviewName.value, reviewStars.value, reviewSummary.value, reviewMessage.value);
+    const errorMessage = ref("");
+    const successMessage = ref("");
+    const isLoading = ref(false);
 
-        isSubmitted.value = true;
+    async function sendReviewData() {
+        const userLogged = computed(() => !!user.value);
+        isLoading.value = true;
 
-        reviewName.value = "";
-        reviewStars.value = 1;
-        reviewSummary.value = "";
-        reviewMessage.value = "";
+        if (!userLogged.value) {
+            isLoading.value = false;
+            errorMessage.value = "You must sign up or login!";
+            return;
+        }
 
-        setTimeout(() => {
-            isSubmitted.value = false;
-        }, 3000);
+        if (reviewName.value !== profile.value.username) {
+            isLoading.value = false;
+            errorMessage.value = "That's not your username!";
+            return;
+        }
+
+        const { data: existingTestimonial } = await getData("testimonies", {
+            user_id: user.value.id
+        });
+
+        if (existingTestimonial.length > 0) {
+            isLoading.value = false;
+            errorMessage.value = "You've already submitted a review!";
+            return;
+        }
+
+        if (
+            reviewSummary.value.length > 20 ||
+            reviewMessage.value.length > 200 ||
+            reviewStars.value < 1 ||
+            reviewStars.value > 5
+        ) {
+            isLoading.value = false;
+            errorMessage.value = "Invalid input. Please check all fields.";
+            return;
+        }
+
+        const response = await insertData("testimonies", {
+            user_id: user.value.id,
+            username: profile.value.username,
+            summary: reviewSummary.value.trim(),
+            rating: reviewStars.value,
+            review_message: reviewMessage.value.trim()
+        });
+
+        if (!!response.error) {
+            isLoading.value = false;
+            errorMessage.value = "Something went wrong, please contact Administration.";
+        } else {
+            isLoading.value = false;
+            successMessage.value = "Review submitted successfully!";
+
+            reviewSummary.value = "";
+            reviewMessage.value = "";
+            reviewStars.value = 1;
+            reviewName.value = "";
+
+            loadCards();
+        }
     }
+
+    const testimonies = ref([]);
+
+    async function loadCards() {
+        const { data: testimonyData } = await getData(
+            "testimonies",
+            {},
+            {
+                select: `
+                testimony_id,
+                summary,
+                rating,
+                review_message,
+                created_at,
+                username
+            `,
+                orderBy: { column: "created_at", ascending: false }
+            }
+        );
+
+        testimonies.value = (testimonyData || []).map((t) => ({
+            id: t.testimony_id,
+            summary: t.summary,
+            rating: t.rating,
+            review_message: t.review_message,
+            created_at: t.created_at,
+            username: t.username || "Anonymous"
+        }));
+    }
+
+    onMounted(() => {
+        if (profile.value && profile.value.username) {
+            reviewName.value = profile.value.username;
+        }
+
+        loadCards();
+    });
 </script>

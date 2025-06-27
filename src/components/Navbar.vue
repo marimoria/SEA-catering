@@ -2,7 +2,7 @@
     <header class="navbar">
         <div class="container">
             <div class="logo">
-                <img src="../assets/images/logo.png" alt="" class="logo_image" />
+                <img src="/images/logo.png" alt="" class="logo_image" />
                 <p class="logo_name"><span class="gradient_1">SEA</span> Catering</p>
             </div>
 
@@ -14,15 +14,17 @@
                 <router-link class="nav_name" to="/contact">Contact Us</router-link>
             </nav>
 
-            <router-link v-if="userLogged && isAdmin" class="nav_name" to="/admin">
-                Admin Dashboard
-            </router-link>
-            <router-link v-else-if="userLogged" class="nav_name" to="/dashboard">
-                Dashboard
-            </router-link>
+            <nav class="desktop-nav">
+                <router-link v-if="!userLogged" class="sign_up" to="/signup">Sign Up</router-link>
 
-            <nav v-if="!userLogged" class="desktop-nav">
-                <router-link class="sign_up" to="/signup">Sign Up</router-link>
+                <router-link v-if="userLogged && isAdmin" class="nav_name" to="/admin">
+                    Admin Dashboard
+                </router-link>
+                <router-link v-else-if="userLogged" class="nav_name" to="/dashboard">
+                    Dashboard
+                </router-link>
+
+                <p v-if="userLogged" class="log_out" @click="logout">Log Out</p>
             </nav>
 
             <!-- Hamburger -->
@@ -45,12 +47,15 @@
                     <router-link v-if="!userLogged" class="sign_up" to="/signup"
                         >Sign Up</router-link
                     >
+
                     <router-link v-if="userLogged && isAdmin" class="nav_name" to="/admin">
                         Admin Dashboard
                     </router-link>
                     <router-link v-else-if="userLogged" class="nav_name" to="/dashboard">
                         Dashboard
                     </router-link>
+
+                    <p v-if="userLogged" class="log_out" @click="logout">Log Out</p>
                 </nav>
             </transition>
         </div>
@@ -58,17 +63,23 @@
 </template>
 
 <script setup>
-    import { computed, onMounted, ref } from "vue";
-    import { user, isAdmin, fetchProfile } from "../components/composables/useAuth";
+    import { computed, ref } from "vue";
+    import { user, isAdmin, handleLogout } from "../components/composables/useAuth";
+    import { useRouter } from "vue-router";
 
     const isOpen = ref(false);
+    const router = useRouter();
 
-    // if user.value is false -> !! -> false
+    // if user.value is null -> !! -> false
     const userLogged = computed(() => !!user.value);
 
-    onMounted(() => {
-        fetchProfile();
-    });
+    async function logout() {
+        const { success } = await handleLogout();
+
+        if (success) {
+            router.push("/");
+        }
+    }
 </script>
 
 <style scoped>
@@ -207,6 +218,7 @@
         }
         .desktop-nav {
             display: flex;
+            align-items: center;
         }
 
         .hamburger {
@@ -218,7 +230,8 @@
         }
     }
 
-    .sign_up {
+    .sign_up,
+    .log_out {
         background-color: #fff9f4;
         font-family: "Inter";
         font-weight: 600;

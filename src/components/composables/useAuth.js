@@ -1,7 +1,8 @@
 import { ref } from "vue";
-import { supabase, getData, insertData } from "../composables/useSupabase";
+import { supabase, insertData, updateData } from "../composables/useSupabase";
 
-const user = ref(null);
+const user = ref(null); // only contains email + metadata
+const profile = ref(null);
 const isAdmin = ref(false);
 
 export async function fetchProfile() {
@@ -9,10 +10,10 @@ export async function fetchProfile() {
         data: { user: authUser }
     } = await supabase.auth.getUser();
 
-    user.value = authUser;
-
     if (authUser) {
-        const { data: profile, error } = await supabase
+        user.value = authUser;
+
+        const { data: profileData, error } = await supabase
             .from("profiles")
             .select("*")
             .eq("id", authUser.id)
@@ -34,30 +35,54 @@ export async function fetchProfile() {
             }
         }
 
-        const { data: check } = await supabase
+        const { data: checkAdmin } = await supabase
             .from("admin_roles")
             .select("*")
             .eq("id", authUser.id)
             .single();
 
-        isAdmin.value = !!check;
+        isAdmin.value = !!checkAdmin;
+        profile.value = profileData;
     }
 }
 
 export async function handleSignUp({ email, password, username, fullName, phone, allergies }) {
-    // Check for duplicate username
-    const usernameExists = await getData("profiles", { username });
-    if (usernameExists.length > 0) {
+    if (!isValidIndonesianPhone(phone)) {
+        return { success: false, error: "Phone number is not Indonesian." };
+    }
+
+    // check for dupes
+    const { data: dupesData, error: dupesError } = await supabase.functions.invoke(
+        "checkUniqueSignUp",
+        {
+            body: { username: username, phone: phone }
+        }
+    );
+
+    if (dupesError) {
+        return { succes: false, error: dupesError.message };
+    }
+
+    if (dupesData.usernameExists) {
         return { success: false, error: "Username already exists." };
+    } else if (dupesData.phoneExists) {
+        return { success: false, error: "Phone number is invalid." };
     }
 
-    // Check for duplicate phone
-    const phoneExists = await getData("profiles", { phone });
-    if (phoneExists.length > 0) {
-        return { success: false, error: "Phone number already registered." };
-    }
-
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+            emailRedirectTo: "https://marimoria.github.io/SEA-catering/#/login",
+            // save to meta data
+            data: {
+                username,
+                full_name: fullName,
+                phone,
+                allergies
+            }
+        }
+    });
 
     if (error) {
         return { success: false, error: error.message };
@@ -65,14 +90,14 @@ export async function handleSignUp({ email, password, username, fullName, phone,
 
     return {
         success: true,
-        message: "Success! Please check your email to confirm your account."
+        message: "A confirmation link will be sent to your email in a few minutes."
     };
 }
 
 export async function handleLogin({ email, password }) {
     const { error } = await supabase.auth.signInWithPassword({
-        email: email.value,
-        password: password.value
+        email,
+        password
     });
 
     if (error) {
@@ -83,4 +108,87 @@ export async function handleLogin({ email, password }) {
     }
 }
 
-export { user, isAdmin };
+export async function handleLogout() {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+        console.error("Logout error:", error.message);
+        return { success: false, error: error.message };
+    }
+
+    user.value = null;
+    profile.value = null;
+    isAdmin.value = false;
+
+    return { success: true };
+}
+
+function isValidIndonesianPhone(phoneNumber) {
+    const regex = /^\+62[0-9]{8,12}$/;
+    return regex.test(phoneNumber);
+}
+
+export async function updateAllergies(newAllergy) {
+    try {
+        await updateData("profiles", { id: user.value.id }, { allergies: newAllergy });
+
+        profile.value = {
+            ...profile.value,
+            allergies: newAllergy
+        };
+
+        return { success: true };
+    } catch (err) {
+        return { success: false, error: err.message };
+    }
+}
+
+export async function updateUsername(newUsername) {
+    try {
+        await updateData("profiles", { id: user.value.id }, { username: newUsername });
+
+        profile.value = {
+            ...profile.value,
+            username: newUsername
+        };
+
+        return { success: true };
+    } catch (err) {
+        return { success: false, error: err.message };
+    }
+}
+
+export async function updateFullName(newFullName) {
+    try {
+        await updateData("profiles", { id: user.value.id }, { full_name: newFullName });
+
+        profile.value = {
+            ...profile.value,
+            full_name: newFullName
+        };
+
+        return { success: true };
+    } catch (err) {
+        return { success: false, error: err.message };
+    }
+}
+
+export async function updatePhone(newPhone) {
+    if (!isValidIndonesianPhone(newPhone)) {
+        return { success: false, error: "Phone number is not Indonesian." };
+    }
+
+    try {
+        await updateData("profiles", { id: user.value.id }, { phone: newPhone });
+
+        profile.value = {
+            ...profile.value,
+            phone: newPhone
+        };
+
+        return { success: true };
+    } catch (err) {
+        return { success: false, error: err.message };
+    }
+}
+
+export { user, isAdmin, profile };

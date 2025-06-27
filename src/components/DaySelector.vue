@@ -18,11 +18,9 @@
 </template>
 
 <script setup>
-    import { defineModel } from "vue";
-
     const props = defineProps({
         days: Array,
-        mealPlan: String,
+        mealPlanId: String,
         buttonColor: String,
         activeColor: String
     });
@@ -30,17 +28,18 @@
     const selected = defineModel("selected");
 
     function isSelected(day) {
-        return selected.value[props.mealPlan].includes(day);
+        const planDays = selected.value[props.mealPlanId];
+        return planDays.includes(day);
     }
 
     function toggleDay(day) {
-        const planArray = selected.value[props.mealPlan];
+        const planDays = selected.value[props.mealPlanId];
 
         if (isSelected(day)) {
-            const index = planArray.indexOf(day);
-            planArray.splice(index, 1);
+            const index = planDays.indexOf(day);
+            planDays.splice(index, 1);
         } else {
-            planArray.push(day);
+            planDays.push(day);
         }
     }
 </script>

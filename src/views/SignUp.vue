@@ -15,15 +15,15 @@
                     </p>
                     <div class="details--grid">
                         <div class="group">
-                            <img src="../assets/images/phone.svg" alt="" class="group--icon" />
+                            <img src="/images/phone.svg" alt="" class="group--icon" />
                             <p class="group--info">(+62) 123-456-789</p>
                         </div>
                         <div class="group">
-                            <img src="../assets/images/gmail.svg" alt="" class="group--icon" />
+                            <img src="/images/gmail.svg" alt="" class="group--icon" />
                             <p class="group--info">SEACatering@support.com</p>
                         </div>
                         <div class="group">
-                            <img src="../assets/images/location.svg" alt="" class="group--icon" />
+                            <img src="/images/location.svg" alt="" class="group--icon" />
                             <p class="group--info">Jakarta, Indonesia</p>
                         </div>
                     </div>
@@ -37,7 +37,7 @@
                             type="text"
                             placeholder="Username"
                             maxlength="20"
-                            @input="sanitizeUsername($event)"
+                            @input="sanitizeUsername($event, username)"
                             required
                         />
                         <input v-model="email" type="email" placeholder="Email Address" required />
@@ -47,12 +47,16 @@
                             v-model="phone"
                             type="text"
                             placeholder="+6281234567"
-                            @input="sanitizePhone($event)"
+                            @input="sanitizePhone($event, phone)"
                             required
                         />
                         <input v-model="allergies" type="text" placeholder="Allergies (optional)" />
 
-                        <button type="submit">Sign Up</button>
+                        <button :disabled="isLoading" type="submit">
+                            {{ isLoading ? "Signing Up..." : "Sign Up" }}
+                        </button>
+
+                        <LoadingSpinner v-if="isLoading" />
 
                         <p v-if="errorMessage" class="error_message">❌ {{ errorMessage }}</p>
                         <p v-if="successMessage" class="success_message">✅ {{ successMessage }}</p>
@@ -70,14 +74,14 @@
             data-speedx="0.02"
             data-speedy="0.03"
             class="parallax bg_image--top_right"
-            src="../assets/images/grill_steak.svg"
+            src="/images/grill_steak.webp"
             alt=""
         />
         <img
             data-speedx="0.01"
             data-speedy="0.03"
             class="parallax bg_image--bottom_left"
-            src="../assets/images/grilled_salmon.svg"
+            src="/images/grilled_salmon.webp"
             alt=""
         />
         <img
@@ -85,7 +89,7 @@
             data-speedx="0.04"
             data-speedy="0.03"
             class="parallax bg_image--sec_right"
-            src="../assets/images/duck.svg"
+            src="/images/duck.webp"
             alt=""
         />
         <img
@@ -93,7 +97,7 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax bg_image--sec_left"
-            src="../assets/images/quinoa_salad.svg"
+            src="/images/quinoa_salad.webp"
             alt=""
         />
     </div>
@@ -101,14 +105,17 @@
 
 <script setup>
     import Navbar from "../components/Navbar.vue";
-    import { onMounted, ref } from "vue";
+    import { onMounted, ref, computed } from "vue";
     import { useParallax } from "../components/composables/useParallax";
     import { handleSignUp } from "../components/composables/useAuth";
+    import LoadingSpinner from "../components/LoadingSpinner.vue";
 
     const props = defineProps({
         viewport: Object,
         device: Object
     });
+
+    const isLoading = ref(false);
 
     // form state
     const email = ref("");
@@ -134,6 +141,7 @@
     async function submitSignUp() {
         errorMessage.value = "";
         successMessage.value = "";
+        isLoading.value = true;
 
         const result = await handleSignUp({
             email: email.value,
@@ -145,6 +153,7 @@
         });
 
         if (result.success) {
+            isLoading.value = false;
             successMessage.value = result.message;
 
             email.value = "";
@@ -154,6 +163,7 @@
             phone.value = "";
             allergies.value = "";
         } else {
+            isLoading.value = false;
             errorMessage.value = result.error;
         }
     }

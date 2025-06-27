@@ -8,7 +8,7 @@
 }
 
 .background {
-    background-image: url("/wavey-fingerprint.svg");
+    background-image: url("/bg/wavey-fingerprint.svg");
     position: absolute;
     inset: 0;
     z-index: -2;
@@ -161,8 +161,16 @@
     font-weight: 500;
     font-family: "Inter", sans-serif;
     font-size: clamp(1.1rem, 1.1vw, 1.5rem);
-    width: clamp(37ch, 50%, 50ch);
     color: #444;
+    margin-inline: auto;
+}
+
+.error_message {
+    text-align: center;
+    font-weight: 500;
+    font-family: "Inter", sans-serif;
+    font-size: clamp(1.1rem, 1.1vw, 1.5rem);
+    color: #b60000;
     margin-inline: auto;
 }
 

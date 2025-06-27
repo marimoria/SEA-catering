@@ -63,7 +63,7 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax hero_image"
-            src="../assets/images/protein_hero.svg"
+            src="/images/protein_hero.webp"
             alt=""
         />
         <img
@@ -71,7 +71,7 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax hero_image"
-            src="../assets/images/veggies_hero.svg"
+            src="/images/veggies_hero.webp"
             alt=""
         />
         <img
@@ -79,7 +79,7 @@
             data-speedx="0.03"
             data-speedy="0.03"
             class="parallax hero_image"
-            src="../assets/images/fruits_hero.svg"
+            src="/images/fruits_hero.webp"
             alt=""
         />
     </section>

@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-    import "./assets/styles/app.scss"; // global app styling
+    import "../src/assets/styles/app.scss"; // global app styling
 
     import { onMounted, Transition } from "vue";
     import { useViewport } from "./components/composables/useViewport";

@@ -7,83 +7,28 @@
                 <p class="forms--title">Meal Plan<span class="highlight_paprika">*</span></p>
                 <p class="forms--desc">Please choose at least one of these meal plan.</p>
                 <div class="plan_wrap">
-                    <div class="choice_wrap">
-                        <div @click="choosePlan($event)" id="recipe_diet" class="plan_wrap--recipe">
-                            <img
-                                src="../assets/images/veggies_hero.svg"
-                                alt=""
-                                class="recipe--image"
-                            />
-                            <p class="recipe--name">Diet Plan</p>
+                    <div v-for="(plan, index) in plans" :key="plan.id" class="choice_wrap">
+                        <div
+                            @click="choosePlan($event)"
+                            :id="'recipe_' + plan.title"
+                            class="plan_wrap--recipe"
+                        >
+                            <img :src="getImageUrl(plan.hero_image)" class="recipe--image" />
+                            <p class="recipe--name">{{ capitalize(plan.title) + " Plan" }}</p>
                             <p id="price_diet" class="recipe--price">
-                                <span class="bigger_size highlight_basil">Rp30.000,00</span> /meal
+                                <span
+                                    class="bigger_size"
+                                    :class="`highlight_${plan.title.toLowerCase()}`"
+                                    >Rp{{ parseInt(plan.price).toLocaleString("id-ID") }},00</span
+                                >
+                                /meal
                             </p>
                             <p class="recipe--desc">
-                                Nourish your body with low-calorie, high-nutrient meals to support
-                                weight management. Each dish is balanced for portion control without
-                                sacrificing flavor.
+                                {{ plan.desc_short }}
                             </p>
                         </div>
                         <p
-                            :class="{ hidden_opacity: !chosenPlans.includes('diet') }"
-                            class="selected_message"
-                        >
-                            ✅ Plan selected
-                        </p>
-                    </div>
-
-                    <div class="choice_wrap">
-                        <div
-                            @click="choosePlan($event)"
-                            id="recipe_protein"
-                            class="plan_wrap--recipe"
-                        >
-                            <img
-                                src="../assets/images/protein_hero.svg"
-                                alt=""
-                                class="recipe--image"
-                            />
-                            <p class="recipe--name">Protein Plan</p>
-                            <p id="price_protein" class="recipe--price">
-                                <span class="bigger_size highlight_paprika">Rp40.000,00</span> /meal
-                            </p>
-                            <p class="recipe--desc">
-                                Power up with protein-packed meals made for strength, recovery, and
-                                fullness. Perfect for active lifestyles to keep you energized all
-                                day.
-                            </p>
-                        </div>
-                        <p
-                            :class="{ hidden_opacity: !chosenPlans.includes('protein') }"
-                            class="selected_message"
-                        >
-                            ✅ Plan selected
-                        </p>
-                    </div>
-
-                    <div class="choice_wrap">
-                        <div
-                            @click="choosePlan($event)"
-                            id="recipe_royal"
-                            class="plan_wrap--recipe"
-                        >
-                            <img
-                                src="../assets/images/fancy_food.svg"
-                                alt=""
-                                class="recipe--image"
-                            />
-                            <p class="recipe--name">Royal Plan</p>
-                            <p id="price_royal" class="recipe--price">
-                                <span class="bigger_size highlight_purple">Rp60.000,00</span> /meal
-                            </p>
-                            <p class="recipe--desc">
-                                An elite culinary experience crafted with the world's most exquisite
-                                ingredients. Each meal is designed for indulgence, balance, and
-                                unforgettable taste
-                            </p>
-                        </div>
-                        <p
-                            :class="{ hidden_opacity: !chosenPlans.includes('royal') }"
+                            :class="{ hidden_opacity: !chosenPlans.includes(plan.id) }"
                             class="selected_message"
                         >
                             ✅ Plan selected
@@ -99,46 +44,25 @@
                 </p>
 
                 <div class="type_options">
-                    <div v-if="chosenPlans.includes('diet')" class="diet_type">
-                        <p class="diet_type--title">
-                            <span class="highlight_basil">Diet</span> Plan
+                    <div
+                        v-for="(planId, index) in chosenPlans"
+                        :key="planId"
+                        :class="getPlanById(planId).title + '_type'"
+                    >
+                        <p :class="getPlanById(planId).title + '_type--title'">
+                            <span :class="'highlight_' + getPlanById(planId).title">
+                                {{ capitalize(getPlanById(planId).title) }}
+                            </span>
+                            Plan
                         </p>
                         <MealSelector
                             class="meal_nav"
                             v-model:selected="chosenTypes"
                             :types="['Breakfast', 'Lunch', 'Dinner']"
-                            :mealPlan="'dietTypes'"
-                            :buttonColor="'#4f9447'"
-                            :activeColor="'#8ebe3f'"
-                        ></MealSelector>
-                    </div>
-
-                    <div v-if="chosenPlans.includes('protein')" class="protein_type">
-                        <p class="protein_type--title">
-                            <span class="highlight_paprika">Protein</span> Plan
-                        </p>
-                        <MealSelector
-                            class="meal_nav"
-                            v-model:selected="chosenTypes"
-                            :types="['Breakfast', 'Lunch', 'Dinner']"
-                            :mealPlan="'proteinTypes'"
-                            :button-color="'#d54f22'"
-                            :active-color="'#ec7b55'"
-                        ></MealSelector>
-                    </div>
-
-                    <div v-if="chosenPlans.includes('royal')" class="royal_type">
-                        <p class="royal_type--title">
-                            <span class="highlight_purple">Royal</span> Plan
-                        </p>
-                        <MealSelector
-                            class="meal_nav"
-                            v-model:selected="chosenTypes"
-                            :types="['Breakfast', 'Lunch', 'Dinner']"
-                            :mealPlan="'royalTypes'"
-                            :button-color="'#847ddd'"
-                            :active-color="'#a5a0e8'"
-                        ></MealSelector>
+                            :mealPlanId="planId"
+                            :buttonColor="getPlanById(planId).colors.medium"
+                            :activeColor="getPlanById(planId).colors.light"
+                        />
                     </div>
                 </div>
             </div>
@@ -151,86 +75,41 @@
                 <p class="forms--desc">Please choose which days to deliever your food.</p>
 
                 <div class="day_options">
-                    <div
-                        v-if="chosenPlans.includes('diet') && chosenTypes.dietTypes.length !== 0"
-                        class="diet_day"
-                    >
-                        <p class="diet_day--title">
-                            <span class="highlight_basil">Diet</span> Plan
-                        </p>
-                        <DaySelector
-                            class="day_nav"
-                            v-model:selected="chosenDays"
-                            :days="[
-                                'Monday',
-                                'Tuesday',
-                                'Wednesday',
-                                'Thursday',
-                                'Friday',
-                                'Saturday',
-                                'Sunday'
-                            ]"
-                            :mealPlan="'dietDays'"
-                            :buttonColor="'#4f9447'"
-                            :activeColor="'#8ebe3f'"
-                        ></DaySelector>
-                    </div>
-
-                    <div
-                        v-if="
-                            chosenPlans.includes('protein') && chosenTypes.proteinTypes.length !== 0
-                        "
-                    >
-                        <p class="protein_day--title">
-                            <span class="highlight_paprika">Protein</span> Plan
-                        </p>
-                        <DaySelector
-                            class="day_nav"
-                            v-model:selected="chosenDays"
-                            :days="[
-                                'Monday',
-                                'Tuesday',
-                                'Wednesday',
-                                'Thursday',
-                                'Friday',
-                                'Saturday',
-                                'Sunday'
-                            ]"
-                            :mealPlan="'proteinDays'"
-                            :buttonColor="'#d54f22'"
-                            :activeColor="'#ec7b55'"
-                        ></DaySelector>
-                    </div>
-
-                    <div
-                        v-if="chosenPlans.includes('royal') && chosenTypes.royalTypes.length !== 0"
-                    >
-                        <p class="royal_day--title">
-                            <span class="highlight_purple">Royal</span> Plan
-                        </p>
-                        <DaySelector
-                            class="day_nav"
-                            v-model:selected="chosenDays"
-                            :days="[
-                                'Monday',
-                                'Tuesday',
-                                'Wednesday',
-                                'Thursday',
-                                'Friday',
-                                'Saturday',
-                                'Sunday'
-                            ]"
-                            :mealPlan="'royalDays'"
-                            :buttonColor="'#847ddd'"
-                            :activeColor="'#a5a0e8'"
-                        ></DaySelector>
+                    <div v-for="planId in chosenPlans" :key="planId">
+                        <div
+                            v-if="chosenTypes[planId]?.length !== 0"
+                            :class="getPlanById(planId).title + '_day'"
+                        >
+                            <p :class="getPlanById(planId).title + '_day--title'">
+                                <span :class="'highlight_' + getPlanById(planId).title">
+                                    {{ capitalize(getPlanById(planId).title) }}
+                                </span>
+                                Plan
+                            </p>
+                            <DaySelector
+                                class="day_nav"
+                                v-model:selected="chosenDays"
+                                :days="[
+                                    'Monday',
+                                    'Tuesday',
+                                    'Wednesday',
+                                    'Thursday',
+                                    'Friday',
+                                    'Saturday',
+                                    'Sunday'
+                                ]"
+                                :mealPlanId="planId"
+                                :buttonColor="getPlanById(planId).colors.medium"
+                                :activeColor="getPlanById(planId).colors.light"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
 
             <form
-                @submit.prevent="sendSubsData"
-                v-if="chosenPlans.length !== 0 && typesLength() !== 0 && !isDayEmpty()"
+                @submit.prevent="checkSubsData"
+                v-if="chosenPlans?.length !== 0 && typesLength() !== 0 && !isDayEmpty()"
                 class="subscription_form--user_data"
             >
                 <p class="forms--title">User Data<span class="highlight_paprika">*</span></p>
@@ -244,9 +123,10 @@
                         id="input_name"
                         class="input--name"
                         type="text"
-                        v-model="userName"
+                        v-model="username"
                         placeholder="Username"
                         maxlength="20"
+                        @input="sanitizeUsername($event, username)"
                         required
                     />
                 </div>
@@ -273,11 +153,11 @@
                     <input
                         id="input_number"
                         class="input--number"
-                        type="number"
-                        v-model="userNum"
+                        type="text"
+                        v-model="userPhone"
                         placeholder="+6281234567"
                         maxlength="20"
-                        @input="sanitizePhone($event)"
+                        @input="sanitizePhone($event, userPhone)"
                         required
                     />
                 </div>
@@ -295,11 +175,39 @@
 
                 <p class="total_price">Total: Rp{{ totalPrice.toLocaleString("id-ID") }}</p>
 
-                <button class="submit_button" type="submit">Order Subscription</button>
+                <button :disabled="isLoading" class="submit_button" type="submit">
+                    {{ isLoading ? "Ordering..." : "Order Subscription" }}
+                </button>
 
-                <p v-if="isSubmitted" class="success_message">
-                    ✅ Thank you! Your subscription is now active.
-                </p>
+                <div v-if="showAllergyPrompt" class="allergy_prompt">
+                    <p class="allergy_prompt--desc">
+                        Your current allergy information doesn't match your profile. Would you like
+                        to update it?
+                    </p>
+
+                    <div class="prompt_buttons" :class="{ column: props.viewport.w < 1024 }">
+                        <button class="change_button" @click="updateAllergyAndSubmit">
+                            Change
+                        </button>
+                        <button
+                            class="cancel_button"
+                            @click="
+                                () => {
+                                    showAllergyPrompt = false;
+                                    hasConfirmedAllergy = true;
+                                    proceedWithSubmission();
+                                }
+                            "
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+
+                <LoadingSpinner v-if="isLoading" />
+
+                <p v-if="errorMessage" class="error_message">❌ {{ errorMessage }}</p>
+                <p v-if="successMessage" class="success_message">✅ {{ successMessage }}</p>
             </form>
         </div>
     </div>
@@ -310,111 +218,124 @@
 </style>
 
 <script setup>
-    import { ref, computed } from "vue";
+    import { ref, computed, onMounted } from "vue";
     import Navbar from "../components/Navbar.vue";
     import MealSelector from "../components/MealSelector.vue";
     import DaySelector from "../components/DaySelector.vue";
+    import LoadingSpinner from "../components/LoadingSpinner.vue";
+    import { getData, insertData } from "../components/composables/useSupabase";
+    import { user, profile, updateAllergies } from "../components/composables/useAuth";
 
     const props = defineProps({
         viewport: Object,
         device: Object
     });
 
-    function sanitizePhone(e) {
-        // Only allow numbers and +
-        phone.value = e.target.value.replace(/[^\d+]/g, "");
-    }
+    const plans = ref([]);
 
     const chosenPlans = ref([]);
-    const chosenTypes = ref({
-        dietTypes: [],
-        proteinTypes: [],
-        royalTypes: []
-    });
-    const chosenDays = ref({
-        dietDays: [],
-        proteinDays: [],
-        royalDays: []
-    });
+    const chosenTypes = ref({});
+    const chosenDays = ref({});
+
+    function getImageUrl(filename) {
+        return `${import.meta.env.BASE_URL}/images/${filename}`;
+    }
+
+    function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    async function loadMealPlans() {
+        try {
+            const { data: mealPlans } = await getData("meal_plans");
+
+            plans.value = mealPlans.map((plan) => ({
+                id: plan.id,
+                title: plan.title,
+                desc_short: plan.desc_short,
+                price: plan.price,
+                colors: plan.colors,
+                hero_image: plan.hero_image
+            }));
+        } catch (err) {
+            console.error("Failed to load meal plans:", err.message);
+        }
+    }
 
     function typesLength() {
-        return (
-            chosenTypes.value["dietTypes"].length +
-            chosenTypes.value["proteinTypes"].length +
-            chosenTypes.value["royalTypes"].length
-        );
+        let total = 0;
+
+        for (let i = 0; i < chosenPlans.value.length; i++) {
+            const planId = chosenPlans.value[i];
+            const types = chosenTypes.value[planId];
+
+            if (types && types.length > 0) {
+                total += types.length;
+            }
+        }
+
+        return total;
     }
 
     function isDayEmpty() {
-        if (chosenPlans.value.includes("diet")) {
-            return chosenDays.value.dietDays.length == 0;
+        for (let i = 0; i < chosenPlans.value.length; i++) {
+            const planId = chosenPlans.value[i];
+            const days = chosenDays.value[planId];
+            if (!days || days.length === 0) {
+                return true;
+            }
         }
-
-        if (chosenPlans.value.includes("protein")) {
-            return chosenDays.value.proteinDays.length == 0;
-        }
-
-        if (chosenPlans.value.includes("royal")) {
-            return chosenDays.value.royalDays.length == 0;
-        }
+        return false;
     }
 
     function choosePlan(event) {
         const recipeCard = event.target.closest(".plan_wrap--recipe");
-        let planName;
 
-        switch (recipeCard.id) {
-            case "recipe_diet":
-                planName = "diet";
-                break;
+        plans.value.forEach((plan) => {
+            if (recipeCard.id == `recipe_${plan.title}`) {
+                const planId = plan.id;
+                const index = chosenPlans.value.indexOf(planId);
 
-            case "recipe_protein":
-                planName = "protein";
-                break;
-
-            case "recipe_royal":
-                planName = "royal";
-                break;
-        }
-
-        if (chosenPlans.value.includes(planName)) {
-            const index = chosenPlans.value.indexOf(planName);
-            chosenPlans.value.splice(index, 1);
-        } else {
-            chosenPlans.value.push(planName);
-        }
+                if (index !== -1) {
+                    chosenPlans.value.splice(index, 1);
+                } else {
+                    chosenPlans.value.push(planId);
+                }
+            }
+        });
     }
 
-    const userName = ref("");
+    function getPlanById(id) {
+        for (let i = 0; i < plans.value.length; i++) {
+            if (plans.value[i].id === id) {
+                return plans.value[i];
+            }
+        }
+        return null;
+    }
+
+    const username = ref("");
     const userFullName = ref("");
-    const userNum = ref("");
+    const userPhone = ref("");
     const userAllergy = ref("");
-    const isSubmitted = ref(false);
 
-    const allergyList = computed(() => {
-        if (!userAllergy.value) return [];
+    const isLoading = ref(false);
+    const showAllergyPrompt = ref(false);
+    const hasConfirmedAllergy = ref(false);
 
-        return userAllergy.value
-            .split(/\s*,\s*/) // split on commas with optional spaces around
-            .map((a) => a.trim()) // trim extra spaces
-            .filter((a) => a.length > 0); // remove empty entries
-    });
-
-    // to be get by db
-    const planPrices = {
-        diet: 30000,
-        protein: 40000,
-        royal: 60000
-    };
+    const errorMessage = ref("");
+    const successMessage = ref("");
 
     const totalPrice = computed(() => {
         let total = 0;
 
         for (let i = 0; i < chosenPlans.value.length; i++) {
-            const plan = chosenPlans.value[i];
-            const planPrice = planPrices[plan];
-            const numTypes = chosenTypes.value[`${plan}Types`].length;
-            const numDays = chosenDays.value[`${plan}Days`].length;
+            const planId = chosenPlans.value[i];
+            const plan = getPlanById(planId);
+
+            const planPrice = plan.price;
+            const numTypes = chosenTypes.value[planId].length;
+            const numDays = chosenDays.value[planId].length;
 
             total += planPrice * numTypes * numDays * 4.3;
         }
@@ -422,41 +343,155 @@
         return total;
     });
 
-    function isDataValid() {
-        if (
-            !userName.value ||
-            !userFullName.value ||
-            !userNum.value ||
-            chosenPlans.value.length === 0
-        ) {
-            return false;
+    function sanitizeUsername(e) {
+        // Replace anything that's NOT a-z, 0-9, _ or .
+        username.value = e.target.value.replace(/[^a-zA-Z0-9_.]/g, "").toLowerCase();
+    }
+
+    function sanitizePhone(e) {
+        // Only allow numbers and +
+        userPhone.value = e.target.value.replace(/[^\d+]/g, "");
+    }
+
+    function checkSubsData() {
+        const userLogged = computed(() => !!user.value);
+        isLoading.value = true;
+
+        if (!userLogged.value) {
+            isLoading.value = false;
+            errorMessage.value = "You must sign up or login!";
+            return;
         }
 
-        for (const plan in chosenPlans.value) {
-            if (
-                chosenTypes.value[`${plan}Types`].length === 0 ||
-                chosenDays.value[`${plan}Days`].length === 0
-            ) {
-                return false;
+        if (username.value !== profile.value.username) {
+            isLoading.value = false;
+            errorMessage.value = "That's not your username!";
+            return;
+        }
+
+        if (userFullName.value !== profile.value.full_name) {
+            isLoading.value = false;
+            errorMessage.value = "That's not your full name!";
+            return;
+        }
+
+        if (userPhone.value !== profile.value.phone) {
+            isLoading.value = false;
+            errorMessage.value = "That's not your phone number!";
+            return;
+        }
+
+        if (!hasConfirmedAllergy.value && userAllergy.value !== profile.value.allergies) {
+            isLoading.value = false;
+            showAllergyPrompt.value = true;
+            errorMessage.value = "";
+            successMessage.value = "";
+            return;
+        }
+
+        proceedWithSubmission();
+    }
+
+    async function updateAllergyAndSubmit() {
+        isLoading.value = true;
+        const { success, error } = await updateAllergies(userAllergy.value);
+
+        if (!success) {
+            isLoading.value = false;
+            errorMessage.value = "❌ Failed to update allergy: " + error;
+            return;
+        }
+
+        hasConfirmedAllergy.value = true;
+        showAllergyPrompt.value = false;
+
+        proceedWithSubmission();
+    }
+
+    async function proceedWithSubmission() {
+        isLoading.value = true;
+
+        // Insert into subscriptions table
+        const { error: subsError } = await insertData("subscriptions", {
+            user_id: user.value.id,
+            status: "active",
+            total_price: totalPrice.value,
+            created_at: new Date().toISOString()
+        });
+
+        if (subsError) {
+            isLoading.value = false;
+            errorMessage.value = "Something went wrong while inserting to subscriptions.";
+            return;
+        }
+
+        const { data: latestSub, error: getSubError } = await getData(
+            "subscriptions",
+            { user_id: user.value.id },
+            {
+                orderBy: { column: "created_at", ascending: false }
             }
+        );
+
+        if (getSubError) {
+            isLoading.value = false;
+            errorMessage.value = "Failed to fetch latest subscription:" + error.message;
+            return;
         }
 
-        return true;
+        const latestSubs = latestSub?.[0];
+
+        // Insert each chosen meal plan as a subscription_item
+        const itemsPayload = chosenPlans.value.map((planId) => ({
+            subscription_id: latestSubs.id,
+            meal_plan_id: planId,
+            meal_types: chosenTypes.value[planId],
+            delivery_days: chosenDays.value[planId],
+            created_at: new Date().toISOString()
+        }));
+
+        const cleanItems = itemsPayload.filter(
+            (item) => item.meal_types.length && item.delivery_days.length
+        );
+
+        const { error: itemsError } = await insertData("subscription_items", cleanItems);
+
+        if (!!itemsError) {
+            isLoading.value = false;
+            errorMessage.value = "Something went wrong: " + itemsError.message;
+        } else {
+            isLoading.value = false;
+            successMessage.value = "Subscription is now active!";
+        }
     }
 
-    // have to modify based on db
-    function sendSubsData() {
-        console.log(userName.value, userFullName.value, userNum.value, allergyList.value);
+    onMounted(async () => {
+        await loadMealPlans();
 
-        isSubmitted.value = true;
+        plans.value.forEach((plan) => {
+            if (!chosenTypes.value[plan.id]) {
+                chosenTypes.value[plan.id] = [];
+            }
 
-        userName.value = "";
-        userFullName.value = "";
-        userNum.value = "";
-        userAllergy.value = "";
+            if (!chosenDays.value[plan.id]) {
+                chosenDays.value[plan.id] = [];
+            }
+        });
 
-        setTimeout(() => {
-            isSubmitted.value = false;
-        }, 3000);
-    }
+        if (profile.value && profile.value.username) {
+            username.value = profile.value.username;
+        }
+
+        if (profile.value && profile.value.full_name) {
+            userFullName.value = profile.value.full_name;
+        }
+
+        if (profile.value && profile.value.phone) {
+            userPhone.value = profile.value.phone;
+        }
+
+        if (profile.value && profile.value.allergies) {
+            userAllergy.value = profile.value.allergies;
+        }
+    });
 </script>
