@@ -7,6 +7,7 @@ import ContactUs from "../views/ContactUs.vue";
 import Testimony from "../views/Testimony.vue";
 import SignUp from "../views/SignUp.vue";
 import Login from "../views/Login.vue";
+import Dashboard from "../views/Dashboard.vue";
 
 const router = createRouter({
     history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -45,6 +46,11 @@ const router = createRouter({
             path: "/login",
             name: "login",
             component: Login
+        },
+        {
+            path: "/dashboard",
+            name: "dashboard",
+            component: Dashboard
         },
         {
             path: "/:pathMatch(.*)*",

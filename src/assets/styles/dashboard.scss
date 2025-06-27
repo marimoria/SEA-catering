@@ -1,0 +1,108 @@
+.dashboard {
+    position: relative;
+    height: calc(var(--vh, 1vh) * 100);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: "Inter";
+}
+
+.typing_text,
+.cursor {
+    display: inline-block;
+    white-space: nowrap;
+    vertical-align: bottom;
+}
+
+.cursor {
+    font-weight: 350;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    0%,
+    100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+.hero_image {
+    position: absolute;
+    bottom: -20%;
+    left: 50%;
+    transform: translateX(-50%) rotate(0deg);
+    width: clamp(25em, 50vw, 47em);
+    z-index: -1;
+    opacity: 0;
+}
+
+.background {
+    background-image: url("/bg/wavey-fingerprint.svg");
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+}
+
+.dashboard_grid {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.dashboard_header {
+    flex-shrink: 0;
+    padding-top: 1rem;
+    text-align: center;
+
+    &--greet {
+        font-size: clamp(1.8rem, 5vw, 3rem);
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 0.3em;
+    }
+
+    &--desc {
+        font-size: clamp(1rem, 2.5vw, 1.3rem);
+        color: #444;
+        text-align: center;
+        margin-bottom: clamp(1rem, 3vw, 1.5rem);
+        width: 35ch;
+        margin-inline: auto;
+        font-weight: 500;
+    }
+}
+
+.dashboard_content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.dashboard_nav,
+.tab_content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.subscription_area {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-inline: auto;
+    width: clamp(20em, 50vw, 45em);
+    padding-bottom: clamp(1em, 3vw, 2em);
+    padding-top: 0;
+
+    &--title {
+        text-align: center;
+        font-size: clamp(0.7rem, 2vw, 1rem);
+        margin-bottom: 10px;
+    }
+}
