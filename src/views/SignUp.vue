@@ -37,7 +37,7 @@
                             type="text"
                             placeholder="Username"
                             maxlength="20"
-                            @input="sanitizeUsername($event)"
+                            @input="sanitizeUsername($event, username)"
                             required
                         />
                         <input v-model="email" type="email" placeholder="Email Address" required />
@@ -47,7 +47,7 @@
                             v-model="phone"
                             type="text"
                             placeholder="+6281234567"
-                            @input="sanitizePhone($event)"
+                            @input="sanitizePhone($event, phone)"
                             required
                         />
                         <input v-model="allergies" type="text" placeholder="Allergies (optional)" />

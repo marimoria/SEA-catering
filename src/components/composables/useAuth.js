@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { supabase, insertData } from "../composables/useSupabase";
+import { supabase, insertData, updateData } from "../composables/useSupabase";
 
 const user = ref(null); // only contains email + metadata
 const profile = ref(null);
@@ -122,17 +122,32 @@ export async function handleLogout() {
     return { success: true };
 }
 
+export async function updateAllergies(newAllergy) {
+    try {
+        await updateData("profiles", { id: user.value.id }, { allergies: newAllergy });
+
+        profile.value = {
+            ...profile.value,
+            allergies: newAllergy
+        };
+
+        return { success: true };
+    } catch (err) {
+        return { success: false, error: err.message };
+    }
+}
+
 export function isValidIndonesianPhone(phoneNumber) {
     const regex = /^\+62[0-9]{8,12}$/;
     return regex.test(phoneNumber);
 }
 
-export function sanitizeUsername(e) {
+export function sanitizeUsername(e, username) {
     // Replace anything that's NOT a-z, 0-9, _ or .
     username.value = e.target.value.replace(/[^a-zA-Z0-9_.]/g, "").toLowerCase();
 }
 
-export function sanitizePhone(e) {
+export function sanitizePhone(e, phone) {
     // Only allow numbers and +
     phone.value = e.target.value.replace(/[^\d+]/g, "");
 }
