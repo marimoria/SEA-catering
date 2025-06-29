@@ -24,25 +24,6 @@
     z-index: -2;
 }
 
-.fork {
-    position: absolute;
-    bottom: 0;
-    width: 40em;
-    z-index: -1;
-    right: -10%;
-    object-fit: contain;
-}
-
-.spoon {
-    position: absolute;
-    bottom: 30%;
-    width: 35em;
-    z-index: -1;
-    left: -8%;
-    transform: scaleX(-1);
-    object-fit: contain;
-}
-
 .cards_grid {
     display: flex;
     flex-direction: column;
@@ -332,4 +313,37 @@ textarea:focus {
     font-size: clamp(1.1rem, 1.1vw, 1.5rem);
     color: #b60000;
     margin-inline: auto;
+}
+
+.fork {
+    position: absolute;
+    bottom: 0;
+    width: 25em;
+    z-index: -1;
+    right: -20%;
+    object-fit: contain;
+}
+
+.spoon {
+    position: absolute;
+    top: 10vh;
+    width: 23em;
+    z-index: -1;
+    left: -10%;
+    transform: scaleX(-1);
+    object-fit: contain;
+}
+
+@media (min-width: 1024px) {
+    .fork {
+        bottom: 0;
+        width: 40em;
+        right: -10%;
+    }
+
+    .spoon {
+        bottom: 30%;
+        width: 35em;
+        left: -8%;
+    }
 }
