@@ -4,33 +4,51 @@
         <Navbar />
 
         <div class="login_grid">
-            <p v-if="viewport.w >= 768" class="login_grid--title">Welcome Back!</p>
-
-            <div class="login_grid--info">
-                <div class="login_info--details">
-                    <p class="details--title">Enjoy Effortless Meals Again</p>
-                    <p class="details--desc">
-                        Login to access your meal plans, update preferences, and enjoy seamless
-                        catering just for you.
-                    </p>
-                    <div class="details--grid">
-                        <div class="group">
-                            <img :src="getImageUrl('phone.svg')" alt="" class="group--icon" />
-                            <p class="group--info">(+62) 123-456-789</p>
-                        </div>
-                        <div class="group">
-                            <img :src="getImageUrl('gmail.svg')" alt="" class="group--icon" />
-                            <p class="group--info">SEACatering@support.com</p>
-                        </div>
-                        <div class="group">
-                            <img :src="getImageUrl('location.svg')" alt="" class="group--icon" />
-                            <p class="group--info">Jakarta, Indonesia</p>
-                        </div>
-                    </div>
+            <div class="login_hero">
+                <div class="login_hero--circle_banner"></div>
+                <div class="login_hero--food">
+                    <img
+                        data-speedx="0.01"
+                        data-speedy="0.03"
+                        :src="getImageUrl('carrot.svg')"
+                        alt=""
+                        class="parallax carrot"
+                    />
+                    <img
+                        data-speedx="0.01"
+                        data-speedy="0.03"
+                        :src="getImageUrl('tomato.svg')"
+                        alt=""
+                        class="parallax tomato"
+                    />
+                    <img
+                        data-speedx="0.01"
+                        data-speedy="0.01"
+                        class="parallax login_hero--image"
+                        :src="getImageUrl('wagyu.webp')"
+                        alt=""
+                    />
+                    <img
+                        data-speedx="0.007"
+                        data-speedy="0.007"
+                        class="parallax login_hero--image"
+                        :src="getImageUrl('chicken_platter.webp')"
+                        alt=""
+                    />
+                    <img
+                        data-speedx="0.005"
+                        data-speedy="0.005"
+                        class="parallax login_hero--image"
+                        :src="getImageUrl('grilled_salmon.webp')"
+                        alt=""
+                    />
                 </div>
+            </div>
 
-                <div class="login_info--form">
-                    <p class="details--title">Login</p>
+            <div class="login_info--form">
+                <p class="content_title">Welcome Back</p>
+                <div class="form">
+                    <p class="form--title">Login</p>
                     <form @submit.prevent="submitLogin">
                         <input v-model="email" type="email" placeholder="Email Address" required />
                         <input v-model="password" type="password" placeholder="Password" required />
@@ -45,44 +63,12 @@
                         <p v-if="successMessage" class="success_message">✅ {{ successMessage }}</p>
                     </form>
                     <p class="nav_message">
-                        Don't have an account?
+                        Don’t have an account?
                         <router-link to="/signup">Sign Up Here</router-link>
                     </p>
                 </div>
             </div>
         </div>
-
-        <!-- background assets -->
-        <img
-            data-speedx="0.03"
-            data-speedy="0.03"
-            class="parallax bg_image--top_right"
-            :src="getImageUrl('chicken_platter.webp')"
-            alt=""
-        />
-        <img
-            data-speedx="0.03"
-            data-speedy="0.03"
-            class="parallax bg_image--bottom_left"
-            :src="getImageUrl('pad_thai.webp')"
-            alt=""
-        />
-        <img
-            v-if="viewport.w >= 1024"
-            data-speedx="0.03"
-            data-speedy="0.03"
-            class="parallax bg_image--sec_right"
-            :src="getImageUrl('protein_hero.webp')"
-            alt=""
-        />
-        <img
-            v-if="viewport.w >= 1024"
-            data-speedx="0.03"
-            data-speedy="0.03"
-            class="parallax bg_image--sec_left"
-            :src="getImageUrl('veggies_hero.webp')"
-            alt=""
-        />
     </div>
 </template>
 
