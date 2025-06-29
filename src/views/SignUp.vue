@@ -2,6 +2,7 @@
     <div class="signup">
         <div class="background"></div>
         <Navbar />
+        <img :src="getImageUrl('spoon.svg')" alt="" class="spoon" />
 
         <div class="signup_grid">
             <div class="signup_hero">

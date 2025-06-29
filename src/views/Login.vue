@@ -2,6 +2,7 @@
     <div class="login">
         <div class="background"></div>
         <Navbar />
+        <img :src="getImageUrl('fork.svg')" alt="" class="fork" />
 
         <div class="login_grid">
             <div class="login_hero">
@@ -46,7 +47,7 @@
             </div>
 
             <div class="login_info--form">
-                <p class="content_title">Welcome Back</p>
+                <p class="content_title">Welcome Back!</p>
                 <div class="form">
                     <p class="form--title">Login</p>
                     <form @submit.prevent="submitLogin">
