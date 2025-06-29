@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
+import { user } from "../components/composables/useAuth";
 
 import Home from "../views/Home.vue";
 import Meal from "../views/MealPlans.vue";
@@ -50,13 +51,28 @@ const router = createRouter({
         {
             path: "/dashboard",
             name: "dashboard",
-            component: Dashboard
+            component: Dashboard,
+            meta: { requiresAuth: true }
         },
         {
             path: "/:pathMatch(.*)*",
             component: Home
         }
     ]
+});
+
+router.beforeEach(async (to, from, next) => {
+    const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+
+    if (!requiresAuth) {
+        return next();
+    }
+
+    if (user.value) {
+        next();
+    } else {
+        next("/");
+    }
 });
 
 export default router;
