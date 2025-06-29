@@ -7,19 +7,41 @@
             <div class="signup_hero">
                 <div class="signup_hero--circle_banner"></div>
                 <div class="signup_hero--food">
-                    <img :src="getImageUrl('carrot.svg')" alt="" class="carrot" />
-                    <img :src="getImageUrl('tomato.svg')" alt="" class="tomato" />
                     <img
-                        class="signup_hero--image"
+                        data-speedx="0.01"
+                        data-speedy="0.03"
+                        :src="getImageUrl('carrot.svg')"
+                        alt=""
+                        class="parallax carrot"
+                    />
+                    <img
+                        data-speedx="0.01"
+                        data-speedy="0.03"
+                        :src="getImageUrl('tomato.svg')"
+                        alt=""
+                        class="parallax tomato"
+                    />
+                    <img
+                        data-speedx="0.01"
+                        data-speedy="0.01"
+                        class="parallax signup_hero--image"
                         :src="getImageUrl('veggies_hero.webp')"
                         alt=""
                     />
                     <img
-                        class="signup_hero--image"
+                        data-speedx="0.007"
+                        data-speedy="0.007"
+                        class="parallax signup_hero--image"
                         :src="getImageUrl('protein_hero.webp')"
                         alt=""
                     />
-                    <img class="signup_hero--image" :src="getImageUrl('foie_gras.webp')" alt="" />
+                    <img
+                        data-speedx="0.005"
+                        data-speedy="0.005"
+                        class="parallax signup_hero--image"
+                        :src="getImageUrl('foie_gras.webp')"
+                        alt=""
+                    />
                 </div>
             </div>
 
