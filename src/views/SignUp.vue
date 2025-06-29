@@ -4,33 +4,29 @@
         <Navbar />
 
         <div class="signup_grid">
-            <p v-if="viewport.w >= 768" class="signup_grid--title">Create Your Account</p>
-
-            <div class="signup_grid--info">
-                <div class="signup_info--details">
-                    <p class="details--title">Why Join SEA Catering?</p>
-                    <p class="details--desc">
-                        Signing up gives you access to customized meal plans tailored to your goals.
-                        Fast, fresh, and nutritious.
-                    </p>
-                    <div class="details--grid">
-                        <div class="group">
-                            <img :src="getImageUrl('phone.svg')" alt="" class="group--icon" />
-                            <p class="group--info">(+62) 123-456-789</p>
-                        </div>
-                        <div class="group">
-                            <img :src="getImageUrl('gmail.svg')" alt="" class="group--icon" />
-                            <p class="group--info">SEACatering@support.com</p>
-                        </div>
-                        <div class="group">
-                            <img :src="getImageUrl('location.svg')" alt="" class="group--icon" />
-                            <p class="group--info">Jakarta, Indonesia</p>
-                        </div>
-                    </div>
+            <div class="signup_hero">
+                <div class="signup_hero--circle_banner"></div>
+                <div class="signup_hero--food">
+                    <img :src="getImageUrl('carrot.svg')" alt="" class="carrot" />
+                    <img :src="getImageUrl('tomato.svg')" alt="" class="tomato" />
+                    <img
+                        class="signup_hero--image"
+                        :src="getImageUrl('veggies_hero.webp')"
+                        alt=""
+                    />
+                    <img
+                        class="signup_hero--image"
+                        :src="getImageUrl('protein_hero.webp')"
+                        alt=""
+                    />
+                    <img class="signup_hero--image" :src="getImageUrl('foie_gras.webp')" alt="" />
                 </div>
+            </div>
 
-                <div class="signup_info--form">
-                    <p class="details--title">Sign Up</p>
+            <div class="signup_info--form">
+                <p class="content_title">Create Your Account</p>
+                <div class="form">
+                    <p class="form--title">Sign Up</p>
                     <form @submit.prevent="submitSignUp">
                         <input
                             v-model="username"
@@ -68,38 +64,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- background assets -->
-        <img
-            data-speedx="0.02"
-            data-speedy="0.03"
-            class="parallax bg_image--top_right"
-            :src="getImageUrl('grill_steak.webp')"
-            alt=""
-        />
-        <img
-            data-speedx="0.01"
-            data-speedy="0.03"
-            class="parallax bg_image--bottom_left"
-            :src="getImageUrl('grilled_salmon.webp')"
-            alt=""
-        />
-        <img
-            v-if="viewport.w >= 1024"
-            data-speedx="0.04"
-            data-speedy="0.03"
-            class="parallax bg_image--sec_right"
-            :src="getImageUrl('duck.webp')"
-            alt=""
-        />
-        <img
-            v-if="viewport.w >= 1024"
-            data-speedx="0.03"
-            data-speedy="0.03"
-            class="parallax bg_image--sec_left"
-            :src="getImageUrl('quinoa_salad.webp')"
-            alt=""
-        />
     </div>
 </template>
 
