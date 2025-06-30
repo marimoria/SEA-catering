@@ -18,7 +18,7 @@
                 <router-link v-if="!userLogged" class="sign_up" to="/signup">Sign Up</router-link>
 
                 <router-link v-if="userLogged && isAdmin" class="nav_name" to="/admin">
-                    Admin Dashboard
+                    Admin Board
                 </router-link>
                 <router-link v-else-if="userLogged" class="nav_name" to="/dashboard">
                     Dashboard
@@ -49,7 +49,7 @@
                     >
 
                     <router-link v-if="userLogged && isAdmin" class="nav_name" to="/admin">
-                        Admin Dashboard
+                        Admin Board
                     </router-link>
                     <router-link v-else-if="userLogged" class="nav_name" to="/dashboard">
                         Dashboard

@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import { user } from "../components/composables/useAuth";
+import { user, isAdmin } from "../components/composables/useAuth";
 
 import Home from "../views/Home.vue";
 import Meal from "../views/MealPlans.vue";
@@ -9,6 +9,7 @@ import Testimony from "../views/Testimony.vue";
 import SignUp from "../views/SignUp.vue";
 import Login from "../views/Login.vue";
 import Dashboard from "../views/Dashboard.vue";
+import AdminDash from "../views/AdminDash.vue";
 
 const router = createRouter({
     history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -55,6 +56,12 @@ const router = createRouter({
             meta: { requiresAuth: true }
         },
         {
+            path: "/admin",
+            name: "admin dashboard",
+            component: AdminDash,
+            meta: { requiresAdmin: true }
+        },
+        {
             path: "/:pathMatch(.*)*",
             component: Home
         }
@@ -63,16 +70,17 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+    const requiresAdmin = to.matched.some((record) => record.meta.requiresAdmin);
 
-    if (!requiresAuth) {
-        return next();
+    if (requiresAuth && !user.value) {
+        return next("/");
     }
 
-    if (user.value) {
-        next();
-    } else {
-        next("/");
+    if (requiresAdmin && !isAdmin) {
+        return next("/");
     }
+
+    return next();
 });
 
 export default router;
