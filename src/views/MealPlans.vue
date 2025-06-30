@@ -174,45 +174,46 @@
 
     async function loadMealPlansAndRecipes() {
         try {
-            const { data: mealPlans } = await getData("meal_plans");
-            const { data: recipes } = await getData(
-                "recipes",
+            const { data: plansData, error } = await getData(
+                "meal_plans",
                 {},
-                { orderBy: { column: "order_index", ascending: true } }
+                { select: `*, recipes (meal_type, name, description, image, order_index)` }
             );
 
-            const recipeMap = {};
-            for (const recipe of recipes) {
-                const planId = recipe.meal_plan_id;
-                const type = recipe.meal_type;
-                if (!recipeMap[planId]) {
-                    recipeMap[planId] = { breakfast: [], lunch: [], dinner: [] };
+            console.log(plansData);
+
+            if (error) {
+                console.error("Failed to load meal plans:", error.message);
+                return;
+            }
+
+            // For each plan, separate their recipes into 3 groups
+            plans.value = (plansData || []).map((plan) => {
+                const grouped = {
+                    breakfast: [],
+                    lunch: [],
+                    dinner: []
+                };
+
+                for (const recipe of plan.recipes) {
+                    grouped[recipe.meal_type].push(recipe);
                 }
-                recipeMap[planId][type].push(recipe);
-            }
 
-            plans.value = mealPlans.map((plan) => ({
-                id: plan.id,
-                title: plan.title,
-                desc_short: plan.desc_short,
-                desc_long: plan.desc_long,
-                price: plan.price,
-                colors: plan.colors,
-                hero_image: plan.hero_image,
-                popup_benefits: plan.popup_benefits,
-                popup_nutrition: plan.popup_nutrition,
-                recipes: recipeMap[plan.id] || { breakfast: [], lunch: [], dinner: [] }
-            }));
+                return {
+                    ...plan,
+                    recipes: grouped
+                };
+            });
 
-            for (const plan of plans.value) {
-                popupStates.value[plan.title.toLowerCase()] = false;
-            }
+            popupStates.value = Object.fromEntries(
+                plans.value.map((plan) => [plan.title.toLowerCase(), false])
+            );
 
             nextTick(() => {
                 parallaxInit();
             });
         } catch (err) {
-            console.error("Failed to load meal plans:", err.message);
+            console.error("Unexpected error:", err.message);
         }
     }
 
