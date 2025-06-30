@@ -10,23 +10,35 @@
 
             <div class="info_row">
                 <div class="info_block">
+                    <p v-if="isAdmin"><strong>👤 Username: </strong>{{ subUser.username }}</p>
                     <p>
-                        <strong>Status: </strong>
+                        <strong>🪧 Status: </strong>
                         {{ subscription.status }}
                     </p>
-                    <p><strong>Price:</strong> Rp {{ formatPrice(subscription.total_price) }}</p>
-                    <p><strong>Purchased:</strong> {{ formatDate(subscription.created_at) }}</p>
+                    <p><strong>🪙 Price:</strong> Rp {{ formatPrice(subscription.total_price) }}</p>
+                    <p><strong>📆 Purchased:</strong> {{ formatDate(subscription.created_at) }}</p>
                     <p v-if="subscription.status == 'paused'">
-                        <strong>Paused at:</strong> {{ formatDate(subscription.pause_start) }}
+                        <strong>⏸️ Paused at:</strong> {{ formatDate(subscription.pause_start) }}
                     </p>
                     <p v-if="subscription.status == 'paused'">
-                        <strong>Paused until:</strong> {{ formatDate(subscription.pause_end) }}
+                        <strong>⏯️ Paused until:</strong> {{ formatDate(subscription.pause_end) }}
                     </p>
+                    <div v-if="isAdmin" class="user_detail_buttons">
+                        <button @click="copySubId" class="action_btn copy_btn">
+                            {{ !!copySubMsg ? copySubMsg : "Copy sub id" }}
+                        </button>
+                        <button @click="copyUserId" class="action_btn copy_btn">
+                            {{ !!copyUserMsg ? copyUserMsg : "Copy user id" }}
+                        </button>
+                    </div>
                 </div>
 
                 <div class="action_buttons">
                     <button @click="showCalendar" class="action_btn pause_btn">Pause</button>
                     <button @click="showDel" class="action_btn cancel_btn">Cancel</button>
+                    <button @click="copySubId" class="action_btn copy_btn">
+                        {{ !!copySubMsg ? copySubMsg : "Copy sub id" }}
+                    </button>
                 </div>
             </div>
 
@@ -66,6 +78,7 @@
 <script setup>
     import { ref, computed, onMounted, inject, watch } from "vue";
     import { getData, updateData, deleteData } from "./composables/useSupabase";
+    import { isAdmin, profile } from "./composables/useAuth";
 
     const props = defineProps({
         index: Number,
@@ -214,8 +227,48 @@
         }
     });
 
+    // Get user details
+    const subUser = ref({});
+
+    async function getUserFromId(userId) {
+        const { data: user } = await getData("profiles", { id: userId });
+        subUser.value = user[0];
+    }
+
+    const copyUserMsg = ref("");
+    const copySubMsg = ref("");
+
+    function copyUserId() {
+        navigator.clipboard
+            .writeText(profile.id)
+            .then(() => {
+                copyUserMsg.value = "Copied!";
+                setTimeout(() => {
+                    copyUserMsg.value = "";
+                }, 3000);
+            })
+            .catch((err) => {
+                console.error("Failed to copy:", err);
+            });
+    }
+
+    function copySubId() {
+        navigator.clipboard
+            .writeText(subscription.value.id)
+            .then(() => {
+                copySubMsg.value = "Copied!";
+                setTimeout(() => {
+                    copySubMsg.value = "";
+                }, 3000);
+            })
+            .catch((err) => {
+                console.error("Failed to copy:", err);
+            });
+    }
+
     onMounted(async () => {
         await loadMealPlans();
+        await getUserFromId(subscription.value.user_id);
     });
 </script>
 
@@ -261,10 +314,15 @@
         flex-grow: 1;
     }
 
-    .action_buttons {
+    .action_buttons,
+    .user_detail_buttons {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         gap: 0.5rem;
+    }
+
+    .user_detail_buttons {
+        margin-top: 10px;
     }
 
     .action_btn {
@@ -285,6 +343,11 @@
     .cancel_btn {
         background-color: #fecaca;
         color: #991b1b;
+    }
+
+    .copy_btn {
+        background-color: #e1dfdf;
+        color: #767676;
     }
 
     .info_block {
@@ -318,8 +381,8 @@
     }
 
     @media (min-width: 1024px) {
-        .action-buttons {
-            flex-direction: row;
+        .action_buttons {
+            flex-direction: column;
         }
     }
 </style>
