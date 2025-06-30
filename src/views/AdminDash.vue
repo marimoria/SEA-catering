@@ -49,7 +49,7 @@
 
             <section class="metrics_content">
                 <div class="metrics_content--subs_panel">
-                    <p class="subs_panel--panel_title">Subscriptions</p>
+                    <p class="subs_panel--panel_title">Subscriptions Panel</p>
                     <div class="search_area">
                         <input
                             type="text"
