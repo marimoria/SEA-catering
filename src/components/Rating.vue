@@ -3,7 +3,7 @@
         <img
             v-for="index in maxRating"
             :key="index"
-            :src="index <= rating ? starFilled : starEmpty"
+            :src="index <= rating ? getImageUrl('star_filled.svg') : getImageUrl('star_empty.svg')"
             @click="canRate ? changeRating(index) : null"
             :id="index"
             class="stars"
@@ -12,8 +12,7 @@
 </template>
 
 <script setup>
-    import starFilled from "../assets/images/star_filled.svg";
-    import starEmpty from "../assets/images/star_empty.svg";
+    import { getImageUrl } from "./composables/useSupabase";
 
     const props = defineProps({
         maxRating: Number,
