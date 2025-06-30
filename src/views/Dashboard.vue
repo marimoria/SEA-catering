@@ -200,9 +200,13 @@
 
     async function loadSubscriptions() {
         // Get subscriptions
-        const { data: subsData, error: subsError } = await getData("subscriptions", {
-            user_id: user.value.id
-        });
+        const { data: subsData, error: subsError } = await getData(
+            "subscriptions",
+            {
+                user_id: user.value.id
+            },
+            { orderBy: { column: "created_at", ascending: false } }
+        );
 
         if (subsError) {
             console.error("Error loading subscriptions:", subsError);
