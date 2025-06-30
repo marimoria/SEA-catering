@@ -167,9 +167,6 @@
             subscription.value.pause_start = now;
             subscription.value.pause_end = date;
 
-            console.log("Paused subscription value:", subscription.value);
-            console.log("Paused subscription ID:", subscription.value.id);
-
             const { error } = await updateData(
                 "subscriptions",
                 { id: subscription.value.id },
