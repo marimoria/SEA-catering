@@ -1,7 +1,9 @@
 import { supabase } from "../../lib/supabaseClient";
 
 export async function getData(table, filters = {}, options = {}) {
-    let query = supabase.from(table).select();
+    const selectFields = options.select ?? "*";
+
+    let query = supabase.from(table).select(selectFields);
 
     for (const [key, value] of Object.entries(filters)) {
         query = query.eq(key, value);

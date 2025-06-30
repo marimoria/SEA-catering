@@ -14,7 +14,7 @@
                         <strong>Status: </strong>
                         {{ subscription.status }}
                     </p>
-                    <p><strong>Price:</strong> Rp {{ formatPrice(subscription.price) }}</p>
+                    <p><strong>Price:</strong> Rp {{ formatPrice(subscription.total_price) }}</p>
                     <p><strong>Purchased:</strong> {{ formatDate(subscription.created_at) }}</p>
                     <p v-if="subscription.status == 'paused'">
                         <strong>Paused at:</strong> {{ formatDate(subscription.pause_start) }}
@@ -32,7 +32,7 @@
 
             <div v-if="expanded" class="details">
                 <div
-                    v-for="(item, i) in subscription.items"
+                    v-for="(item, i) in subscription.subscription_items"
                     :key="i"
                     class="plan_detail"
                     :style="{

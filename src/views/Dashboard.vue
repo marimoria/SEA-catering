@@ -101,7 +101,7 @@
                             </div>
 
                             <button :disabled="isLoading" class="submit_button" type="submit">
-                                {{ isLoading ? "Submitting..." : "Submit Review" }}
+                                {{ isLoading ? "Updating..." : "Update" }}
                             </button>
 
                             <LoadingSpinner v-if="isLoading" />
@@ -199,13 +199,13 @@
     const hasSubscriptions = ref(false);
 
     async function loadSubscriptions() {
-        // Get subscriptions
         const { data: subsData, error: subsError } = await getData(
             "subscriptions",
+            { user_id: user.value.id },
             {
-                user_id: user.value.id
-            },
-            { orderBy: { column: "created_at", ascending: false } }
+                select: `*, subscription_items (meal_plan_id, meal_types, delivery_days)`,
+                orderBy: { column: "created_at", ascending: false }
+            }
         );
 
         if (subsError) {
@@ -213,41 +213,11 @@
             return;
         }
 
-        if (subsData && subsData.length != 0) {
+        if (subsData && subsData.length > 0) {
             hasSubscriptions.value = true;
         }
 
-        const subIds = subsData.map((sub) => sub.id);
-
-        // Get all subscription items
-        const { data: itemsData, error: itemsError } = await getData("subscription_items", {});
-
-        if (itemsError) {
-            console.error("Error loading subscription items:", itemsError);
-            return;
-        }
-
-        // Only keep item that matches subscription id
-        const filteredItems = itemsData.filter((item) => subIds.includes(item.subscription_id));
-
-        // One by one attach to each subscription object
-        subscriptions.value = subsData.map((sub) => {
-            const relatedItems = filteredItems.filter((item) => item.subscription_id === sub.id);
-            return {
-                id: sub.id,
-                user_id: sub.user_id,
-                status: sub.status,
-                price: sub.total_price,
-                pause_start: sub.pause_start,
-                pause_end: sub.pause_end,
-                created_at: sub.created_at,
-                items: relatedItems.map((item) => ({
-                    meal_plan_id: item.meal_plan_id,
-                    meal_types: item.meal_types,
-                    delivery_days: item.delivery_days
-                }))
-            };
-        });
+        subscriptions.value = subsData || [];
     }
 
     // pause
@@ -293,100 +263,75 @@
         userPhone.value = e.target.value.replace(/[^\d+]/g, "");
     }
 
+    async function tryUpdate(updateFunc, newRef, oldVal) {
+        const res = await updateFunc(newRef.value);
+        if (!res.success) {
+            newRef.value = oldVal;
+            errorMessage.value = res.error;
+            return false;
+        }
+        return true;
+    }
+
     async function updateProfile() {
         errorMessage.value = "";
         successMessage.value = "";
         isLoading.value = true;
 
         const updates = {
-            usernameChanged: username.value !== profile.value.username,
-            nameChanged: userFullName.value !== profile.value.full_name,
-            phoneChanged: userPhone.value !== profile.value.phone,
-            allergyChanged: userAllergy.value !== profile.value.allergies
+            username: username.value !== profile.value.username,
+            full_name: userFullName.value !== profile.value.full_name,
+            phone: userPhone.value !== profile.value.phone,
+            allergies: userAllergy.value !== profile.value.allergies
         };
 
-        if (
-            !updates.usernameChanged &&
-            !updates.nameChanged &&
-            !updates.phoneChanged &&
-            !updates.allergyChanged
-        ) {
+        const noChanges = !Object.values(updates).some(Boolean);
+        if (noChanges) {
             successMessage.value = "No changes were made.";
             isLoading.value = false;
             return;
         }
 
-        if (updates.usernameChanged || updates.phoneChanged) {
-            const { data: dupesData, error: dupesError } = await supabase.functions.invoke(
-                "checkUniqueSignUp",
-                {
+        try {
+            if (updates.username || updates.phone) {
+                const { data, error } = await supabase.functions.invoke("checkUniqueSignUp", {
                     body: { username: username.value, phone: userPhone.value }
+                });
+
+                if (error) throw new Error(error.message);
+
+                if (updates.username && data.usernameExists) {
+                    username.value = profile.value.username;
+                    throw new Error("Username already exists.");
                 }
-            );
 
-            if (dupesError) {
-                errorMessage.value = dupesError.message;
-                isLoading.value = false;
+                if (updates.phone && data.phoneExists) {
+                    userPhone.value = profile.value.phone;
+                    throw new Error("Phone number is invalid.");
+                }
+            }
+
+            const tasks = [
+                updates.username && tryUpdate(updateUsername, username, profile.value.username),
+                updates.full_name &&
+                    tryUpdate(updateFullName, userFullName, profile.value.full_name),
+                updates.phone && tryUpdate(updatePhone, userPhone, profile.value.phone),
+                updates.allergies &&
+                    tryUpdate(updateAllergies, userAllergy, profile.value.allergies)
+            ];
+
+            const results = await Promise.all(tasks.filter(Boolean));
+
+            if (results.includes(false)) {
                 return;
             }
 
-            if (updates.usernameChanged && dupesData.usernameExists) {
-                errorMessage.value = "Username already exists.";
-                username.value = profile.value.username;
-                isLoading.value = false;
-                return;
-            }
-
-            if (updates.phoneChanged && dupesData.phoneExists) {
-                errorMessage.value = "Phone number is invalid.";
-                userPhone.value = profile.value.phone;
-                isLoading.value = false;
-                return;
-            }
+            successMessage.value = "Profile successfully updated!";
+        } catch (err) {
+            errorMessage.value = err.message || "Something went wrong.";
+        } finally {
+            isLoading.value = false;
         }
-
-        if (updates.usernameChanged) {
-            const res = await updateUsername(username.value);
-            if (!res.success) {
-                username.value = profile.value.username;
-                errorMessage.value = res.error;
-                isLoading.value = false;
-                return;
-            }
-        }
-
-        if (updates.nameChanged) {
-            const res = await updateFullName(userFullName.value);
-            if (!res.success) {
-                userFullName.value = profile.value.full_name;
-                errorMessage.value = res.error;
-                isLoading.value = false;
-                return;
-            }
-        }
-
-        if (updates.phoneChanged) {
-            const res = await updatePhone(userPhone.value);
-            if (!res.success) {
-                userPhone.value = profile.value.phone;
-                errorMessage.value = res.error;
-                isLoading.value = false;
-                return;
-            }
-        }
-
-        if (updates.allergyChanged) {
-            const res = await updateAllergies(userAllergy.value);
-            if (!res.success) {
-                userAllergy.value = profile.value.allergies;
-                errorMessage.value = res.error;
-                isLoading.value = false;
-                return;
-            }
-        }
-
-        successMessage.value = "Profile successfully updated!";
-        isLoading.value = false;
     }
 
     onMounted(async () => {
