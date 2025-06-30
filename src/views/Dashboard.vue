@@ -19,6 +19,11 @@
                     <template #Subscriptions>
                         <div class="subscription_area">
                             <div class="subscription_area--title">My Subscriptions</div>
+                            <p v-if="hasSubscriptions == false" class="no_subs">
+                                You have no subscriptions yet!<br />
+                                Purchase your subscription
+                                <router-link to="/subscription">here</router-link>
+                            </p>
 
                             <SubscriptionCard
                                 v-for="(sub, i) in subscriptions"
@@ -204,7 +209,7 @@
             return;
         }
 
-        if (!subsData || subsData.length === 0) {
+        if (!subsData && subsData.length === 0) {
             hasSubscriptions.value = true;
             return;
         }
