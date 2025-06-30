@@ -213,10 +213,11 @@
         font-weight: 600;
     }
 
-    @media (min-width: 1000px) {
+    @media (min-width: 1125px) {
         .navbar {
             padding: 1rem 2rem 0 2rem;
         }
+
         .desktop-nav {
             display: flex;
             align-items: center;
