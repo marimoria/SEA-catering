@@ -41,7 +41,7 @@
                         <p class="metric_value">3</p>
                     </div>
                     <div class="metric_card">
-                        <p class="metric_title">Active Subscriptions</p>
+                        <p class="metric_title">Total Subscriptions</p>
                         <p class="metric_value">{{ subscriptions.length }}</p>
                     </div>
                 </div>
@@ -50,17 +50,16 @@
             <section class="metrics_content">
                 <div class="metrics_content--subs_panel">
                     <p class="subs_panel--panel_title">Subscriptions</p>
+                    <div class="search_area">
+                        <input
+                            type="text"
+                            v-model="subscriptionFilter"
+                            placeholder="Subscription id"
+                        />
+                    </div>
                     <div class="subs_panel--subs_viewer">
                         <SubscriptionCard
-                            v-for="(sub, i) in subscriptions"
-                            :key="sub.id"
-                            v-model:subscription="subscriptions[i]"
-                            :title="'Subscription ' + (i + 1)"
-                            :index="i"
-                            @deleted="handleDelete"
-                        />
-                        <SubscriptionCard
-                            v-for="(sub, i) in subscriptions"
+                            v-for="(sub, i) in filteredSubscriptions"
                             :key="sub.id"
                             v-model:subscription="subscriptions[i]"
                             :title="'Subscription ' + (i + 1)"
@@ -91,7 +90,7 @@
 
     import { profile } from "../components/composables/useAuth";
     import { getData } from "../components/composables/useSupabase";
-    import { onMounted, ref, provide } from "vue";
+    import { onMounted, computed, ref, provide } from "vue";
 
     const props = defineProps({
         viewport: Object,
@@ -146,6 +145,16 @@
     function handleDelete(id) {
         subscriptions.value = subscriptions.value.filter((sub) => sub.id !== id);
     }
+
+    // filter feature
+    const subscriptionFilter = ref("");
+
+    const filteredSubscriptions = computed(() => {
+        if (!subscriptionFilter.value) {
+            return subscriptions.value;
+        }
+        return subscriptions.value.filter((sub) => sub.id === subscriptionFilter.value.trim());
+    });
 
     onMounted(async () => {
         await loadSubscriptions();
