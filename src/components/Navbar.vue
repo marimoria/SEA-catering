@@ -244,5 +244,9 @@
         border-radius: 1em;
         background-image: linear-gradient(white, white), var(--second-gradient);
         background-clip: padding-box, border-box;
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 </style>
