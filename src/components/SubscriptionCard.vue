@@ -36,7 +36,7 @@
                 <div class="action_buttons">
                     <button @click="showCalendar" class="action_btn pause_btn">Pause</button>
                     <button @click="showDel" class="action_btn cancel_btn">Cancel</button>
-                    <button @click="copySubId" class="action_btn copy_btn">
+                    <button v-if="!isAdmin" @click="copySubId" class="action_btn copy_btn">
                         {{ !!copySubMsg ? copySubMsg : "Copy sub id" }}
                     </button>
                 </div>
@@ -239,8 +239,16 @@
     const copySubMsg = ref("");
 
     function copyUserId() {
+        let userId;
+
+        if (isAdmin) {
+            userId = subscription.value.user_id;
+        } else {
+            userId = profile.value.user_id;
+        }
+
         navigator.clipboard
-            .writeText(profile.id)
+            .writeText(userId)
             .then(() => {
                 copyUserMsg.value = "Copied!";
                 setTimeout(() => {
