@@ -8,10 +8,6 @@
                 <p class="header--greet">
                     Welcome, <span class="highlight_paprika">{{ profile.username }}</span>
                 </p>
-                <p class="header--desc">
-                    <span class="typing_text" id="animatedText"></span>
-                    <span class="cursor">|</span>
-                </p>
             </div>
 
             <section class="date_range">
@@ -96,7 +92,6 @@
     import { profile } from "../components/composables/useAuth";
     import { getData } from "../components/composables/useSupabase";
     import { onMounted, ref, provide } from "vue";
-    import { gsap } from "../js/vendor";
 
     const props = defineProps({
         viewport: Object,
@@ -154,31 +149,5 @@
 
     onMounted(async () => {
         await loadSubscriptions();
-
-        const descWords = [
-            "Let's make SEA Catering the best!",
-            "Here are what we have so far.",
-            "Keep up the good work!"
-        ];
-
-        const textRef = "#animatedText";
-        const typewriterTl = gsap.timeline({ repeat: -1 });
-
-        for (let i = 0; i < descWords.length; i++) {
-            const word = descWords[i];
-
-            typewriterTl
-                .to(textRef, {
-                    duration: 1,
-                    text: word,
-                    ease: "steps(" + word.length + ")"
-                })
-                .to({}, { duration: 5 })
-                .to(textRef, {
-                    duration: 0.5,
-                    text: "",
-                    ease: "steps(" + word.length + ")"
-                });
-        }
     });
 </script>
