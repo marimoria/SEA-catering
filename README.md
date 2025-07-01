@@ -22,6 +22,7 @@ This project was deployed using GitHub Pages: https://marimoria.github.io/SEA-ca
 - 📝 Testimonials with form + carousel display.
 - 📦 Subscription system with validation and dynamic price calculation.
 - 🧠 User dashboard: pause, cancel, view subscriptions, and modify profile.
+- 📈 Admin dashboard: view over real-time subscription panels and metrics.
 - 🌐 Supabase backend with Edge Functions, scheduled PostgreSQL functions, and Row-Level Security.
 - 📞 A contact-us page that allows direct message from user to SEA catering support email.
 - 📱 Mobile-first UI with dynamic SCSS styling
@@ -50,6 +51,7 @@ npm install
 
 ### 2. Make `.env.local` file
 Please paste the contents from the selection pdf file. It should look like this:
+⚠️ Please do not change the localhost port in `vite.config.mjs` from 3000 as it is the only allowed localhost port to request to edge functions.
 
 ```env
 VITE_SUPABASE_URL=
@@ -417,18 +419,16 @@ create table if not exists subscriptions (
 
 alter table subscriptions enable row level security;
 
--- Allow users to view their own subscriptions or allow admins
 create policy "User can view own subscriptions"
 on subscriptions
 for select
 using (
   (select auth.uid()) = user_id OR
-  (select exists (
-    select 1 from admin_roles where user_id = (select auth.uid())
-  ))
+  exists (
+    select 1 from admin_roles where id = (select auth.uid())
+  )
 );
 
--- Allow users to insert their own subscriptions
 create policy "User can insert own subscriptions"
 on subscriptions
 for insert
@@ -436,29 +436,30 @@ with check (
   (select auth.uid()) = user_id
 );
 
--- Allow users to update their own subscriptions or allow admins
 create policy "User can update own subscriptions"
 on subscriptions
 for update
 using (
   (select auth.uid()) = user_id OR
-  (select exists (
-    select 1 from admin_roles where user_id = (select auth.uid())
-  ))
+  exists (
+    select 1 from admin_roles where id = (select auth.uid())
+  )
 )
 with check (
-  (select auth.uid()) = user_id
+  (select auth.uid()) = user_id OR
+  exists (
+    select 1 from admin_roles where id = (select auth.uid())
+  )
 );
 
--- Allow users to delete their own subscriptions or allow admins
 create policy "User can delete own subscriptions"
 on subscriptions
 for delete
 using (
   (select auth.uid()) = user_id OR
-  (select exists (
-    select 1 from admin_roles where user_id = (select auth.uid())
-  ))
+  exists (
+    select 1 from admin_roles where id = (select auth.uid())
+  )
 );
 ```
 
@@ -489,7 +490,6 @@ create table if not exists subscription_items (
 
 alter table subscription_items enable row level security;
 
--- User and admins can see their own subscription items
 create policy "User can view own subscription_items"
 on subscription_items
 for select
@@ -500,13 +500,12 @@ using (
     and (
       subscriptions.user_id = (select auth.uid())
       or exists (
-        select 1 from admin_roles where user_id = (select auth.uid())
+        select 1 from admin_roles where id = (select auth.uid())
       )
     )
   )
 );
 
--- User can insert their own subscriptions items
 create policy "User can insert own subscription_items"
 on subscription_items
 for insert
@@ -518,7 +517,6 @@ with check (
   )
 );
 
--- users or admins can update subscription items
 create policy "User can update own subscription_items"
 on subscription_items
 for update
@@ -529,7 +527,7 @@ using (
     and (
       subscriptions.user_id = (select auth.uid())
       or exists (
-        select 1 from admin_roles where user_id = (select auth.uid())
+        select 1 from admin_roles where id = (select auth.uid())
       )
     )
   )
@@ -542,7 +540,6 @@ with check (
   )
 );
 
--- allow users or admins to delete their own subscription
 create policy "User can delete own subscription_items"
 on subscription_items
 for delete
@@ -553,32 +550,93 @@ using (
     and (
       subscriptions.user_id = (select auth.uid())
       or exists (
-        select 1 from admin_roles where user_id = (select auth.uid())
+        select 1 from admin_roles where id = (select auth.uid())
       )
     )
   )
 );
 ```
 
-7. `resume_expired_subscription()` function
+7. `subscription_events` tab;e
+```sql
+create table if not exists subscription_events (
+  id uuid primary key default gen_random_uuid(),
+  subscription_id uuid not null references subscriptions(id) on delete cascade,
+  event_type text not null check (event_type in ('paused', 'reactivated')),
+  event_date timestamptz not null default timezone('Asia/Jakarta', now())
+);
+
+alter table subscription_events enable row level security;
+
+create policy "User can view their own subscription events"
+on subscription_events
+for select
+using (
+  exists (
+    select 1 from subscriptions
+    where subscriptions.id = subscription_events.subscription_id
+    and (
+      subscriptions.user_id = (select auth.uid())
+      or exists (
+        select 1 from admin_roles where id = (select auth.uid())
+      )
+    )
+  )
+);
+
+create policy "User can insert events for their own subscriptions"
+on subscription_events
+for insert
+with check (
+  exists (
+    select 1 from subscriptions
+    where subscriptions.id = subscription_events.subscription_id
+    and (
+      subscriptions.user_id = (select auth.uid())
+      or exists (
+        select 1 from admin_roles where id = (select auth.uid())
+      )
+    )
+  )
+);
+```
+
+8. `resume_expired_subscription()` function
 > **Note:** This function is ran every midnight but you can run it manually as well for good meassure like the example below.
 ```sql
 -- Enable pg_cron
 create extension if not exists pg_cron;
 
--- Create a SQL function to update expired paused subscriptions
+create table if not exists cron_heartbeat (
+  id serial primary key,
+  ran_at timestamptz default now()
+);
+
+alter table cron_heartbeat enable row level security;
+
 create or replace function resume_expired_subscriptions()
-returns void as $$
+returns void
+security definer
+as $$
 begin
-  update subscriptions
-  set status = 'active',
-      pause_start = null,
-      pause_end = null
-  where status = 'paused'
-    and pause_end is not null
-    and pause_end <= (now() at time zone 'Asia/Jakarta')::date;
+  insert into cron_heartbeat default values;
+
+  with resumed as (
+    update subscriptions
+    set status = 'active',
+        pause_start = null,
+        pause_end = null
+    where status = 'paused'
+      and pause_end is not null
+      and pause_end <= (now() at time zone 'Asia/Jakarta')::date
+    returning id
+  )
+  insert into subscription_events (subscription_id, event_type, event_date)
+  select id, 'reactivated', timezone('Asia/Jakarta', now())
+  from resumed;
 end;
 $$ language plpgsql;
+
 
 -- Run the function daily
 select cron.schedule(
@@ -586,9 +644,50 @@ select cron.schedule(
   '0 0 * * *',  -- at midnight
   $$select resume_expired_subscriptions();$$
 );
+
+-- CLEAN UP CRON HEARTBEAT & JOB DETAILS
+create or replace function cleanup_old_cron_logs()
+returns void
+security definer
+as $$
+begin
+  delete from cron.job_run_details
+  where end_time < now() - interval '3 days';
+
+  delete from cron_heartbeat
+  where ran_at < now() - interval '3 days';
+end;
+$$ language plpgsql;
+
+-- Schedule it to run daily at 2 am
+select cron.schedule(
+  'cleanup_cron_logs_weekly',
+  '0 2 * * *',
+  $$select cleanup_old_cron_logs();$$
+);
 ```
 ```sql
 select * from resume_expired_subscriptions();
+```
+
+9. `monthly_mrr` table
+```sql
+create table if not exists monthly_mrr (
+  month text primary key, -- use '2025-07'
+  mrr numeric not null default 0,
+  active_subs int not null default 0
+);
+
+alter table monthly_mrr enable row level security;
+
+create policy "Admins can read MRR"
+on monthly_mrr
+for select
+using (
+  exists (
+    select 1 from admin_roles where id = (select auth.uid())
+  )
+);
 ```
 
 ### 5. Edge Functions
@@ -598,6 +697,8 @@ select * from resume_expired_subscriptions();
 - Click `Deploy a new function` via editor
 - In `index.ts` paste the following script
 - Change `your_dev_localhost_url` and `your_website_domain` to your actual domains
+
+1. `checkUniqueSignUp` function
 - Name your function `checkUniqueSignUp`
 - Deploy your function
 ```ts
@@ -645,6 +746,98 @@ serve(async (req)=>{
       details: error.message ?? String(error)
     }), {
       status: 400,
+      headers: corsHeaders
+    });
+  }
+});
+```
+
+2. `updateMRR` function
+```ts
+import { serve } from "https://deno.land/std@0.202.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://marimoria.github.io"
+];
+serve(async (req)=>{
+  const origin = req.headers.get("origin") ?? "";
+  const corsHeaders = {
+    "Access-Control-Allow-Origin": allowedOrigins.includes(origin) ? origin : "",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization, apikey, x-client-info",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Content-Type": "application/json"
+  };
+  if (req.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: corsHeaders
+    });
+  }
+  try {
+    const { type, price, date } = await req.json();
+    if (![
+      "create",
+      "pause",
+      "reactivate"
+    ].includes(type) || typeof price !== "number" || !date) {
+      return new Response(JSON.stringify({
+        error: "Invalid input"
+      }), {
+        status: 400,
+        headers: corsHeaders
+      });
+    }
+    const supabase = createClient(Deno.env.get("SUPABASE_URL"), Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"), {
+      global: {
+        headers: {
+          Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`
+        }
+      }
+    });
+    const month = date.slice(0, 7); // "2025-07"
+    const { data: existing, error: fetchError } = await supabase.from("monthly_mrr").select("mrr, active_subs").eq("month", month).maybeSingle();
+    if (fetchError && fetchError.code !== "PGRST116") {
+      return new Response(JSON.stringify({
+        error: fetchError.message
+      }), {
+        status: 500,
+        headers: corsHeaders
+      });
+    }
+    if (type === "create" || type === "reactivate") {
+      if (existing) {
+        await supabase.from("monthly_mrr").update({
+          mrr: existing.mrr + price,
+          active_subs: existing.active_subs + 1
+        }).eq("month", month);
+      } else {
+        await supabase.from("monthly_mrr").insert({
+          month,
+          mrr: price,
+          active_subs: 1
+        });
+      }
+    } else if (type === "pause") {
+      if (existing) {
+        await supabase.from("monthly_mrr").update({
+          mrr: existing.mrr - price,
+          active_subs: existing.active_subs - 1
+        }).eq("month", month);
+      }
+    }
+    return new Response(JSON.stringify({
+      success: true
+    }), {
+      status: 200,
+      headers: corsHeaders
+    });
+  } catch (error) {
+    return new Response(JSON.stringify({
+      error: "Server error",
+      details: error.message ?? String(error)
+    }), {
+      status: 500,
       headers: corsHeaders
     });
   }
