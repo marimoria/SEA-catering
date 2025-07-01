@@ -1,8 +1,8 @@
 <template>
     <div class="testimonials">
         <div class="background"></div>
-        <img v-if="viewport.w >= 1024" :src="getImageUrl('fork.svg')" alt="" class="fork" />
-        <img v-if="viewport.w >= 1024" :src="getImageUrl('spoon.svg')" alt="" class="spoon" />
+        <img :src="getImageUrl('fork.svg')" alt="" class="fork" />
+        <img :src="getImageUrl('spoon.svg')" alt="" class="spoon" />
 
         <navBar />
         <div class="testimonials--view_grid">

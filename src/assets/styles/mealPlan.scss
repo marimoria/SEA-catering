@@ -29,7 +29,6 @@
     opacity: 0.7;
 }
 
-// Dynamic plan section
 .meal_plan_panel {
     position: relative;
     display: flex;
@@ -167,7 +166,6 @@
     font-size: 1.2rem;
 }
 
-// Responsive overrides
 @media screen and (min-width: 1024px) {
     .meal_plan_panel {
         display: grid;

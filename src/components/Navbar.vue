@@ -18,7 +18,7 @@
                 <router-link v-if="!userLogged" class="sign_up" to="/signup">Sign Up</router-link>
 
                 <router-link v-if="userLogged && isAdmin" class="nav_name" to="/admin">
-                    Admin Dashboard
+                    Admin Board
                 </router-link>
                 <router-link v-else-if="userLogged" class="nav_name" to="/dashboard">
                     Dashboard
@@ -49,7 +49,7 @@
                     >
 
                     <router-link v-if="userLogged && isAdmin" class="nav_name" to="/admin">
-                        Admin Dashboard
+                        Admin Board
                     </router-link>
                     <router-link v-else-if="userLogged" class="nav_name" to="/dashboard">
                         Dashboard
@@ -213,10 +213,11 @@
         font-weight: 600;
     }
 
-    @media (min-width: 1000px) {
+    @media (min-width: 1125px) {
         .navbar {
             padding: 1rem 2rem 0 2rem;
         }
+
         .desktop-nav {
             display: flex;
             align-items: center;
@@ -243,5 +244,9 @@
         border-radius: 1em;
         background-image: linear-gradient(white, white), var(--second-gradient);
         background-clip: padding-box, border-box;
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 </style>

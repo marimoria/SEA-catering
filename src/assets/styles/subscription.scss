@@ -65,7 +65,7 @@
         position: relative;
 
         width: clamp(13em, 30vw, 17em);
-        height: clamp(15em, 35vw, 20rem);
+        height: clamp(16em, 35vw, 20rem);
 
         padding-bottom: clamp(1rem, 2vh, 2rem);
         padding-top: clamp(2.7em, 8vh, 4em);
@@ -298,9 +298,10 @@
 
     &--user_data {
         display: flex;
+        padding: 1em;
         flex-direction: column;
-        width: 75%;
         align-self: center;
+        align-items: center;
     }
 }
 

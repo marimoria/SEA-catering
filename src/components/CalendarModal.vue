@@ -7,7 +7,7 @@
 
             <div class="actions">
                 <button class="confirm_btn" @click="confirm">Confirm</button>
-                <button class="cancel_btn" @click="model = false">Cancel</button>
+                <button class="cancel_btn" @click="cancel">Cancel</button>
             </div>
         </div>
     </div>
@@ -23,6 +23,11 @@
         if (resumeDate) {
             model.value = false;
         }
+    }
+
+    function cancel() {
+        resumeDate.value = null;
+        model.value = false;
     }
 </script>
 

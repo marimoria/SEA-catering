@@ -37,9 +37,9 @@ export async function fetchProfile() {
 
         const { data: checkAdmin } = await supabase
             .from("admin_roles")
-            .select("*")
+            .select("id")
             .eq("id", authUser.id)
-            .single();
+            .maybeSingle();
 
         isAdmin.value = !!checkAdmin;
         profile.value = profileData;
