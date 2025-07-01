@@ -58,6 +58,7 @@
                         />
                     </div>
                     <div class="subs_panel--subs_viewer">
+                        <p v-if="!hasSubscriptions" class="no_subs">There are no subscriptions</p>
                         <SubscriptionCard
                             v-for="(sub, i) in filteredSubscriptions"
                             :key="sub.id"
@@ -69,7 +70,9 @@
                     </div>
                 </div>
 
-                <div class="graphs"></div>
+                <div class="metrics_content--graphs">
+                    <p class="graphs--title"></p>
+                </div>
             </section>
         </div>
 
