@@ -161,6 +161,8 @@
     }
 
     // pause subscription
+    const emitEvents = defineEmits(["paused", "deleted"]);
+
     const calendarVisible = inject("calendarVisible");
     const resumeDate = inject("resumeDate");
     const pausedSubId = inject("pausedSubId");
@@ -194,6 +196,7 @@
                 console.error("Failed to pause subscription:", error.message);
             }
 
+            emitEvents("paused");
             resumeDate.value = null;
             pausedSubId.value = null;
         }
@@ -203,8 +206,6 @@
     const delVisible = inject("delVisible");
     const delConfirm = inject("delConfirm");
     const delSubId = inject("delSubId");
-
-    const deletedEvent = defineEmits(["deleted"]);
 
     function showDel() {
         delVisible.value = true;
@@ -221,7 +222,7 @@
                 console.error("Failed to delete subscription:", error.message);
             }
 
-            deletedEvent("deleted", subscription.value.id);
+            emitEvents("deleted", subscription.value.id);
             delConfirm.value = false;
             delSubId.value = null;
         }

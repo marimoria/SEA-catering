@@ -197,6 +197,7 @@
     @media (min-width: 1024px) {
         flex-direction: row;
         align-items: stretch;
+        height: 100%;
     }
 
     &--subs_panel {
@@ -210,8 +211,11 @@
     }
 
     &--graphs {
+        display: flex;
+        flex-direction: column;
         flex: 1;
         min-height: 300px;
+        height: auto;
         background-color: #ffe7df;
         border-radius: 1rem;
         padding: 1rem;
@@ -231,7 +235,7 @@
         overflow-y: auto;
         gap: 1rem;
         padding-right: 0.5rem;
-        max-height: clamp(25em, 50vw, 35em);
+        max-height: clamp(25em, 50vw, 45em);
 
         .subscription_card {
             margin-bottom: 1rem;
@@ -281,5 +285,10 @@
 /* GRAPHS */
 .graphs {
     &--title {
+        font-weight: 600;
+        font-size: clamp(1.1rem, 50vw, 1.5rem);
+        margin-bottom: 1rem;
+        color: #333;
+        text-align: center;
     }
 }

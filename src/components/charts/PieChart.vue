@@ -4,9 +4,19 @@
 
 <script setup>
     import { Pie } from "vue-chartjs";
+    import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement } from "chart.js";
 
-    defineProps({
-        chartData: Object,
-        chartOptions: Object
+    const props = defineProps({
+        chartData: {
+            type: Object,
+            required: true
+        },
+        chartOptions: {
+            type: Object,
+            required: false,
+            default: () => ({})
+        }
     });
+
+    ChartJS.register(Title, Tooltip, Legend, ArcElement);
 </script>

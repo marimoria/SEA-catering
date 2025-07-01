@@ -28,19 +28,19 @@
             <section class="metrics_grid">
                 <p class="metrics_grid--title">Click to see the graph</p>
                 <div class="metrics">
-                    <div class="metric_card">
+                    <div @click="switchGraphs('newSubs')" class="metric_card">
                         <p class="metric_title">New Subscriptions</p>
                         <p class="metric_value">20</p>
                     </div>
-                    <div class="metric_card">
+                    <div @click="switchGraphs('mrr')" class="metric_card">
                         <p class="metric_title">MRR</p>
                         <p class="metric_value">Rp 20.000</p>
                     </div>
-                    <div class="metric_card">
+                    <div @click="switchGraphs('reactivations')" class="metric_card">
                         <p class="metric_title">Reactivations</p>
                         <p class="metric_value">3</p>
                     </div>
-                    <div class="metric_card">
+                    <div @click="switchGraphs('totalSubs')" class="metric_card">
                         <p class="metric_title">Total Subscriptions</p>
                         <p class="metric_value">{{ subscriptions.length }}</p>
                     </div>
@@ -65,13 +65,19 @@
                             v-model:subscription="subscriptions[i]"
                             :title="'Subscription ' + (i + 1)"
                             :index="i"
-                            @deleted="handleDelete"
+                            @deleted="handleDelete(sub.id)"
+                            @paused="fetchMetrics()"
                         />
                     </div>
                 </div>
 
                 <div class="metrics_content--graphs">
-                    <p class="graphs--title"></p>
+                    <p v-if="graphs.totalSubs" class="graphs--title">Total Subscriptions</p>
+                    <PieChart
+                        v-if="graphs.totalSubs && totalSubsData.datasets?.length"
+                        :chartData="totalSubsData"
+                        :chartOptions="totalSubsOption"
+                    />
                 </div>
             </section>
         </div>
@@ -90,9 +96,10 @@
     import SubscriptionCard from "../components/SubscriptionCard.vue";
     import CalendarModal from "../components/CalendarModal.vue";
     import DeleteConfirmModal from "../components/DeleteConfirmModal.vue";
+    import PieChart from "../components/charts/PieChart.vue";
 
     import { profile } from "../components/composables/useAuth";
-    import { getData } from "../components/composables/useSupabase";
+    import { supabase, getData } from "../components/composables/useSupabase";
     import { onMounted, computed, ref, provide } from "vue";
 
     const props = defineProps({
@@ -111,7 +118,8 @@
             "subscriptions",
             {},
             {
-                select: `*, subscription_items (id, meal_plan_id, meal_types, delivery_days, created_at)`
+                select: `*, subscription_items (id, meal_plan_id, meal_types, delivery_days, created_at)`,
+                orderBy: { column: "created_at", ascending: false }
             }
         );
 
@@ -147,6 +155,7 @@
 
     function handleDelete(id) {
         subscriptions.value = subscriptions.value.filter((sub) => sub.id !== id);
+        fetchMetrics();
     }
 
     // filter feature
@@ -159,7 +168,63 @@
         return subscriptions.value.filter((sub) => sub.id === subscriptionFilter.value.trim());
     });
 
+    // graphs
+    const graphs = ref({
+        newSubs: false,
+        mrr: false,
+        reactivations: false,
+        totalSubs: true
+    });
+
+    function switchGraphs(graphName) {
+        for (const key in graphs.value) {
+            graphs.value[key] = false;
+        }
+
+        graphs.value[graphName] = true;
+    }
+
+    const totalSubsData = ref({});
+    const totalSubsOption = ref({});
+
+    function fetchMetrics() {
+        // Total subscriptions data, always show first by default
+        const totalSubActive = subscriptions.value.filter((sub) => sub.status == "active");
+        const totalSubPaused = subscriptions.value.filter((sub) => sub.status == "paused");
+        totalSubsData.value = {
+            labels: ["Active", "Paused"],
+            datasets: [
+                {
+                    label: "Total Subscriptions",
+                    data: [totalSubActive.length, totalSubPaused.length],
+                    backgroundColor: ["#8ebe3f", "#f28c28"],
+                    hoverOffset: 4
+                }
+            ]
+        };
+        totalSubsOption.value = {
+            responsive: true
+        };
+
+        if (!startDate || !endDate) {
+            return;
+        }
+    }
+
     onMounted(async () => {
         await loadSubscriptions();
+        fetchMetrics();
+
+        supabase
+            .channel("realtime:subscriptions")
+            .on(
+                "postgres_changes",
+                { event: "INSERT", schema: "public", table: "subscriptions" },
+                async () => {
+                    await loadSubscriptions();
+                    fetchMetrics();
+                }
+            )
+            .subscribe();
     });
 </script>
