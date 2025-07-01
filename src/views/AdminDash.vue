@@ -38,7 +38,7 @@
                     </div>
                     <div @click="switchGraphs('reactivations')" class="metric_card">
                         <p class="metric_title">Reactivations</p>
-                        <p class="metric_value">3</p>
+                        <p class="metric_value">{{ reactivationsCountTotal }}</p>
                     </div>
                     <div @click="switchGraphs('totalSubs')" class="metric_card">
                         <p class="metric_title">Total Subscriptions</p>
@@ -84,6 +84,13 @@
                         v-if="graphs.newSubs && newSubsData.datasets?.length"
                         :chartData="newSubsData"
                         :chartOptions="newSubsOption"
+                    />
+
+                    <p v-if="graphs.reactivations" class="graphs--title">Reactivations</p>
+                    <BarChart
+                        v-if="graphs.reactivations && reactivationData.datasets?.length"
+                        :chartData="reactivationData"
+                        :chartOptions="reactivationOption"
                     />
                 </div>
             </section>
@@ -144,6 +151,25 @@
         subscriptions.value = subsData || [];
     }
 
+    const subscriptionEvents = ref([]);
+
+    async function loadSubscriptionEvents() {
+        const { data: eventsData, error: eventsError } = await getData(
+            "subscription_events",
+            {},
+            {
+                orderBy: { column: "event_date", ascending: false }
+            }
+        );
+
+        if (eventsError) {
+            console.error("Error loading subs events:", eventsError);
+            return;
+        }
+
+        subscriptionEvents.value = eventsData;
+    }
+
     // pause
     const calendarVisible = ref(false);
     const resumeDate = ref(null);
@@ -199,6 +225,10 @@
     const newSubsData = ref({});
     const newSubsOption = ref({});
     const newSubsCountTotal = ref(0);
+
+    const reactivationData = ref({});
+    const reactivationOption = ref({});
+    const reactivationsCountTotal = ref(0);
 
     function fetchMetrics() {
         // TOTAL SUBSCRIPTIONS, always show first by default
@@ -303,10 +333,85 @@
                 }
             }
         };
+
+        // REACTIVATIONS
+        const startReactivation = new Date(startDate.value);
+        startReactivation.setHours(0, 0, 0, 0);
+
+        const endReactivation = new Date(endDate.value);
+        endReactivation.setHours(23, 59, 59, 999);
+
+        // all events within range
+        const eventsRange = subscriptionEvents.value.filter((subEvent) => {
+            const eventDate = new Date(subEvent.event_date);
+            return eventDate >= startReactivation && eventDate <= endReactivation;
+        });
+
+        const reactivationLabels = [];
+        const currentReactLabel = new Date(startReactivation);
+
+        while (currentReactLabel <= endReactivation) {
+            reactivationLabels.push(
+                new Date(currentReactLabel).toLocaleDateString("id-ID", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                })
+            );
+            currentReactLabel.setDate(currentReactLabel.getDate() + 1);
+        }
+
+        // count events per label
+        const reactivationCounts = reactivationLabels.map((label) => {
+            return eventsRange.filter((event) => {
+                const eventDate = new Date(event.event_date);
+                const formattedEventDate = eventDate.toLocaleDateString("id-ID", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                });
+                return formattedEventDate === label;
+            }).length;
+        });
+
+        if (reactivationsCountTotal.value != 0) {
+            reactivationsCountTotal.value = 0;
+        }
+
+        reactivationCounts.forEach((count) => {
+            reactivationsCountTotal.value += count;
+        });
+
+        reactivationData.value = {
+            labels: reactivationLabels,
+            datasets: [
+                {
+                    label: "Reactivations",
+                    data: reactivationCounts,
+                    backgroundColor: reactivationCounts.map(
+                        (_, i) => barColors[i % barColors.length]
+                    )
+                }
+            ]
+        };
+
+        reactivationOption.value = {
+            responsive: true,
+            scales: {
+                y: {
+                    type: "linear",
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        };
     }
 
     onMounted(async () => {
         await loadSubscriptions();
+        await loadSubscriptionEvents();
         fetchMetrics();
 
         useRealtimeSubs(async () => {
