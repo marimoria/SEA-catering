@@ -171,7 +171,7 @@
     }
 
     // pause subscription
-    const emitEvents = defineEmits(["paused", "deleted"]);
+    const emitEvents = defineEmits(["paused", "deleted", "reactivated"]);
 
     const calendarVisible = inject("calendarVisible");
     const resumeDate = inject("resumeDate");
@@ -270,6 +270,7 @@
             return;
         }
 
+        emitEvents("reactivated");
         subscription.value.status = "active";
         subscription.value.pause_start = null;
         subscription.value.pause_end = null;

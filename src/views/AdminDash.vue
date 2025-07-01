@@ -67,6 +67,7 @@
                             :index="i"
                             @deleted="handleDelete(sub.id)"
                             @paused="fetchMetrics()"
+                            @reactivated="fetchMetrics()"
                         />
                     </div>
                 </div>
@@ -230,8 +231,13 @@
     const reactivationOption = ref({});
     const reactivationsCountTotal = ref(0);
 
-    function fetchMetrics() {
-        // TOTAL SUBSCRIPTIONS, always show first by default
+    async function fetchMetrics() {
+        fetchTotalSubsMetrics();
+        fetchNewSubsMetrics();
+        await fetchReactivationMetrics();
+    }
+
+    function fetchTotalSubsMetrics() {
         const totalSubActive = subscriptions.value.filter((sub) => sub.status == "active");
         const totalSubPaused = subscriptions.value.filter((sub) => sub.status == "paused");
 
@@ -246,22 +252,23 @@
                 }
             ]
         };
+
         totalSubsOption.value = {
             responsive: true
         };
+    }
 
+    function fetchNewSubsMetrics() {
         if (!startDate || !endDate) {
             return;
         }
 
-        // NEW SUBSCRIPTIONS
         const startNewSub = new Date(startDate.value);
         startNewSub.setHours(0, 0, 0, 0);
 
         const endNewSub = new Date(endDate.value);
         endNewSub.setHours(23, 59, 59, 999);
 
-        // all subs within range
         const newSubsRange = subscriptions.value.filter((sub) => {
             const createdAt = new Date(sub.created_at);
             return createdAt >= startNewSub && createdAt <= endNewSub;
@@ -281,7 +288,6 @@
             currentLabel.setDate(currentLabel.getDate() + 1);
         }
 
-        // count subs per label
         const newSubsCounts = newSubsLabels.map((label) => {
             return newSubsRange.filter((sub) => {
                 const createdDate = new Date(sub.created_at);
@@ -302,13 +308,7 @@
             newSubsCountTotal.value += count;
         });
 
-        const barColors = [
-            "#f28c28", // sunset orange
-            "#d54f22", // paprika red
-            "#8ebe3f", // lime leaf
-            "#4f9447", // fresh basil
-            "#847ddd" // pink
-        ];
+        const barColors = ["#f28c28", "#d54f22", "#8ebe3f", "#4f9447", "#847ddd"];
 
         newSubsData.value = {
             labels: newSubsLabels,
@@ -333,15 +333,17 @@
                 }
             }
         };
+    }
 
-        // REACTIVATIONS
+    async function fetchReactivationMetrics() {
+        await loadSubscriptionEvents();
+
         const startReactivation = new Date(startDate.value);
         startReactivation.setHours(0, 0, 0, 0);
 
         const endReactivation = new Date(endDate.value);
         endReactivation.setHours(23, 59, 59, 999);
 
-        // all events within range
         const eventsRange = subscriptionEvents.value.filter((subEvent) => {
             const eventDate = new Date(subEvent.event_date);
             return eventDate >= startReactivation && eventDate <= endReactivation;
@@ -361,7 +363,6 @@
             currentReactLabel.setDate(currentReactLabel.getDate() + 1);
         }
 
-        // count events per label
         const reactivationCounts = reactivationLabels.map((label) => {
             return eventsRange.filter((event) => {
                 const eventDate = new Date(event.event_date);
@@ -381,6 +382,8 @@
         reactivationCounts.forEach((count) => {
             reactivationsCountTotal.value += count;
         });
+
+        const barColors = ["#f28c28", "#d54f22", "#8ebe3f", "#4f9447", "#847ddd"];
 
         reactivationData.value = {
             labels: reactivationLabels,
@@ -411,12 +414,11 @@
 
     onMounted(async () => {
         await loadSubscriptions();
-        await loadSubscriptionEvents();
-        fetchMetrics();
+        await fetchMetrics();
 
         useRealtimeSubs(async () => {
             await loadSubscriptions();
-            fetchMetrics();
+            await fetchMetrics();
         });
     });
 </script>
