@@ -34,7 +34,7 @@
                     </div>
                     <div @click="switchGraphs('mrr')" class="metric_card">
                         <p class="metric_title">MRR</p>
-                        <p class="metric_value">Rp 20.000</p>
+                        <p class="metric_value">Rp{{ mrrTotal.toLocaleString("id-ID") }}</p>
                     </div>
                     <div @click="switchGraphs('reactivations')" class="metric_card">
                         <p class="metric_title">Reactivations</p>
@@ -93,6 +93,13 @@
                         :chartData="reactivationData"
                         :chartOptions="reactivationOption"
                     />
+
+                    <p v-if="graphs.mrr" class="graphs--title">Monthly Recurring Revenue</p>
+                    <LineChart
+                        v-if="graphs.mrr && mrrData.datasets?.length"
+                        :chartData="mrrData"
+                        :chartOptions="mrrOption"
+                    />
                 </div>
             </section>
         </div>
@@ -113,6 +120,7 @@
     import DeleteConfirmModal from "../components/DeleteConfirmModal.vue";
     import PieChart from "../components/charts/PieChart.vue";
     import BarChart from "../components/charts/BarChart.vue";
+    import LineChart from "../components/charts/LineChart.vue";
 
     import { profile } from "../components/composables/useAuth";
     import { getData } from "../components/composables/useSupabase";
@@ -231,10 +239,16 @@
     const reactivationOption = ref({});
     const reactivationsCountTotal = ref(0);
 
+    const mrrData = ref({});
+    const mrrOption = ref({});
+    const mrrTotal = ref(0);
+
     async function fetchMetrics() {
+        await loadSubscriptions();
         fetchTotalSubsMetrics();
         fetchNewSubsMetrics();
         await fetchReactivationMetrics();
+        await fetchMonthlyMRR();
     }
 
     function fetchTotalSubsMetrics() {
@@ -412,12 +426,79 @@
         };
     }
 
+    async function fetchMonthlyMRR() {
+        if (!startDate.value || !endDate.value) return;
+
+        const startMonth = startDate.value.slice(0, 7); // 2025-06
+        const endMonth = endDate.value.slice(0, 7);
+
+        console.log(startMonth, endMonth);
+
+        const { data, error } = await getData(
+            "monthly_mrr",
+            {
+                month: {
+                    gte: startMonth,
+                    lte: endMonth
+                }
+            },
+            {
+                orderBy: { column: "month", ascending: true }
+            }
+        );
+
+        console.log("Fetched monthly_mrr:", data);
+        console.log(startDate.value);
+
+        if (error) {
+            console.error("Error fetching MRR data:", error.message);
+            return;
+        }
+
+        const labels = data.map((row) =>
+            // Add a fake date to turn into string (2025-06-1) -> Juni 2025
+            new Date(row.month + "-01").toLocaleDateString("id-ID", {
+                month: "long",
+                year: "numeric"
+            })
+        );
+
+        const mrrValues = data.map((row) => row.mrr);
+
+        let totalMrr = 0;
+
+        for (const value of mrrValues) {
+            totalMrr += value;
+        }
+
+        if (mrrTotal.value != 0) {
+            mrrTotal.value = 0;
+        }
+
+        mrrTotal.value = totalMrr;
+
+        mrrData.value = {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Monthly Recurring Revenue",
+                    data: mrrValues,
+                    borderColor: "#8ebe3f",
+                    fill: false,
+                    tension: 0.1
+                }
+            ]
+        };
+
+        mrrOption.value = {
+            responsive: true
+        };
+    }
+
     onMounted(async () => {
-        await loadSubscriptions();
         await fetchMetrics();
 
         useRealtimeSubs(async () => {
-            await loadSubscriptions();
             await fetchMetrics();
         });
     });

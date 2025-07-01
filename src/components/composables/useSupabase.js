@@ -2,11 +2,19 @@ import { supabase } from "../../lib/supabaseClient";
 
 export async function getData(table, filters = {}, options = {}) {
     const selectFields = options.select ?? "*";
-
     let query = supabase.from(table).select(selectFields);
 
     for (const [key, value] of Object.entries(filters)) {
-        query = query.eq(key, value);
+        if (typeof value === "object" && value !== null) {
+            if (value.gte !== undefined) {
+                query = query.gte(key, value.gte);
+            }
+            if (value.lte !== undefined) {
+                query = query.lte(key, value.lte);
+            }
+        } else {
+            query = query.eq(key, value);
+        }
     }
 
     if (options.orderBy) {

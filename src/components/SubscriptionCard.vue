@@ -87,7 +87,13 @@
 
 <script setup>
     import { ref, computed, onMounted, inject, watch } from "vue";
-    import { getData, updateData, deleteData, insertData } from "./composables/useSupabase";
+    import {
+        getData,
+        updateData,
+        deleteData,
+        insertData,
+        supabase
+    } from "./composables/useSupabase";
     import { isAdmin, profile } from "./composables/useAuth";
 
     const props = defineProps({
@@ -198,6 +204,14 @@
                 }
             );
 
+            await supabase.functions.invoke("updateMRR", {
+                body: {
+                    type: "pause",
+                    price: subscription.value.total_price,
+                    date: subscription.value.created_at
+                }
+            });
+
             if (error) {
                 console.error("Failed to pause subscription:", error.message);
                 return;
@@ -228,6 +242,14 @@
     watch([delVisible, delConfirm], async ([visible, confirm]) => {
         if (!visible && confirm && delSubId.value === subscription.value.id) {
             const { error } = await deleteData("subscriptions", { id: subscription.value.id });
+
+            await supabase.functions.invoke("updateMRR", {
+                body: {
+                    type: "cancel",
+                    price: subscription.value.total_price,
+                    date: subscription.value.created_at
+                }
+            });
 
             if (error) {
                 console.error("Failed to delete subscription:", error.message);
@@ -263,6 +285,14 @@
             subscription_id: subscription.value.id,
             event_type: "reactivated",
             event_date: now
+        });
+
+        await supabase.functions.invoke("updateMRR", {
+            body: {
+                type: "reactivate",
+                price: subscription.value.total_price,
+                date: subscription.value.created_at
+            }
         });
 
         if (eventError) {

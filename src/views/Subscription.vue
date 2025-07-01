@@ -223,7 +223,12 @@
     import MealSelector from "../components/MealSelector.vue";
     import DaySelector from "../components/DaySelector.vue";
     import LoadingSpinner from "../components/LoadingSpinner.vue";
-    import { getData, insertData, getImageUrl } from "../components/composables/useSupabase";
+    import {
+        getData,
+        insertData,
+        getImageUrl,
+        supabase
+    } from "../components/composables/useSupabase";
     import { user, profile, updateAllergies } from "../components/composables/useAuth";
 
     const props = defineProps({
@@ -421,7 +426,7 @@
             return;
         }
 
-        const { data: latestSub, error: getSubError } = await getData(
+        const { data: latestSubs, error: getSubError } = await getData(
             "subscriptions",
             { user_id: user.value.id },
             {
@@ -435,11 +440,11 @@
             return;
         }
 
-        const latestSubs = latestSub?.[0];
+        const latestSub = latestSubs?.[0];
 
         // Insert each chosen meal plan as a subscription_item
         const itemsPayload = chosenPlans.value.map((planId) => ({
-            subscription_id: latestSubs.id,
+            subscription_id: latestSub.id,
             meal_plan_id: planId,
             meal_types: chosenTypes.value[planId],
             delivery_days: chosenDays.value[planId],
@@ -451,6 +456,14 @@
         );
 
         const { error: itemsError } = await insertData("subscription_items", cleanItems);
+
+        await supabase.functions.invoke("updateMRR", {
+            body: {
+                type: "create",
+                price: totalPrice.value,
+                date: new Date().toISOString()
+            }
+        });
 
         if (!!itemsError) {
             isLoading.value = false;
