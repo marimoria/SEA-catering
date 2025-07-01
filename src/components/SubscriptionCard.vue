@@ -23,22 +23,32 @@
                     <p v-if="subscription.status == 'paused'">
                         <strong>⏯️ Paused until:</strong> {{ formatDate(subscription.pause_end) }}
                     </p>
-                    <div v-if="isAdmin" class="user_detail_buttons">
+                    <div class="info_block_buttons">
                         <button @click="copySubId" class="action_btn copy_btn">
                             {{ !!copySubMsg ? copySubMsg : "Copy sub id" }}
                         </button>
-                        <button @click="copyUserId" class="action_btn copy_btn">
+                        <button v-if="isAdmin" @click="copyUserId" class="action_btn copy_btn">
                             {{ !!copyUserMsg ? copyUserMsg : "Copy user id" }}
                         </button>
                     </div>
                 </div>
 
                 <div class="action_buttons">
-                    <button @click="showCalendar" class="action_btn pause_btn">Pause</button>
-                    <button @click="showDel" class="action_btn cancel_btn">Cancel</button>
-                    <button v-if="!isAdmin" @click="copySubId" class="action_btn copy_btn">
-                        {{ !!copySubMsg ? copySubMsg : "Copy sub id" }}
+                    <button
+                        v-if="subscription.status == 'active'"
+                        @click="showCalendar"
+                        class="action_btn pause_btn"
+                    >
+                        Pause
                     </button>
+                    <button
+                        v-if="subscription.status == 'paused'"
+                        @click="resumeSubscription"
+                        class="action_btn pause_btn"
+                    >
+                        {{ !!copySubMsg ? copySubMsg : "Resume" }}
+                    </button>
+                    <button @click="showDel" class="action_btn cancel_btn">Cancel</button>
                 </div>
             </div>
 
@@ -77,7 +87,7 @@
 
 <script setup>
     import { ref, computed, onMounted, inject, watch } from "vue";
-    import { getData, updateData, deleteData } from "./composables/useSupabase";
+    import { getData, updateData, deleteData, insertData } from "./composables/useSupabase";
     import { isAdmin, profile } from "./composables/useAuth";
 
     const props = defineProps({
@@ -178,10 +188,6 @@
         if (!visible && date && pausedSubId.value === subscription.value.id) {
             const now = new Date().toISOString();
 
-            subscription.value.status = "paused";
-            subscription.value.pause_start = now;
-            subscription.value.pause_end = date;
-
             const { error } = await updateData(
                 "subscriptions",
                 { id: subscription.value.id },
@@ -194,7 +200,12 @@
 
             if (error) {
                 console.error("Failed to pause subscription:", error.message);
+                return;
             }
+
+            subscription.value.status = "paused";
+            subscription.value.pause_start = now;
+            subscription.value.pause_end = date;
 
             emitEvents("paused");
             resumeDate.value = null;
@@ -220,6 +231,7 @@
 
             if (error) {
                 console.error("Failed to delete subscription:", error.message);
+                return;
             }
 
             emitEvents("deleted", subscription.value.id);
@@ -227,6 +239,41 @@
             delSubId.value = null;
         }
     });
+
+    // Resume paused subscriptions
+    async function resumeSubscription() {
+        const { error } = await updateData(
+            "subscriptions",
+            { id: subscription.value.id },
+            {
+                status: "active",
+                pause_start: null,
+                pause_end: null
+            }
+        );
+
+        if (error) {
+            console.error("Failed to reactivate subscription:", error.message);
+            return;
+        }
+
+        const now = new Date().toISOString();
+
+        const { error: eventError } = await insertData("subscription_events", {
+            subscription_id: subscription.value.id,
+            event_type: "reactivated",
+            event_date: now
+        });
+
+        if (eventError) {
+            console.error("Failed to log reactivate subscription:", eventError.message);
+            return;
+        }
+
+        subscription.value.status = "active";
+        subscription.value.pause_start = null;
+        subscription.value.pause_end = null;
+    }
 
     // Get user details
     const subUser = ref({});
@@ -324,13 +371,13 @@
     }
 
     .action_buttons,
-    .user_detail_buttons {
+    .info_block_buttons {
         display: flex;
         flex-direction: row;
         gap: 0.5rem;
     }
 
-    .user_detail_buttons {
+    .info_block_buttons {
         margin-top: 10px;
     }
 
