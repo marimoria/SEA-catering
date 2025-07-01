@@ -30,7 +30,7 @@
                 <div class="metrics">
                     <div @click="switchGraphs('newSubs')" class="metric_card">
                         <p class="metric_title">New Subscriptions</p>
-                        <p class="metric_value">20</p>
+                        <p class="metric_value">{{ newSubsCountTotal }}</p>
                     </div>
                     <div @click="switchGraphs('mrr')" class="metric_card">
                         <p class="metric_title">MRR</p>
@@ -78,6 +78,13 @@
                         :chartData="totalSubsData"
                         :chartOptions="totalSubsOption"
                     />
+
+                    <p v-if="graphs.newSubs" class="graphs--title">Total Subscriptions</p>
+                    <BarChart
+                        v-if="graphs.newSubs && newSubsData.datasets?.length"
+                        :chartData="newSubsData"
+                        :chartOptions="newSubsOption"
+                    />
                 </div>
             </section>
         </div>
@@ -97,9 +104,11 @@
     import CalendarModal from "../components/CalendarModal.vue";
     import DeleteConfirmModal from "../components/DeleteConfirmModal.vue";
     import PieChart from "../components/charts/PieChart.vue";
+    import BarChart from "../components/charts/BarChart.vue";
 
     import { profile } from "../components/composables/useAuth";
-    import { supabase, getData } from "../components/composables/useSupabase";
+    import { getData } from "../components/composables/useSupabase";
+    import { useRealtimeSubs } from "../components/composables/useRealTimeSub";
     import { onMounted, computed, ref, provide } from "vue";
 
     const props = defineProps({
@@ -187,10 +196,15 @@
     const totalSubsData = ref({});
     const totalSubsOption = ref({});
 
+    const newSubsData = ref({});
+    const newSubsOption = ref({});
+    const newSubsCountTotal = ref(0);
+
     function fetchMetrics() {
-        // Total subscriptions data, always show first by default
+        // TOTAL SUBSCRIPTIONS, always show first by default
         const totalSubActive = subscriptions.value.filter((sub) => sub.status == "active");
         const totalSubPaused = subscriptions.value.filter((sub) => sub.status == "paused");
+
         totalSubsData.value = {
             labels: ["Active", "Paused"],
             datasets: [
@@ -209,22 +223,95 @@
         if (!startDate || !endDate) {
             return;
         }
+
+        // NEW SUBSCRIPTIONS
+        const startNewSub = new Date(startDate.value);
+        startNewSub.setHours(0, 0, 0, 0);
+
+        const endNewSub = new Date(endDate.value);
+        endNewSub.setHours(23, 59, 59, 999);
+
+        // all subs within range
+        const newSubsRange = subscriptions.value.filter((sub) => {
+            const createdAt = new Date(sub.created_at);
+            return createdAt >= startNewSub && createdAt <= endNewSub;
+        });
+
+        const newSubsLabels = [];
+        const currentLabel = new Date(startNewSub);
+
+        while (currentLabel <= endNewSub) {
+            newSubsLabels.push(
+                new Date(currentLabel).toLocaleDateString("id-ID", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                })
+            );
+            currentLabel.setDate(currentLabel.getDate() + 1);
+        }
+
+        // count subs per label
+        const newSubsCounts = newSubsLabels.map((label) => {
+            return newSubsRange.filter((sub) => {
+                const createdDate = new Date(sub.created_at);
+                const formattedCreatedDate = createdDate.toLocaleDateString("id-ID", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                });
+                return formattedCreatedDate === label;
+            }).length;
+        });
+
+        if (newSubsCountTotal.value != 0) {
+            newSubsCountTotal.value = 0;
+        }
+
+        newSubsCounts.forEach((count) => {
+            newSubsCountTotal.value += count;
+        });
+
+        const barColors = [
+            "#f28c28", // sunset orange
+            "#d54f22", // paprika red
+            "#8ebe3f", // lime leaf
+            "#4f9447", // fresh basil
+            "#847ddd" // pink
+        ];
+
+        newSubsData.value = {
+            labels: newSubsLabels,
+            datasets: [
+                {
+                    label: "New subscriptions",
+                    data: newSubsCounts,
+                    backgroundColor: newSubsCounts.map((_, i) => barColors[i % barColors.length])
+                }
+            ]
+        };
+
+        newSubsOption.value = {
+            responsive: true,
+            scales: {
+                y: {
+                    type: "linear",
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        };
     }
 
     onMounted(async () => {
         await loadSubscriptions();
         fetchMetrics();
 
-        supabase
-            .channel("realtime:subscriptions")
-            .on(
-                "postgres_changes",
-                { event: "INSERT", schema: "public", table: "subscriptions" },
-                async () => {
-                    await loadSubscriptions();
-                    fetchMetrics();
-                }
-            )
-            .subscribe();
+        useRealtimeSubs(async () => {
+            await loadSubscriptions();
+            fetchMetrics();
+        });
     });
 </script>
