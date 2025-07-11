@@ -64,7 +64,7 @@
                         <p v-if="successMessage" class="success_message">✅ {{ successMessage }}</p>
                     </form>
                     <p class="nav_message">
-                        Don’t have an account?
+                        Don't have an account?
                         <router-link to="/signup">Sign Up Here</router-link>
                     </p>
                 </div>
@@ -78,13 +78,14 @@
 </style>
 
 <script setup>
-    import Navbar from "../components/Navbar.vue";
     import { useRouter } from "vue-router";
     import { ref, onMounted } from "vue";
     import { handleLogin } from "../components/composables/useAuth";
     import { useParallax } from "../components/composables/useParallax";
     import { getImageUrl } from "../components/composables/useSupabase";
+
     import LoadingSpinner from "../components/LoadingSpinner.vue";
+    import Navbar from "../components/Navbar.vue";
 
     const props = defineProps({
         viewport: Object,
@@ -97,6 +98,7 @@
 
     const email = ref("");
     const password = ref("");
+
     const successMessage = ref("");
     const errorMessage = ref("");
 
@@ -110,8 +112,9 @@
             password: password.value
         });
 
+        isLoading.value = false;
+
         if (result.success) {
-            isLoading.value = false;
             successMessage.value = result.message;
 
             email.value = "";
@@ -119,7 +122,6 @@
 
             router.push("/");
         } else {
-            isLoading.value = false;
             errorMessage.value = result.error;
         }
     }

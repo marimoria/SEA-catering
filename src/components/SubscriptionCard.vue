@@ -43,7 +43,7 @@
                     </button>
                     <button
                         v-if="subscription.status == 'paused'"
-                        @click="resumeSubscription"
+                        @click="resumeSubscription(subscription, emitEvents)"
                         class="action_btn pause_btn"
                     >
                         {{ !!copySubMsg ? copySubMsg : "Resume" }}
@@ -86,14 +86,9 @@
 </template>
 
 <script setup>
-    import { ref, computed, onMounted, inject, watch } from "vue";
-    import {
-        getData,
-        updateData,
-        deleteData,
-        insertData,
-        supabase
-    } from "./composables/useSupabase";
+    import { ref, computed, onMounted, inject } from "vue";
+    import { resumeSubscription, watchToPause, watchToDelete } from "./composables/useSubscription";
+    import { getData } from "./composables/useSupabase";
     import { isAdmin, profile } from "./composables/useAuth";
 
     const props = defineProps({
@@ -190,42 +185,7 @@
     }
 
     // Watch resumeDate when modal closes
-    watch([calendarVisible, resumeDate], async ([visible, date]) => {
-        if (!visible && date && pausedSubId.value === subscription.value.id) {
-            const now = new Date().toISOString();
-
-            const { error } = await updateData(
-                "subscriptions",
-                { id: subscription.value.id },
-                {
-                    status: "paused",
-                    pause_start: now,
-                    pause_end: date
-                }
-            );
-
-            await supabase.functions.invoke("updateMRR", {
-                body: {
-                    type: "pause",
-                    price: subscription.value.total_price,
-                    date: subscription.value.created_at
-                }
-            });
-
-            if (error) {
-                console.error("Failed to pause subscription:", error.message);
-                return;
-            }
-
-            subscription.value.status = "paused";
-            subscription.value.pause_start = now;
-            subscription.value.pause_end = date;
-
-            emitEvents("paused");
-            resumeDate.value = null;
-            pausedSubId.value = null;
-        }
-    });
+    watchToPause(calendarVisible, resumeDate, subscription, pausedSubId, emitEvents);
 
     // delete subscription
     const delVisible = inject("delVisible");
@@ -239,72 +199,7 @@
     }
 
     // Watch delConfirm when modal closes
-    watch([delVisible, delConfirm], async ([visible, confirm]) => {
-        if (!visible && confirm && delSubId.value === subscription.value.id) {
-            const { error } = await deleteData("subscriptions", { id: subscription.value.id });
-
-            await supabase.functions.invoke("updateMRR", {
-                body: {
-                    type: "cancel",
-                    price: subscription.value.total_price,
-                    date: subscription.value.created_at
-                }
-            });
-
-            if (error) {
-                console.error("Failed to delete subscription:", error.message);
-                return;
-            }
-
-            emitEvents("deleted", subscription.value.id);
-            delConfirm.value = false;
-            delSubId.value = null;
-        }
-    });
-
-    // Resume paused subscriptions
-    async function resumeSubscription() {
-        const { error } = await updateData(
-            "subscriptions",
-            { id: subscription.value.id },
-            {
-                status: "active",
-                pause_start: null,
-                pause_end: null
-            }
-        );
-
-        if (error) {
-            console.error("Failed to reactivate subscription:", error.message);
-            return;
-        }
-
-        const now = new Date().toISOString();
-
-        const { error: eventError } = await insertData("subscription_events", {
-            subscription_id: subscription.value.id,
-            event_type: "reactivated",
-            event_date: now
-        });
-
-        await supabase.functions.invoke("updateMRR", {
-            body: {
-                type: "reactivate",
-                price: subscription.value.total_price,
-                date: subscription.value.created_at
-            }
-        });
-
-        if (eventError) {
-            console.error("Failed to log reactivate subscription:", eventError.message);
-            return;
-        }
-
-        emitEvents("reactivated");
-        subscription.value.status = "active";
-        subscription.value.pause_start = null;
-        subscription.value.pause_end = null;
-    }
+    watchToDelete(delVisible, delConfirm, subscription, delSubId, emitEvents);
 
     // Get user details
     const subUser = ref({});

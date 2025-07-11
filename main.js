@@ -11,7 +11,6 @@ async function initApp() {
     const app = createApp(App);
     app.use(router).mount("#app");
 
-    // Set correct viewport height
     function setVH() {
         const vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty("--vh", `${vh}px`);

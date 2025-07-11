@@ -15,7 +15,7 @@
                         >
                             <img :src="getImageUrl(plan.hero_image)" class="recipe--image" />
                             <p class="recipe--name">{{ capitalize(plan.title) + " Plan" }}</p>
-                            <p id="price_diet" class="recipe--price">
+                            <p class="recipe--price">
                                 <span
                                     class="bigger_size"
                                     :class="`highlight_${plan.title.toLowerCase()}`"
@@ -195,7 +195,16 @@
                                 () => {
                                     showAllergyPrompt = false;
                                     hasConfirmedAllergy = true;
-                                    proceedWithSubmission();
+                                    insertSubscription(
+                                        user,
+                                        totalPrice,
+                                        isLoading,
+                                        errorMessage,
+                                        successMessage,
+                                        chosenPlans,
+                                        chosenTypes,
+                                        chosenDays
+                                    );
                                 }
                             "
                         >
@@ -219,17 +228,15 @@
 
 <script setup>
     import { ref, computed, onMounted } from "vue";
+    import { sanitizeUsername, sanitizePhone } from "@/components/composables/useSanitize";
+    import { user, profile, updateAllergies } from "../components/composables/useAuth";
+    import { insertSubscription } from "../components/composables/useSubscription";
+    import { getData, getImageUrl } from "../components/composables/useSupabase";
+
     import Navbar from "../components/Navbar.vue";
     import MealSelector from "../components/MealSelector.vue";
     import DaySelector from "../components/DaySelector.vue";
     import LoadingSpinner from "../components/LoadingSpinner.vue";
-    import {
-        getData,
-        insertData,
-        getImageUrl,
-        supabase
-    } from "../components/composables/useSupabase";
-    import { user, profile, updateAllergies } from "../components/composables/useAuth";
 
     const props = defineProps({
         viewport: Object,
@@ -344,16 +351,6 @@
         return total;
     });
 
-    function sanitizeUsername(e) {
-        // Replace anything that's NOT a-z, 0-9, _ or .
-        username.value = e.target.value.replace(/[^a-zA-Z0-9_.]/g, "").toLowerCase();
-    }
-
-    function sanitizePhone(e) {
-        // Only allow numbers and +
-        userPhone.value = e.target.value.replace(/[^\d+]/g, "");
-    }
-
     function checkSubsData() {
         const userLogged = computed(() => !!user.value);
         isLoading.value = true;
@@ -390,7 +387,16 @@
             return;
         }
 
-        proceedWithSubmission();
+        insertSubscription(
+            user,
+            totalPrice,
+            isLoading,
+            errorMessage,
+            successMessage,
+            chosenPlans,
+            chosenTypes,
+            chosenDays
+        );
     }
 
     async function updateAllergyAndSubmit() {
@@ -406,72 +412,16 @@
         hasConfirmedAllergy.value = true;
         showAllergyPrompt.value = false;
 
-        proceedWithSubmission();
-    }
-
-    async function proceedWithSubmission() {
-        isLoading.value = true;
-
-        // Insert into subscriptions table
-        const { error: subsError } = await insertData("subscriptions", {
-            user_id: user.value.id,
-            status: "active",
-            total_price: totalPrice.value,
-            created_at: new Date().toISOString()
-        });
-
-        if (subsError) {
-            isLoading.value = false;
-            errorMessage.value = "Something went wrong while inserting to subscriptions.";
-            return;
-        }
-
-        const { data: latestSubs, error: getSubError } = await getData(
-            "subscriptions",
-            { user_id: user.value.id },
-            {
-                orderBy: { column: "created_at", ascending: false }
-            }
+        insertSubscription(
+            user,
+            totalPrice,
+            isLoading,
+            errorMessage,
+            successMessage,
+            chosenPlans,
+            chosenTypes,
+            chosenDays
         );
-
-        if (getSubError) {
-            isLoading.value = false;
-            errorMessage.value = "Failed to fetch latest subscription:" + error.message;
-            return;
-        }
-
-        const latestSub = latestSubs?.[0];
-
-        // Insert each chosen meal plan as a subscription_item
-        const itemsPayload = chosenPlans.value.map((planId) => ({
-            subscription_id: latestSub.id,
-            meal_plan_id: planId,
-            meal_types: chosenTypes.value[planId],
-            delivery_days: chosenDays.value[planId],
-            created_at: new Date().toISOString()
-        }));
-
-        const cleanItems = itemsPayload.filter(
-            (item) => item.meal_types.length && item.delivery_days.length
-        );
-
-        const { error: itemsError } = await insertData("subscription_items", cleanItems);
-
-        await supabase.functions.invoke("updateMRR", {
-            body: {
-                type: "create",
-                price: totalPrice.value,
-                date: new Date().toISOString()
-            }
-        });
-
-        if (!!itemsError) {
-            isLoading.value = false;
-            errorMessage.value = "Something went wrong: " + itemsError.message;
-        } else {
-            isLoading.value = false;
-            successMessage.value = "Subscription is now active!";
-        }
     }
 
     onMounted(async () => {

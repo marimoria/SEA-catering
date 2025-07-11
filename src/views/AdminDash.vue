@@ -432,8 +432,6 @@
         const startMonth = startDate.value.slice(0, 7); // 2025-06
         const endMonth = endDate.value.slice(0, 7);
 
-        console.log(startMonth, endMonth);
-
         const { data, error } = await getData(
             "monthly_mrr",
             {
@@ -446,9 +444,6 @@
                 orderBy: { column: "month", ascending: true }
             }
         );
-
-        console.log("Fetched monthly_mrr:", data);
-        console.log(startDate.value);
 
         if (error) {
             console.error("Error fetching MRR data:", error.message);
