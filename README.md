@@ -779,7 +779,8 @@ serve(async (req)=>{
     if (![
       "create",
       "pause",
-      "reactivate"
+      "reactivate",
+      "cancel"
     ].includes(type) || typeof price !== "number" || !date) {
       return new Response(JSON.stringify({
         error: "Invalid input"
@@ -818,7 +819,7 @@ serve(async (req)=>{
           active_subs: 1
         });
       }
-    } else if (type === "pause") {
+    } else if (type === "pause" || type === "cancel") {
       if (existing) {
         await supabase.from("monthly_mrr").update({
           mrr: existing.mrr - price,
