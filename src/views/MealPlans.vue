@@ -141,11 +141,12 @@
 
 <script setup>
     import { ref, onMounted, nextTick } from "vue";
+    import { getData, getImageUrl } from "../components/composables/useSupabase";
+    import { useParallax } from "../components/composables/useParallax";
+
     import navBar from "../components/Navbar.vue";
     import mealTypeNav from "../components/MealTypeNavbar.vue";
     import mealPlanPopup from "../components/MealPlanPopup.vue";
-    import { getData, getImageUrl } from "../components/composables/useSupabase";
-    import { useParallax } from "../components/composables/useParallax";
 
     const props = defineProps({
         viewport: Object,

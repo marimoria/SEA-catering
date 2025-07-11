@@ -154,13 +154,13 @@
 
 <script setup>
     import { computed, onMounted, ref } from "vue";
+    import { user, profile } from "../components/composables/useAuth";
+    import { getData, insertData, getImageUrl } from "../components/composables/useSupabase";
+    import { gsap } from "../js/vendor";
+
     import navBar from "../components/Navbar.vue";
     import rating from "../components/Rating.vue";
     import LoadingSpinner from "../components/LoadingSpinner.vue";
-    import { user, profile } from "../components/composables/useAuth";
-    import { getData, insertData, getImageUrl } from "../components/composables/useSupabase";
-
-    import { gsap } from "../js/vendor";
 
     const props = defineProps({
         viewport: Object,

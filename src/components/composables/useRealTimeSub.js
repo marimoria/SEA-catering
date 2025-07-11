@@ -9,6 +9,8 @@ export function useRealtimeSubs(callback) {
             .on(
                 "postgres_changes",
                 { event: "INSERT", schema: "public", table: "subscriptions" },
+                { event: "UPDATE", schema: "public", table: "subscriptions" },
+                { event: "DELETE", schema: "public", table: "subscriptions" },
                 callback
             )
             .subscribe();

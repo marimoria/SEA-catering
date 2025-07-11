@@ -92,11 +92,13 @@
 
 <script setup>
     import Navbar from "../components/Navbar.vue";
+    import LoadingSpinner from "../components/LoadingSpinner.vue";
+
     import { onMounted, ref } from "vue";
     import { useParallax } from "../components/composables/useParallax";
     import { handleSignUp } from "../components/composables/useAuth";
     import { getImageUrl } from "../components/composables/useSupabase";
-    import LoadingSpinner from "../components/LoadingSpinner.vue";
+    import { sanitizeUsername, sanitizePhone } from "../components/composables/useSanitize";
 
     const props = defineProps({
         viewport: Object,
@@ -105,7 +107,6 @@
 
     const isLoading = ref(false);
 
-    // form state
     const email = ref("");
     const password = ref("");
     const username = ref("");
@@ -115,16 +116,6 @@
 
     const successMessage = ref("");
     const errorMessage = ref("");
-
-    function sanitizeUsername(e) {
-        // Replace anything that's NOT a-z, 0-9, _ or .
-        username.value = e.target.value.replace(/[^a-zA-Z0-9_.]/g, "").toLowerCase();
-    }
-
-    function sanitizePhone(e) {
-        // Only allow numbers and +
-        phone.value = e.target.value.replace(/[^\d+]/g, "");
-    }
 
     async function submitSignUp() {
         errorMessage.value = "";
@@ -140,8 +131,9 @@
             allergies: allergies.value
         });
 
+        isLoading.value = false;
+
         if (result.success) {
-            isLoading.value = false;
             successMessage.value = result.message;
 
             email.value = "";
@@ -151,7 +143,6 @@
             phone.value = "";
             allergies.value = "";
         } else {
-            isLoading.value = false;
             errorMessage.value = result.error;
         }
     }

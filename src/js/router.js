@@ -42,18 +42,20 @@ const router = createRouter({
         {
             path: "/signup",
             name: "sign up",
-            component: SignUp
+            component: SignUp,
+            meta: { notAllowAuth: true }
         },
         {
             path: "/login",
             name: "login",
-            component: Login
+            component: Login,
+            meta: { notAllowAuth: true }
         },
         {
             path: "/dashboard",
             name: "dashboard",
             component: Dashboard,
-            meta: { requiresAuth: true }
+            meta: { requiresAuth: true, notAllowAdmin: true }
         },
         {
             path: "/admin",
@@ -71,12 +73,22 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
     const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
     const requiresAdmin = to.matched.some((record) => record.meta.requiresAdmin);
+    const notAllowAuth = to.matched.some((record) => record.meta.notAllowAuth);
+    const notAllowAdmin = to.matched.some((record) => record.meta.notAllowAdmin);
+
+    if (notAllowAuth && user.value) {
+        return next("/");
+    }
+
+    if (notAllowAdmin && isAdmin.value) {
+        return next("/");
+    }
 
     if (requiresAuth && !user.value) {
         return next("/");
     }
 
-    if (requiresAdmin && !isAdmin) {
+    if (requiresAdmin && !isAdmin.value) {
         return next("/");
     }
 

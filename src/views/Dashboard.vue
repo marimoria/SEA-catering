@@ -53,7 +53,7 @@
                                     v-model="username"
                                     placeholder="Username"
                                     maxlength="20"
-                                    @input="sanitizeUsername($event, username)"
+                                    @input="sanitizeUsername($event)"
                                     required
                                 />
                             </div>
@@ -84,7 +84,7 @@
                                     v-model="userPhone"
                                     placeholder="+6281234567"
                                     maxlength="20"
-                                    @input="sanitizePhone($event, userPhone)"
+                                    @input="sanitizePhone($event)"
                                     required
                                 />
                             </div>
@@ -179,7 +179,8 @@
         updatePhone,
         updateAllergies
     } from "../components/composables/useAuth";
-    import { getData, supabase, getImageUrl } from "../components/composables/useSupabase";
+    import { supabase, getImageUrl } from "../components/composables/useSupabase";
+    import { loadSubscriptions } from "../components/composables/useSubscription";
     import { gsap } from "../js/vendor";
     import { useParallax } from "../components/composables/useParallax";
 
@@ -197,28 +198,6 @@
 
     const subscriptions = ref([]);
     const hasSubscriptions = ref(false);
-
-    async function loadSubscriptions() {
-        const { data: subsData, error: subsError } = await getData(
-            "subscriptions",
-            { user_id: user.value.id },
-            {
-                select: `*, subscription_items (meal_plan_id, meal_types, delivery_days)`,
-                orderBy: { column: "created_at", ascending: false }
-            }
-        );
-
-        if (subsError) {
-            console.error("Error loading subscriptions:", subsError);
-            return;
-        }
-
-        if (subsData && subsData.length > 0) {
-            hasSubscriptions.value = true;
-        }
-
-        subscriptions.value = subsData || [];
-    }
 
     // pause
     const calendarVisible = ref(false);
@@ -335,7 +314,7 @@
     }
 
     onMounted(async () => {
-        await loadSubscriptions();
+        await loadSubscriptions(user, hasSubscriptions, subscriptions);
 
         const parallaxEls = document.querySelectorAll(".parallax");
         parallaxEls.forEach((el) => useParallax(el));

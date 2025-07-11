@@ -103,12 +103,13 @@
 
 <script setup>
     import { useParallax } from "../components/composables/useParallax";
-    import Navbar from "../components/Navbar.vue";
-    import LoadingSpinner from "../components/LoadingSpinner.vue";
     import { computed, onMounted, ref } from "vue";
     import { user, profile } from "../components/composables/useAuth";
-    import emailjs from "emailjs-com";
     import { getImageUrl } from "../components/composables/useSupabase";
+
+    import Navbar from "../components/Navbar.vue";
+    import LoadingSpinner from "../components/LoadingSpinner.vue";
+    import emailjs from "emailjs-com";
 
     const props = defineProps({
         viewport: Object,
